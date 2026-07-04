@@ -1923,29 +1923,27 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     <div class="cbody" id="week-note-disp">First week of the new schedule. Holding 3-4 viewers consistently.</div>
   </div>
 
-  <!-- V3: CLIP OF THE WEEK -->
+  <!-- V4: PROFESSIONAL CLIP OF THE WEEK (max 3) -->
   <div class="card cp" style="margin-bottom:10px;">
-    <div class="clabel">◈ Clip of the Week</div>
-    <div id="clip-display" style="margin-top:10px;">
-      <div id="clip-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.2);text-align:center;padding:20px 0;">NO CLIP SET</div>
-      <!-- iframe for Medal -->
-      <iframe id="clip-frame" style="display:none;width:100%;border-radius:4px;border:none;aspect-ratio:16/9;" allowfullscreen></iframe>
-      <!-- native video for MP4 -->
-      <video id="clip-video" controls style="display:none;width:100%;border-radius:4px;aspect-ratio:16/9;background:#000;"></video>
-      <!-- link card for Twitch -->
-      <div id="clip-link-card" style="display:none;padding:18px 20px;background:rgba(var(--tc-rgb),0.06);border:1px solid rgba(var(--tc-rgb),0.2);border-radius:4px;text-align:center;">
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,0.3);margin-bottom:10px;">TWITCH CLIPS CANNOT BE EMBEDDED DIRECTLY</div>
-        <a id="clip-twitch-link" href="#" target="_blank" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--tc);text-shadow:0 0 12px rgba(var(--tc-rgb),0.5);text-decoration:none;padding:10px 24px;border:1px solid rgba(var(--tc-rgb),0.4);border-radius:3px;display:inline-block;transition:all .18s;">▸ AUF TWITCH ANSCHAUEN</a>
+    <div style="display:flex;justify-content:space-between;align-items:center;">
+      <div class="clabel">◈ Professional Clip of the Week</div>
+      <div id="cow-counter" style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.3);">0 / 3</div>
+    </div>
+    <div id="cow-list" style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
+      <div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.2);text-align:center;padding:20px 0;">NO CLIPS SET</div>
+    </div>
+    <div id="cow-add-row" class="owner-only" style="margin-top:12px;">
+      <div style="display:flex;gap:8px;flex-wrap:wrap;">
+        <input class="ta" id="cow-url-inp" placeholder="Medal · MP4 · YouTube · TikTok URL" style="flex:2;min-width:200px;font-size:11px;">
+        <input class="ta" id="cow-label-inp" placeholder="Label (e.g. sick clutch)" style="flex:1;min-width:120px;font-size:11px;">
       </div>
+      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;">
+        <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="flex:1;min-width:180px;font-size:10px;color:rgba(255,255,255,0.4);">
+        <button class="ebtn" id="cow-add-btn" onclick="addClipOfWeek()">+ Add Clip</button>
+      </div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.2);margin-top:8px;">Max 200MB per clip · Medal · MP4 · YouTube · TikTok · uploaded files preview this session only</div>
+      <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:rgba(255,100,100,0.7);margin-top:8px;display:none;">MAX 3 CLIPS REACHED — REMOVE ONE TO ADD ANOTHER</div>
     </div>
-    <div id="clip-url-row" class="owner-only" style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;">
-      <input class="ta" id="clip-url-inp" placeholder="Medal URL · MP4 path · Twitch Clip URL" style="flex:2;min-width:200px;font-size:11px;">
-      <input class="ta" id="clip-label-inp" placeholder="Label (e.g. sick clutch)" style="flex:1;min-width:120px;font-size:11px;">
-      <button class="ebtn" onclick="setClip()">Set</button>
-      <button class="ebtn" onclick="clearClip()" style="color:rgba(255,100,100,0.7);">✕</button>
-    </div>
-    <div id="clip-label-disp" style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.4);margin-top:6px;display:none;"></div>
-    <div id="clip-type-badge" style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.2);margin-top:4px;display:none;"></div>
   </div>
 
   <!-- V3: MOOD / ENERGY SLIDER -->
@@ -4806,6 +4804,7 @@ function saveState(){
       milestones:MILESTONES,
       events:EVENTS,
       clips:CLIPS,
+      clipsOfWeek:(typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK.filter(c=>!c.local).map(({url,type,label,typeBadge,raw})=>({url,type,label,typeBadge,raw})):[]),
       ttTopClips:TT_TOP_CLIPS,
       gamesRoster:GAMES_ROSTER,
       achievements:ACHIEVEMENTS,
@@ -4904,6 +4903,7 @@ function loadState(){
     if(s.events&&s.events.length)EVENTS.push(...s.events);
     if(s.clips&&s.clips.length)CLIPS.push(...s.clips);
     if(s.ttTopClips&&s.ttTopClips.length){ TT_TOP_CLIPS.push(...s.ttTopClips); setTimeout(()=>{ if(typeof renderTTClips==='function') renderTTClips(); },200); }
+    if(s.clipsOfWeek&&s.clipsOfWeek.length){ setTimeout(()=>{ try{ const local=(typeof CLIPS_OF_WEEK!=="undefined")?CLIPS_OF_WEEK.filter(c=>c.local):[]; CLIPS_OF_WEEK=[...s.clipsOfWeek.slice(0,COW_MAX), ...local].slice(0,COW_MAX); if(typeof renderClipsOfWeek==='function') renderClipsOfWeek(); }catch(e){} },250); }
     if(s.gamesRoster)s.gamesRoster.forEach((g,i)=>{if(GAMES_ROSTER[i])Object.assign(GAMES_ROSTER[i],g);});
     if(s.achievements)s.achievements.forEach((a,i)=>{if(ACHIEVEMENTS[i])ACHIEVEMENTS[i].done=a.done;});
     if(s.records)s.records.forEach((r,i)=>{if(ALL_RECORDS[i])Object.assign(ALL_RECORDS[i],r);});
@@ -6392,99 +6392,164 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-// ── V3: CLIP OF THE WEEK ──
-function clipHideAll(){
-  document.getElementById('clip-frame').style.display='none';
-  document.getElementById('clip-video').style.display='none';
-  document.getElementById('clip-link-card').style.display='none';
-  document.getElementById('clip-placeholder').style.display='none';
-}
-
-function renderClip(data){
-  clipHideAll();
-  const url = data.url;
-  const type = data.type;
-
-  if(type === 'mp4'){
-    const vid = document.getElementById('clip-video');
-    vid.src = url;
-    vid.style.display = 'block';
-  } else if(type === 'medal'){
-    const frame = document.getElementById('clip-frame');
-    frame.src = url;
-    frame.style.display = 'block';
-  } else {
-    // Twitch → link card
-    document.getElementById('clip-twitch-link').href = url;
-    document.getElementById('clip-link-card').style.display = 'block';
-  }
-
-  if(data.label){
-    document.getElementById('clip-label-disp').textContent = '▸ ' + data.label;
-    document.getElementById('clip-label-disp').style.display = 'block';
-  }
-  if(data.typeBadge){
-    document.getElementById('clip-type-badge').textContent = '◈ ' + data.typeBadge;
-    document.getElementById('clip-type-badge').style.display = 'block';
-  }
-}
+// ── V4: PROFESSIONAL CLIP OF THE WEEK (max 3) ──
+const COW_MAX = 3;
+const COW_MAX_BYTES = 200 * 1024 * 1024; // 200MB per clip
+let CLIPS_OF_WEEK = [];
 
 function detectClipType(url){
   if(/\.mp4(\?|$)/i.test(url) || /\.webm(\?|$)/i.test(url) || /\.mov(\?|$)/i.test(url)) return 'mp4';
   if(/medal\.tv/i.test(url)) return 'medal';
+  if(/youtube\.com|youtu\.be/i.test(url)) return 'youtube';
+  if(/tiktok\.com/i.test(url)) return 'tiktok';
   if(/twitch\.tv|clips\.twitch/i.test(url)) return 'twitch';
-  // fallback: if ends with video ext treat as mp4
   return 'twitch';
 }
 
 function getMedalEmbed(url){
   // medal share links: https://medal.tv/games/.../clips/...
-  // Medal supports direct embed via iframe with their player
   const match = url.match(/medal\.tv\/(?:games\/[^/]+\/clips|clips)\/([^/?]+)/);
   if(match) return `https://medal.tv/clip/${match[1]}/embed`;
   return url;
 }
 
-function setClip(){
-  if(!checkOwner()) return;
-  const raw = document.getElementById('clip-url-inp').value.trim();
-  const label = document.getElementById('clip-label-inp').value.trim();
-  if(!raw) return;
+function getYouTubeEmbed(url){
+  // handles youtu.be/ID, watch?v=ID, /shorts/ID, /embed/ID
+  let m = url.match(/youtu\.be\/([A-Za-z0-9_-]{6,})/);
+  if(!m) m = url.match(/[?&]v=([A-Za-z0-9_-]{6,})/);
+  if(!m) m = url.match(/\/shorts\/([A-Za-z0-9_-]{6,})/);
+  if(!m) m = url.match(/\/embed\/([A-Za-z0-9_-]{6,})/);
+  if(m) return `https://www.youtube.com/embed/${m[1]}`;
+  return url;
+}
 
+function getTikTokEmbed(url){
+  // handles .../video/ID and short /v/ID links
+  let m = url.match(/\/video\/(\d+)/);
+  if(!m) m = url.match(/tiktok\.com\/v\/(\d+)/);
+  if(m) return `https://www.tiktok.com/embed/v2/${m[1]}`;
+  return url;
+}
+
+function normalizeClip(raw, label){
   const type = detectClipType(raw);
-  let url = raw;
-  let typeBadge = '';
+  let url = raw, typeBadge = '';
+  if(type === 'medal'){ url = getMedalEmbed(raw); typeBadge = 'MEDAL.TV'; }
+  else if(type === 'youtube'){ url = getYouTubeEmbed(raw); typeBadge = 'YOUTUBE'; }
+  else if(type === 'tiktok'){ url = getTikTokEmbed(raw); typeBadge = 'TIKTOK'; }
+  else if(type === 'mp4'){ typeBadge = 'VIDEO'; }
+  else { typeBadge = 'TWITCH CLIP'; }
+  return {url, type, label, typeBadge, raw};
+}
 
-  if(type === 'medal'){
-    url = getMedalEmbed(raw);
-    typeBadge = 'MEDAL.TV';
-  } else if(type === 'mp4'){
-    typeBadge = 'VIDEO';
+function cowClipInner(c){
+  if(c.type === 'mp4'){
+    return `<video controls playsinline style="width:100%;border-radius:4px;aspect-ratio:16/9;background:#000;" src="${c.url}"></video>`;
+  }
+  if(c.type === 'twitch'){
+    return `<div style="padding:18px 20px;background:rgba(var(--tc-rgb),0.06);border:1px solid rgba(var(--tc-rgb),0.2);border-radius:4px;text-align:center;">`
+      + `<div style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,255,255,0.3);margin-bottom:10px;">TWITCH CLIPS CANNOT BE EMBEDDED DIRECTLY</div>`
+      + `<a href="${c.raw||c.url}" target="_blank" style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--tc);text-shadow:0 0 12px rgba(var(--tc-rgb),0.5);text-decoration:none;padding:10px 24px;border:1px solid rgba(var(--tc-rgb),0.4);border-radius:3px;display:inline-block;transition:all .18s;">▸ AUF TWITCH ANSCHAUEN</a></div>`;
+  }
+  // medal / youtube / tiktok → iframe
+  return `<iframe src="${c.url}" allowfullscreen allow="autoplay; fullscreen; encrypted-media" style="width:100%;border-radius:4px;border:none;aspect-ratio:16/9;"></iframe>`;
+}
+
+function renderClipsOfWeek(){
+  const list = document.getElementById('cow-list');
+  const counter = document.getElementById('cow-counter');
+  if(!list) return;
+  if(counter) counter.textContent = `${CLIPS_OF_WEEK.length} / ${COW_MAX}`;
+
+  if(!CLIPS_OF_WEEK.length){
+    list.innerHTML = `<div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.2);text-align:center;padding:20px 0;">NO CLIPS SET</div>`;
   } else {
-    typeBadge = 'TWITCH CLIP';
+    const owner = checkOwner();
+    list.innerHTML = CLIPS_OF_WEEK.map((c,i)=>{
+      const removeBtn = owner ? `<span class="clip-remove owner-only" style="font-size:16px;cursor:none;" onclick="removeClipOfWeek(${i})">✕</span>` : '';
+      const localTag = c.local ? ` <span style="color:rgba(255,255,255,0.25);">· LOCAL PREVIEW</span>` : '';
+      const label = c.label ? `<div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);">▸ ${c.label}</div>` : '';
+      return `<div style="position:relative;">`
+        + `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">`
+        + `<div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);">◈ ${c.typeBadge||''}${localTag}</div>`
+        + removeBtn + `</div>`
+        + cowClipInner(c)
+        + label
+        + `</div>`;
+    }).join('');
   }
 
-  const data = {url, type, label, typeBadge, raw};
-  renderClip(data);
-  try{ localStorage.setItem('ndz_clip', JSON.stringify(data)); }catch(e){}
+  // toggle add controls when full
+  const addBtn = document.getElementById('cow-add-btn');
+  const fullNote = document.getElementById('cow-full-note');
+  const full = CLIPS_OF_WEEK.length >= COW_MAX;
+  if(addBtn) addBtn.style.display = full ? 'none' : '';
+  if(fullNote) fullNote.style.display = full ? 'block' : 'none';
 }
 
-function clearClip(){
-  clipHideAll();
-  document.getElementById('clip-placeholder').style.display='block';
-  document.getElementById('clip-label-disp').style.display='none';
-  document.getElementById('clip-type-badge').style.display='none';
-  document.getElementById('clip-video').src='';
-  document.getElementById('clip-frame').src='';
-  try{ localStorage.removeItem('ndz_clip'); }catch(e){}
-}
-
-(function loadClip(){
+function persistClipsOfWeek(){
   try{
-    const c = JSON.parse(localStorage.getItem('ndz_clip')||'null');
-    if(c && c.url) renderClip(c);
-    else document.getElementById('clip-placeholder').style.display='block';
-  }catch(e){ document.getElementById('clip-placeholder').style.display='block'; }
+    const persistable = CLIPS_OF_WEEK.filter(c=>!c.local).map(({url,type,label,typeBadge,raw})=>({url,type,label,typeBadge,raw}));
+    localStorage.setItem('ndz_clips', JSON.stringify(persistable));
+  }catch(e){}
+  if(typeof saveState==='function'){ try{ saveState(); }catch(e){} }
+}
+
+function addClipOfWeek(){
+  if(!checkOwner()) return;
+  if(CLIPS_OF_WEEK.length >= COW_MAX){ renderClipsOfWeek(); return; }
+
+  const urlInp = document.getElementById('cow-url-inp');
+  const labelInp = document.getElementById('cow-label-inp');
+  const fileInp = document.getElementById('cow-file-inp');
+  const label = labelInp ? labelInp.value.trim() : '';
+  const file = fileInp && fileInp.files && fileInp.files[0];
+
+  let clip;
+  if(file){
+    if(file.size > COW_MAX_BYTES){
+      alert('Clip is too large. Max 200MB per clip.');
+      return;
+    }
+    const objUrl = URL.createObjectURL(file);
+    clip = {url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, local:true};
+  } else {
+    const raw = urlInp ? urlInp.value.trim() : '';
+    if(!raw) return;
+    clip = normalizeClip(raw, label);
+  }
+
+  CLIPS_OF_WEEK.push(clip);
+  if(urlInp) urlInp.value = '';
+  if(labelInp) labelInp.value = '';
+  if(fileInp) fileInp.value = '';
+  renderClipsOfWeek();
+  persistClipsOfWeek();
+}
+
+function removeClipOfWeek(i){
+  if(!checkOwner()) return;
+  const c = CLIPS_OF_WEEK[i];
+  if(c && c.local && c.url){ try{ URL.revokeObjectURL(c.url); }catch(e){} }
+  CLIPS_OF_WEEK.splice(i,1);
+  renderClipsOfWeek();
+  persistClipsOfWeek();
+}
+
+(function loadClipsOfWeek(){
+  try{
+    let arr = JSON.parse(localStorage.getItem('ndz_clips')||'null');
+    if(!Array.isArray(arr)) arr = [];
+    // migrate legacy single clip
+    const legacy = JSON.parse(localStorage.getItem('ndz_clip')||'null');
+    if(legacy && legacy.url){
+      arr.unshift({url:legacy.url, type:legacy.type, label:legacy.label, typeBadge:legacy.typeBadge, raw:legacy.raw});
+      localStorage.removeItem('ndz_clip');
+    }
+    CLIPS_OF_WEEK = arr.slice(0, COW_MAX);
+    if(legacy && legacy.url){ try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK)); }catch(e){} }
+  }catch(e){ CLIPS_OF_WEEK = []; }
+  renderClipsOfWeek();
 })();
 
 // ── V3: MOOD SLIDER ──
