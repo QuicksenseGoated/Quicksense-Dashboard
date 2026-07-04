@@ -1791,6 +1791,15 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
       </div>
       <div class="smi-arr">›</div>
     </div>
+    <div class="smi tc" onclick="go('cow')">
+        <div class="smi-bg"></div><div class="smi-num-bg">05</div>
+      <div class="smi-body">
+        <div class="smi-num tc">◈ 05</div>
+        <div class="smi-title">Clip of the Week</div>
+        <div class="smi-sub">featured clips, community voting, uploads</div>
+      </div>
+      <div class="smi-arr">›</div>
+    </div>
   </div>
   <div class="pfoot"><div class="pfoot-name">QUICKSENSE</div><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
 </div></div>
@@ -1944,29 +1953,6 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     <div class="cbody" id="week-note-disp">First week of the new schedule. Holding 3-4 viewers consistently.</div>
   </div>
 
-  <!-- V4: PROFESSIONAL CLIP OF THE WEEK (max 3) -->
-  <div class="card cp" id="cow-card" style="margin-bottom:10px;">
-    <div style="display:flex;justify-content:space-between;align-items:center;">
-      <div class="clabel">◈ Professional Clip of the Week</div>
-      <div id="cow-counter" style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.3);">0 / 3</div>
-    </div>
-    <div id="cow-list" style="margin-top:12px;display:flex;flex-direction:column;gap:14px;">
-      <div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.2);text-align:center;padding:20px 0;">NO CLIPS SET</div>
-    </div>
-    <div id="cow-add-row" class="owner-only" style="margin-top:12px;">
-      <div style="display:flex;gap:8px;flex-wrap:wrap;">
-        <input class="ta" id="cow-url-inp" placeholder="Medal · MP4 · YouTube · TikTok URL" style="flex:2;min-width:200px;font-size:11px;">
-        <input class="ta" id="cow-label-inp" placeholder="Label (e.g. sick clutch)" style="flex:1;min-width:120px;font-size:11px;">
-      </div>
-      <div style="display:flex;gap:8px;margin-top:8px;flex-wrap:wrap;align-items:center;">
-        <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="flex:1;min-width:180px;font-size:10px;color:rgba(255,255,255,0.4);">
-        <button class="ebtn" id="cow-add-btn" onclick="addClipOfWeek()">+ Add Clip</button>
-      </div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.2);margin-top:8px;">Max 200MB per clip · Medal · MP4 · YouTube · TikTok · uploaded files preview this session only</div>
-      <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:3px;color:rgba(255,100,100,0.7);margin-top:8px;display:none;">MAX 3 CLIPS REACHED — REMOVE ONE TO ADD ANOTHER</div>
-    </div>
-  </div>
-
   <!-- V3: MOOD / ENERGY SLIDER -->
   <div class="card cp" style="margin-bottom:10px;">
     <div style="display:flex;justify-content:space-between;align-items:center;">
@@ -1983,6 +1969,46 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     </div>
   </div>
   <div class="pfoot"><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
+</div></div>
+
+<!-- ═══════════ CLIP OF THE WEEK (dedicated page) ═══════════ -->
+<div id="cow" class="pg">
+<div class="shell ain">
+  <div class="tnav">
+    <button class="back" onclick="go('twitch')">← Twitch</button>
+    <div class="bc">QUICKSENSE <b>/ Clip of the Week</b></div>
+  </div>
+  <div class="ph">
+    <div class="ph-tag tc">◈ Featured</div>
+    <div class="ph-title">CLIP OF THE <span class="acc">WEEK</span></div>
+    <div class="ph-line tc"></div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">
+    <div style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.35);">▸ VOTE FOR YOUR FAVORITE · ONE VOTE PER CLIP</div>
+    <div id="cow-counter" style="font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:2px;color:rgba(var(--tc-rgb),0.8);">0 / 3</div>
+  </div>
+
+  <div id="cow-list" style="display:flex;flex-direction:column;gap:18px;">
+    <div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:rgba(255,255,255,0.25);text-align:center;padding:50px 0;">NO CLIPS SET YET</div>
+  </div>
+
+  <!-- OWNER: UPLOAD / ADD -->
+  <div id="cow-add-row" class="owner-only card cp" style="margin-top:20px;border-color:rgba(var(--tc-rgb),0.25);">
+    <div class="clabel">◈ Add / Upload Clip</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+      <input class="ta" id="cow-url-inp" placeholder="Medal · MP4 · YouTube · TikTok URL" style="flex:2;min-width:200px;font-size:12px;">
+      <input class="ta" id="cow-label-inp" placeholder="Label (e.g. sick clutch)" style="flex:1;min-width:120px;font-size:12px;">
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;">
+      <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="flex:1;min-width:180px;font-size:11px;color:rgba(255,255,255,0.4);">
+      <button class="ebtn" id="cow-add-btn" onclick="addClipOfWeek()">+ Add Clip</button>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-top:10px;">Max 200MB per clip · Medal · MP4 · YouTube · TikTok · uploaded files preview this session only</div>
+    <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,100,100,0.7);margin-top:10px;display:none;">MAX 3 CLIPS REACHED — REMOVE ONE TO ADD ANOTHER</div>
+  </div>
+
+  <div class="pfoot"><div class="pfoot-name">QUICKSENSE</div><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
 </div></div>
 
 <!-- TW ANNOUNCEMENTS -->
@@ -2690,6 +2716,7 @@ renderAllGoals();
   if(id==='yt-progress')renderVidProgress();
   if(id==='s-current')renderGear();
   if(id==='s-upgrades')renderUpgrades();
+  if(id==='cow' && typeof renderClipsOfWeek==='function')renderClipsOfWeek();
 }
 
 // ── EDIT TOGGLE ──
@@ -4825,7 +4852,7 @@ function saveState(){
       milestones:MILESTONES,
       events:EVENTS,
       clips:CLIPS,
-      clipsOfWeek:(typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK.filter(c=>!c.local).map(({url,type,label,typeBadge,raw})=>({url,type,label,typeBadge,raw})):[]),
+      clipsOfWeek:(typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK.filter(c=>!c.local).map(({id,url,type,label,typeBadge,raw,votes})=>({id,url,type,label,typeBadge,raw,votes:votes||0})):[]),
       ttTopClips:TT_TOP_CLIPS,
       gamesRoster:GAMES_ROSTER,
       achievements:ACHIEVEMENTS,
@@ -6331,6 +6358,7 @@ const PAGES_MAP = [
 const SEARCH_PAGES = [
   {label:'Twitch → Stream Plan', page:'tw-plan'},
   {label:'Twitch → Status', page:'tw-status'},
+  {label:'Twitch → Clip of the Week', page:'cow'},
   {label:'Twitch → Stream Log', page:'tw-log'},
   {label:'YouTube → Upload Schedule', page:'yt-upload'},
   {label:'YouTube → Progress', page:'yt-progress'},
@@ -6476,28 +6504,58 @@ function cowClipInner(c){
   return `<iframe src="${c.url}" allowfullscreen allow="autoplay; fullscreen; encrypted-media" style="width:100%;border-radius:4px;border:none;aspect-ratio:16/9;"></iframe>`;
 }
 
+// ── voting ──
+function cowId(){ return 'c'+Date.now().toString(36)+Math.random().toString(36).slice(2,7); }
+function getMyVotes(){ try{ return JSON.parse(localStorage.getItem('ndz_cow_votes')||'[]'); }catch(e){ return []; } }
+function setMyVotes(a){ try{ localStorage.setItem('ndz_cow_votes', JSON.stringify(a)); }catch(e){} }
+function hasVoted(id){ return getMyVotes().indexOf(id) >= 0; }
+function voteClip(id){
+  const clip = CLIPS_OF_WEEK.find(c=>c.id===id);
+  if(!clip) return;
+  let mine = getMyVotes();
+  if(mine.indexOf(id) >= 0){ mine = mine.filter(x=>x!==id); clip.votes = Math.max(0,(clip.votes||0)-1); }
+  else { mine.push(id); clip.votes = (clip.votes||0)+1; }
+  setMyVotes(mine);
+  renderClipsOfWeek();
+  persistClipsOfWeek();
+}
+
 function renderClipsOfWeek(){
   const list = document.getElementById('cow-list');
   const counter = document.getElementById('cow-counter');
+  // ensure every clip has stable id + vote count
+  CLIPS_OF_WEEK.forEach(c=>{ if(!c.id) c.id=cowId(); if(typeof c.votes!=='number') c.votes=0; });
   if(!list) return;
   if(counter) counter.textContent = `${CLIPS_OF_WEEK.length} / ${COW_MAX}`;
   const popSub = document.getElementById('cow-popup-sub');
   if(popSub) popSub.textContent = CLIPS_OF_WEEK.length ? `${CLIPS_OF_WEEK.length} CLIP${CLIPS_OF_WEEK.length>1?'S':''} · TAP TO WATCH` : 'TAP TO WATCH';
 
   if(!CLIPS_OF_WEEK.length){
-    list.innerHTML = `<div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,255,255,0.2);text-align:center;padding:20px 0;">NO CLIPS SET</div>`;
+    list.innerHTML = `<div id="cow-placeholder" style="font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:4px;color:rgba(255,255,255,0.25);text-align:center;padding:50px 0;">NO CLIPS SET YET</div>`;
   } else {
     const owner = checkOwner();
+    const maxVotes = CLIPS_OF_WEEK.reduce((m,c)=>Math.max(m,c.votes||0),0);
     list.innerHTML = CLIPS_OF_WEEK.map((c,i)=>{
       const removeBtn = owner ? `<span class="clip-remove owner-only" style="font-size:16px;cursor:none;" onclick="removeClipOfWeek(${i})">✕</span>` : '';
       const localTag = c.local ? ` <span style="color:rgba(255,255,255,0.25);">· LOCAL PREVIEW</span>` : '';
-      const label = c.label ? `<div style="font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);">▸ ${c.label}</div>` : '';
-      return `<div style="position:relative;">`
-        + `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">`
-        + `<div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);">◈ ${c.typeBadge||''}${localTag}</div>`
+      const label = c.label ? `<div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);">▸ ${c.label}</div>` : `<div></div>`;
+      const isLeader = maxVotes>0 && (c.votes||0)===maxVotes;
+      const crown = isLeader ? ` <span style="color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.6);">👑 LEADING</span>` : '';
+      const voted = hasVoted(c.id);
+      const voteBtn = `<button onclick="voteClip('${c.id}')" title="Vote for this clip" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:7px 18px;border-radius:4px;cursor:none;transition:all .18s;`
+        + (voted
+            ? `background:rgba(var(--tc-rgb),0.9);color:#0a0600;border:1px solid var(--tc);box-shadow:0 0 16px rgba(var(--tc-rgb),0.5);`
+            : `background:transparent;color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.45);`)
+        + `">${voted?'★ VOTED':'☆ VOTE'} · ${c.votes||0}</button>`;
+      const wrapBorder = isLeader ? `border:1px solid rgba(var(--g-rgb,200,150,10),0.4);box-shadow:0 0 22px rgba(var(--g-rgb,200,150,10),0.12);` : `border:1px solid rgba(255,255,255,0.05);`;
+      return `<div style="position:relative;padding:12px;border-radius:6px;${wrapBorder}background:rgba(0,0,0,0.25);">`
+        + `<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;">`
+        + `<div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.35);">◈ ${c.typeBadge||''}${localTag}${crown}</div>`
         + removeBtn + `</div>`
         + cowClipInner(c)
-        + label
+        + `<div style="display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:10px;flex-wrap:wrap;">`
+        + label + voteBtn
+        + `</div>`
         + `</div>`;
     }).join('');
   }
@@ -6512,7 +6570,7 @@ function renderClipsOfWeek(){
 
 function persistClipsOfWeek(){
   try{
-    const persistable = CLIPS_OF_WEEK.filter(c=>!c.local).map(({url,type,label,typeBadge,raw})=>({url,type,label,typeBadge,raw}));
+    const persistable = CLIPS_OF_WEEK.filter(c=>!c.local).map(({id,url,type,label,typeBadge,raw,votes})=>({id,url,type,label,typeBadge,raw,votes:votes||0}));
     localStorage.setItem('ndz_clips', JSON.stringify(persistable));
   }catch(e){}
   if(typeof saveState==='function'){ try{ saveState(); }catch(e){} }
@@ -6535,11 +6593,13 @@ function addClipOfWeek(){
       return;
     }
     const objUrl = URL.createObjectURL(file);
-    clip = {url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, local:true};
+    clip = {id:cowId(), url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, local:true, votes:0};
   } else {
     const raw = urlInp ? urlInp.value.trim() : '';
     if(!raw) return;
     clip = normalizeClip(raw, label);
+    clip.id = cowId();
+    clip.votes = 0;
   }
 
   CLIPS_OF_WEEK.push(clip);
@@ -6576,8 +6636,7 @@ function removeClipOfWeek(i){
 })();
 
 function openClipOfWeek(){
-  if(typeof go==='function') go('tw-status');
-  setTimeout(()=>{ const c=document.getElementById('cow-card'); if(c) c.scrollIntoView({behavior:'smooth',block:'center'}); }, 150);
+  if(typeof go==='function') go('cow');
 }
 function closeCowPopup(){ const p=document.getElementById('cow-popup'); if(p) p.style.display='none'; }
 
