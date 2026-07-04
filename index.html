@@ -1791,15 +1791,6 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
       </div>
       <div class="smi-arr">›</div>
     </div>
-    <div class="smi tc" onclick="go('cow')">
-        <div class="smi-bg"></div><div class="smi-num-bg">05</div>
-      <div class="smi-body">
-        <div class="smi-num tc">◈ 05</div>
-        <div class="smi-title">Clip of the Week</div>
-        <div class="smi-sub">featured clips, community voting, uploads</div>
-      </div>
-      <div class="smi-arr">›</div>
-    </div>
   </div>
   <div class="pfoot"><div class="pfoot-name">QUICKSENSE</div><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
 </div></div>
@@ -1996,15 +1987,28 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
   <!-- OWNER: UPLOAD / ADD -->
   <div id="cow-add-row" class="owner-only card cp" style="margin-top:20px;border-color:rgba(var(--tc-rgb),0.25);">
     <div class="clabel">◈ Add / Upload Clip</div>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;">
+
+    <!-- OPTION A: paste a link -->
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-top:12px;margin-bottom:6px;">▸ OPTION A — PASTE A LINK</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;">
       <input class="ta" id="cow-url-inp" placeholder="Medal · MP4 · YouTube · TikTok URL" style="flex:2;min-width:200px;font-size:12px;">
       <input class="ta" id="cow-label-inp" placeholder="Label (e.g. sick clutch)" style="flex:1;min-width:120px;font-size:12px;">
     </div>
-    <div style="display:flex;gap:8px;margin-top:10px;flex-wrap:wrap;align-items:center;">
-      <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="flex:1;min-width:180px;font-size:11px;color:rgba(255,255,255,0.4);">
-      <button class="ebtn" id="cow-add-btn" onclick="addClipOfWeek()">+ Add Clip</button>
+
+    <!-- OPTION B: upload a file -->
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-top:14px;margin-bottom:6px;">▸ OPTION B — UPLOAD AN MP4 (max 200MB)</div>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
+      <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
+      <button class="ebtn" id="cow-upload-btn" onclick="document.getElementById('cow-file-inp').click()" style="border-color:rgba(var(--tc-rgb),0.5);color:var(--tc);">⬆ Choose Video</button>
+      <span id="cow-file-name" style="font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;color:rgba(255,255,255,0.35);flex:1;min-width:120px;">no file selected</span>
     </div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-top:10px;">Max 200MB per clip · Medal · MP4 · YouTube · TikTok · uploaded files preview this session only</div>
+
+    <!-- action -->
+    <div style="display:flex;gap:8px;margin-top:16px;flex-wrap:wrap;align-items:center;">
+      <button class="ebtn" id="cow-add-btn" onclick="addClipOfWeek()" style="background:rgba(var(--tc-rgb),0.9);color:#0a0600;border:1px solid var(--tc);font-size:13px;">+ ADD CLIP</button>
+      <button class="ebtn" id="cow-clear-btn" onclick="cowClearForm()" style="color:rgba(255,255,255,0.5);">Clear</button>
+    </div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-top:12px;">Max 200MB per clip · Uploaded files are stored on this device and stay available after reload.</div>
     <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:3px;color:rgba(255,100,100,0.7);margin-top:10px;display:none;">MAX 3 CLIPS REACHED — REMOVE ONE TO ADD ANOTHER</div>
   </div>
 
@@ -4852,7 +4856,7 @@ function saveState(){
       milestones:MILESTONES,
       events:EVENTS,
       clips:CLIPS,
-      clipsOfWeek:(typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK.filter(c=>!c.local).map(({id,url,type,label,typeBadge,raw,votes})=>({id,url,type,label,typeBadge,raw,votes:votes||0})):[]),
+      clipsOfWeek:(typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK.filter(c=>!c.up&&!c.local).map(({id,url,type,label,typeBadge,raw,votes})=>({id,url,type,label,typeBadge,raw,votes:votes||0})):[]),
       ttTopClips:TT_TOP_CLIPS,
       gamesRoster:GAMES_ROSTER,
       achievements:ACHIEVEMENTS,
@@ -4951,7 +4955,13 @@ function loadState(){
     if(s.events&&s.events.length)EVENTS.push(...s.events);
     if(s.clips&&s.clips.length)CLIPS.push(...s.clips);
     if(s.ttTopClips&&s.ttTopClips.length){ TT_TOP_CLIPS.push(...s.ttTopClips); setTimeout(()=>{ if(typeof renderTTClips==='function') renderTTClips(); },200); }
-    if(s.clipsOfWeek&&s.clipsOfWeek.length){ setTimeout(()=>{ try{ const local=(typeof CLIPS_OF_WEEK!=="undefined")?CLIPS_OF_WEEK.filter(c=>c.local):[]; CLIPS_OF_WEEK=[...s.clipsOfWeek.slice(0,COW_MAX), ...local].slice(0,COW_MAX); if(typeof renderClipsOfWeek==='function') renderClipsOfWeek(); }catch(e){} },250); }
+    if(s.clipsOfWeek){ setTimeout(()=>{ try{
+      const byId={};
+      (typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK:[]).forEach(c=>{ if(c&&c.id) byId[c.id]=c; });
+      (s.clipsOfWeek||[]).forEach(c=>{ if(c&&c.id) byId[c.id]=Object.assign(byId[c.id]||{}, c); });
+      CLIPS_OF_WEEK=Object.values(byId).slice(0,COW_MAX);
+      if(typeof rehydrateUploads==='function') rehydrateUploads(); else if(typeof renderClipsOfWeek==='function') renderClipsOfWeek();
+    }catch(e){} },250); }
     if(s.gamesRoster)s.gamesRoster.forEach((g,i)=>{if(GAMES_ROSTER[i])Object.assign(GAMES_ROSTER[i],g);});
     if(s.achievements)s.achievements.forEach((a,i)=>{if(ACHIEVEMENTS[i])ACHIEVEMENTS[i].done=a.done;});
     if(s.records)s.records.forEach((r,i)=>{if(ALL_RECORDS[i])Object.assign(ALL_RECORDS[i],r);});
@@ -6446,6 +6456,30 @@ const COW_MAX = 3;
 const COW_MAX_BYTES = 200 * 1024 * 1024; // 200MB per clip
 let CLIPS_OF_WEEK = [];
 
+// ── IndexedDB store for uploaded video blobs (persist across reloads) ──
+const COW_DB = 'ndz_cow_db', COW_STORE = 'clips';
+function cowDB(){
+  return new Promise((resolve,reject)=>{
+    try{
+      const req = indexedDB.open(COW_DB, 1);
+      req.onupgradeneeded = ()=>{ try{ req.result.createObjectStore(COW_STORE); }catch(e){} };
+      req.onsuccess = ()=>resolve(req.result);
+      req.onerror = ()=>reject(req.error);
+    }catch(e){ reject(e); }
+  });
+}
+async function cowPutBlob(id, blob){
+  const db = await cowDB();
+  return new Promise((res,rej)=>{ const tx=db.transaction(COW_STORE,'readwrite'); tx.objectStore(COW_STORE).put(blob,id); tx.oncomplete=()=>res(); tx.onerror=()=>rej(tx.error); });
+}
+async function cowGetBlob(id){
+  const db = await cowDB();
+  return new Promise((res,rej)=>{ const tx=db.transaction(COW_STORE,'readonly'); const r=tx.objectStore(COW_STORE).get(id); r.onsuccess=()=>res(r.result||null); r.onerror=()=>rej(r.error); });
+}
+async function cowDelBlob(id){
+  try{ const db = await cowDB(); return new Promise((res)=>{ const tx=db.transaction(COW_STORE,'readwrite'); tx.objectStore(COW_STORE).delete(id); tx.oncomplete=()=>res(); tx.onerror=()=>res(); }); }catch(e){}
+}
+
 function detectClipType(url){
   if(/\.mp4(\?|$)/i.test(url) || /\.webm(\?|$)/i.test(url) || /\.mov(\?|$)/i.test(url)) return 'mp4';
   if(/medal\.tv/i.test(url)) return 'medal';
@@ -6493,6 +6527,9 @@ function normalizeClip(raw, label){
 
 function cowClipInner(c){
   if(c.type === 'mp4'){
+    if(c.up && !c.url){
+      return `<div style="width:100%;aspect-ratio:16/9;border-radius:4px;background:#000;display:flex;align-items:center;justify-content:center;font-family:'Bebas Neue',sans-serif;letter-spacing:3px;color:rgba(255,255,255,0.3);">LOADING UPLOADED CLIP…</div>`;
+    }
     return `<video controls playsinline style="width:100%;border-radius:4px;aspect-ratio:16/9;background:#000;" src="${c.url}"></video>`;
   }
   if(c.type === 'twitch'){
@@ -6537,7 +6574,7 @@ function renderClipsOfWeek(){
     const maxVotes = CLIPS_OF_WEEK.reduce((m,c)=>Math.max(m,c.votes||0),0);
     list.innerHTML = CLIPS_OF_WEEK.map((c,i)=>{
       const removeBtn = owner ? `<span class="clip-remove owner-only" style="font-size:16px;cursor:none;" onclick="removeClipOfWeek(${i})">✕</span>` : '';
-      const localTag = c.local ? ` <span style="color:rgba(255,255,255,0.25);">· LOCAL PREVIEW</span>` : '';
+      const localTag = c.up ? ` <span style="color:rgba(255,255,255,0.25);">· SAVED ON DEVICE</span>` : (c.local ? ` <span style="color:rgba(255,255,255,0.25);">· LOCAL PREVIEW</span>` : '');
       const label = c.label ? `<div style="font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);">▸ ${c.label}</div>` : `<div></div>`;
       const isLeader = maxVotes>0 && (c.votes||0)===maxVotes;
       const crown = isLeader ? ` <span style="color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.6);">👑 LEADING</span>` : '';
@@ -6568,12 +6605,29 @@ function renderClipsOfWeek(){
   if(fullNote) fullNote.style.display = full ? 'block' : 'none';
 }
 
+// clip -> plain metadata for storage. Uploaded (up) clips omit the blob URL (rehydrated from IndexedDB).
+function cowMeta(c){
+  if(c.up) return {id:c.id, type:'mp4', label:c.label, typeBadge:c.typeBadge, votes:c.votes||0, up:true, fname:c.fname||''};
+  return {id:c.id, url:c.url, type:c.type, label:c.label, typeBadge:c.typeBadge, raw:c.raw, votes:c.votes||0};
+}
+
 function persistClipsOfWeek(){
   try{
-    const persistable = CLIPS_OF_WEEK.filter(c=>!c.local).map(({id,url,type,label,typeBadge,raw,votes})=>({id,url,type,label,typeBadge,raw,votes:votes||0}));
-    localStorage.setItem('ndz_clips', JSON.stringify(persistable));
+    localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta)));
   }catch(e){}
   if(typeof saveState==='function'){ try{ saveState(); }catch(e){} }
+}
+
+// styled upload button helpers
+function cowFilePicked(inp){
+  const nameEl = document.getElementById('cow-file-name');
+  const f = inp && inp.files && inp.files[0];
+  if(nameEl) nameEl.textContent = f ? f.name : 'no file selected';
+}
+function cowClearForm(){
+  const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp'),
+        f=document.getElementById('cow-file-inp'), n=document.getElementById('cow-file-name');
+  if(u) u.value=''; if(l) l.value=''; if(f) f.value=''; if(n) n.textContent='no file selected';
 }
 
 function addClipOfWeek(){
@@ -6592,8 +6646,11 @@ function addClipOfWeek(){
       alert('Clip is too large. Max 200MB per clip.');
       return;
     }
+    const id = cowId();
     const objUrl = URL.createObjectURL(file);
-    clip = {id:cowId(), url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, local:true, votes:0};
+    clip = {id, url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, up:true, votes:0, fname:file.name, _hydrated:true};
+    // store the actual video so it survives reloads
+    cowPutBlob(id, file).catch(e=>{ console.warn('upload store failed', e); clip.up=false; clip.local=true; });
   } else {
     const raw = urlInp ? urlInp.value.trim() : '';
     if(!raw) return;
@@ -6603,9 +6660,7 @@ function addClipOfWeek(){
   }
 
   CLIPS_OF_WEEK.push(clip);
-  if(urlInp) urlInp.value = '';
-  if(labelInp) labelInp.value = '';
-  if(fileInp) fileInp.value = '';
+  cowClearForm();
   renderClipsOfWeek();
   persistClipsOfWeek();
 }
@@ -6613,10 +6668,25 @@ function addClipOfWeek(){
 function removeClipOfWeek(i){
   if(!checkOwner()) return;
   const c = CLIPS_OF_WEEK[i];
-  if(c && c.local && c.url){ try{ URL.revokeObjectURL(c.url); }catch(e){} }
+  if(c && (c.up || c.local) && c.url){ try{ URL.revokeObjectURL(c.url); }catch(e){} }
+  if(c && c.up && c.id){ cowDelBlob(c.id); }
   CLIPS_OF_WEEK.splice(i,1);
   renderClipsOfWeek();
   persistClipsOfWeek();
+}
+
+// re-create playable blob URLs for uploaded clips from IndexedDB
+async function rehydrateUploads(){
+  let changed = false;
+  for(const c of CLIPS_OF_WEEK){
+    if(c.up && !c._hydrated){
+      try{
+        const blob = await cowGetBlob(c.id);
+        if(blob){ c.url = URL.createObjectURL(blob); c.raw = c.url; c._hydrated = true; changed = true; }
+      }catch(e){}
+    }
+  }
+  if(changed) renderClipsOfWeek();
 }
 
 (function loadClipsOfWeek(){
@@ -6630,9 +6700,10 @@ function removeClipOfWeek(i){
       localStorage.removeItem('ndz_clip');
     }
     CLIPS_OF_WEEK = arr.slice(0, COW_MAX);
-    if(legacy && legacy.url){ try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK)); }catch(e){} }
+    if(legacy && legacy.url){ try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){} }
   }catch(e){ CLIPS_OF_WEEK = []; }
   renderClipsOfWeek();
+  rehydrateUploads();
 })();
 
 function openClipOfWeek(){
