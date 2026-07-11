@@ -564,6 +564,12 @@ input.ta{padding:8px 12px;}
 .cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);}
 .cow-divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.2);}
 .cow-divider::before,.cow-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
+.cow-methods{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
+.cow-method{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.25);}
+.cow-method-tag{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:2px 7px;border-radius:2px;background:rgba(var(--tc-rgb),0.15);color:var(--tc);flex-shrink:0;}
+.cow-method-tag.yt{background:rgba(var(--yt-rgb),0.15);color:var(--yt);}
+.cow-method-tag.tk{background:rgba(var(--tk-rgb),0.15);color:var(--tk);}
+.cow-method-ex{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.5px;color:rgba(255,255,255,0.3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
 .cow-link-row{display:flex;gap:8px;flex-wrap:wrap;}
 .cow-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center;}
 .cow-btn-primary{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:12px 28px;border-radius:4px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.9);color:#0a0600;box-shadow:0 0 20px rgba(var(--tc-rgb),0.35);transition:all .18s;}
@@ -2064,6 +2070,13 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
     <div class="cow-divider">OR PASTE A LINK</div>
 
+    <div class="cow-methods">
+      <div class="cow-method"><span class="cow-method-tag">MEDAL</span><span class="cow-method-ex">medal.tv/clips/…</span></div>
+      <div class="cow-method"><span class="cow-method-tag yt">YOUTUBE</span><span class="cow-method-ex">youtube.com/watch?v=…</span></div>
+      <div class="cow-method"><span class="cow-method-tag tk">TIKTOK</span><span class="cow-method-ex">tiktok.com/@user/video/…</span></div>
+      <div class="cow-method"><span class="cow-method-tag">MP4 LINK</span><span class="cow-method-ex">direct .mp4 URL</span></div>
+    </div>
+
     <div class="cow-link-row">
       <input class="ta" id="cow-url-inp" placeholder="Medal · YouTube · TikTok · MP4 URL" style="flex:2;min-width:160px;font-size:13px;">
       <input class="ta" id="cow-label-inp" placeholder="Clip name (e.g. insane clutch)" style="flex:1;min-width:120px;font-size:13px;">
@@ -2077,9 +2090,10 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
   </div>
 
   <!-- viewer hint when not owner -->
-  <div id="cow-viewer-hint" style="display:none;padding:14px 16px;margin-bottom:16px;border-radius:6px;border:1px solid rgba(255,255,255,0.08);background:rgba(255,255,255,0.02);text-align:center;">
-    <div style="font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:rgba(255,255,255,0.4);">VOTE FOR YOUR FAVORITE CLIP BELOW</div>
-    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);margin-top:6px;">ONE VOTE PER CLIP · TAP ☆ VOTE</div>
+  <div id="cow-viewer-hint" style="display:none;padding:16px;margin-bottom:16px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.2);background:rgba(var(--tc-rgb),0.04);text-align:center;">
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:var(--tc);">VOTE FOR YOUR FAVORITE CLIP</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.35);margin-top:8px;line-height:1.7;">Tap <b style="color:#fff;">☆ VOTE</b> on any clip below · one vote per clip</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.2);margin-top:10px;padding-top:10px;border-top:1px solid rgba(255,255,255,0.06);">To post clips: tap <b style="color:rgba(255,255,255,0.5);">NDZ · v5 · QUICKSENSE</b> (bottom) 5× and log in as owner</div>
   </div>
 
   <!-- leaderboard -->
@@ -6674,8 +6688,14 @@ function renderClipsOfWeek(){
 
   // section visibility
   if(emptyHero) emptyHero.style.display = n ? 'none' : 'block';
+  if(emptyHero && !n){
+    const sub = emptyHero.querySelector('.cow-empty-hero-sub');
+    if(sub) sub.innerHTML = owner
+      ? 'Submit your best play below.<br>Up to 3 clips compete — community picks the winner.'
+      : 'No clips posted yet.<br>Check back soon or vote when clips appear.';
+  }
   if(lbWrap) lbWrap.style.display = n ? 'block' : 'none';
-  if(viewerHint) viewerHint.style.display = (!owner && n) ? 'block' : 'none';
+  if(viewerHint) viewerHint.style.display = !owner ? 'block' : 'none';
 
   if(submitWrap && owner){
     submitWrap.style.display = 'block';
