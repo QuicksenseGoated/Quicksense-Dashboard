@@ -5085,6 +5085,8 @@ function loadState(){
       (typeof CLIPS_OF_WEEK!=="undefined"?CLIPS_OF_WEEK:[]).forEach(c=>{ if(c&&c.id) byId[c.id]=c; });
       (s.clipsOfWeek||[]).forEach(c=>{ if(c&&c.id) byId[c.id]=Object.assign(byId[c.id]||{}, c); });
       CLIPS_OF_WEEK=Object.values(byId).slice(0,COW_MAX);
+      cowDedupeSid();
+      cowEnforceMax();
       if(typeof rehydrateUploads==='function') rehydrateUploads(); else if(typeof renderClipsOfWeek==='function') renderClipsOfWeek();
     }catch(e){} },250); }
     if(s.gamesRoster)s.gamesRoster.forEach((g,i)=>{if(GAMES_ROSTER[i])Object.assign(GAMES_ROSTER[i],g);});
@@ -6582,6 +6584,28 @@ const COW_MAX = 3;
 const COW_MAX_BYTES = 200 * 1024 * 1024; // 200MB per clip
 let CLIPS_OF_WEEK = [];
 
+// Hard cap: never more than 3 clips; one clip per browser (sid)
+function cowEnforceMax(){
+  if(CLIPS_OF_WEEK.length > COW_MAX){
+    CLIPS_OF_WEEK.slice(COW_MAX).forEach(c=>{
+      if(c && (c.up||c.local) && c.url){ try{ URL.revokeObjectURL(c.url); }catch(e){} }
+      if(c && c.up && c.id) cowDelBlob(c.id);
+    });
+    CLIPS_OF_WEEK = CLIPS_OF_WEEK.slice(0, COW_MAX);
+    return true;
+  }
+  return false;
+}
+function cowDedupeSid(){
+  const seen = new Set();
+  CLIPS_OF_WEEK = CLIPS_OF_WEEK.filter(c=>{
+    if(!c.sid) return true;
+    if(seen.has(c.sid)) return false;
+    seen.add(c.sid);
+    return true;
+  });
+}
+
 // ── IndexedDB store for uploaded video blobs (persist across reloads) ──
 const COW_DB = 'ndz_cow_db', COW_STORE = 'clips';
 function cowDB(){
@@ -6757,6 +6781,8 @@ function renderClipsOfWeek(){
   const nameInp = document.getElementById('cow-name-inp');
 
   CLIPS_OF_WEEK.forEach(c=>{ if(!c.id) c.id=cowId(); if(typeof c.votes!=='number') c.votes=0; });
+  cowDedupeSid();
+  if(cowEnforceMax()) persistClipsOfWeek();
   if(!list) return;
 
   const n = CLIPS_OF_WEEK.length;
@@ -6764,7 +6790,7 @@ function renderClipsOfWeek(){
   const owner = checkOwner();
   const slots = COW_MAX - n;
   const myClip = myCowClip();
-  const alreadyPosted = !!myClip && !owner;
+  const alreadyPosted = !!myClip;
   const canPost = !full && !alreadyPosted;
 
   if(nameInp && getCowName() && !nameInp.value) nameInp.value = getCowName();
@@ -6801,7 +6827,7 @@ function renderClipsOfWeek(){
       else if(full) submitSub.textContent = 'All 3 slots are taken — vote below or check back later';
       else submitSub.textContent = 'Anyone can post · 3 slots total · 1 clip per person';
     }
-    const showForm = canPost || owner;
+    const showForm = canPost;
     if(formFields) formFields.style.display = showForm ? 'block' : 'none';
     if(alreadyNote) alreadyNote.style.display = alreadyPosted ? 'block' : 'none';
     if(fullNote) fullNote.style.display = (full && !alreadyPosted) ? 'block' : 'none';
@@ -6848,6 +6874,8 @@ function cowMeta(c){
 }
 
 function persistClipsOfWeek(){
+  cowDedupeSid();
+  cowEnforceMax();
   try{
     localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta)));
     const raw = localStorage.getItem('ndz_state');
@@ -6880,9 +6908,18 @@ function cowClearForm(){
 }
 
 function addClipOfWeek(){
-  if(CLIPS_OF_WEEK.length >= COW_MAX){ renderClipsOfWeek(); return; }
-  const owner = checkOwner();
-  if(!owner && myCowClip()){ alert('You already posted a clip. Remove yours from the leaderboard to post a new one.'); renderClipsOfWeek(); return; }
+  cowDedupeSid();
+  cowEnforceMax();
+  if(CLIPS_OF_WEEK.length >= COW_MAX){
+    alert('All 3 slots are full. Vote below or check back later.');
+    renderClipsOfWeek();
+    return;
+  }
+  if(myCowClip()){
+    alert('You already posted a clip. Remove yours from the leaderboard to post a new one.');
+    renderClipsOfWeek();
+    return;
+  }
 
   const urlInp = document.getElementById('cow-url-inp');
   const labelInp = document.getElementById('cow-label-inp');
@@ -6890,7 +6927,11 @@ function addClipOfWeek(){
   const fileInp = document.getElementById('cow-file-inp');
   const label = labelInp ? labelInp.value.trim() : '';
   const by = nameInp ? nameInp.value.trim() : getCowName();
-  if(!by){ alert('Enter your name so people know who posted the clip.'); if(nameInp) nameInp.focus(); return; }
+  if(!by){
+    alert('Enter your name before posting. Tap ? for help.');
+    if(nameInp) nameInp.focus();
+    return;
+  }
   setCowName(by);
   const file = fileInp && fileInp.files && fileInp.files[0];
   const sid = getCowSid();
@@ -6916,6 +6957,8 @@ function addClipOfWeek(){
   }
 
   CLIPS_OF_WEEK.push(clip);
+  cowDedupeSid();
+  cowEnforceMax();
   cowClearForm();
   renderClipsOfWeek();
   persistClipsOfWeek();
@@ -6958,6 +7001,8 @@ async function rehydrateUploads(){
       localStorage.removeItem('ndz_clip');
     }
     CLIPS_OF_WEEK = arr.slice(0, COW_MAX);
+    cowDedupeSid();
+    cowEnforceMax();
     if(legacy && legacy.url){ try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){} }
   }catch(e){ CLIPS_OF_WEEK = []; }
   renderClipsOfWeek();
