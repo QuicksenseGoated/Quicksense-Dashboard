@@ -2797,6 +2797,7 @@ renderAllGoals();
   if(id==='s-current')renderGear();
   if(id==='s-upgrades')renderUpgrades();
   if(id==='cow' && typeof renderClipsOfWeek==='function')renderClipsOfWeek();
+  syncCowPopup(id);
 }
 
 // ── EDIT TOGGLE ──
@@ -6838,7 +6839,18 @@ async function rehydrateUploads(){
 function openClipOfWeek(){
   if(typeof go==='function') go('cow');
 }
-function closeCowPopup(){ const p=document.getElementById('cow-popup'); if(p) p.style.display='none'; }
+let cowPopupDismissed = false;
+function syncCowPopup(pageId){
+  const p = document.getElementById('cow-popup');
+  if(!p) return;
+  if(pageId === 'cow') p.style.display = 'none';
+  else if(!cowPopupDismissed) p.style.display = 'flex';
+}
+function closeCowPopup(){
+  cowPopupDismissed = true;
+  const p = document.getElementById('cow-popup');
+  if(p) p.style.display = 'none';
+}
 
 // ── V3: MOOD SLIDER ──
 const MOOD_LEVELS = [
