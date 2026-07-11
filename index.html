@@ -544,55 +544,68 @@ input.ta{padding:8px 12px;}
 .clip-remove:hover{color:var(--yt);}
 
 /* ── CLIP OF THE WEEK PAGE ── */
-.cow-how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:20px;}
-.cow-step{padding:14px 12px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.15);background:rgba(var(--tc-rgb),0.04);text-align:center;}
-.cow-step-num{font-family:'Bebas Neue',sans-serif;font-size:28px;color:var(--tc);line-height:1;text-shadow:0 0 14px rgba(var(--tc-rgb),0.5);}
-.cow-step-txt{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);margin-top:6px;line-height:1.5;}
-.cow-status-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;padding:12px 16px;margin-bottom:16px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.2);background:rgba(var(--tc-rgb),0.06);}
-.cow-status-slots{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--tc);}
-.cow-status-lead{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.5);}
-.cow-submit-wrap{border-radius:8px;border:2px dashed rgba(var(--tc-rgb),0.45);background:linear-gradient(135deg,rgba(var(--tc-rgb),0.08) 0%,rgba(0,0,0,0.3) 100%);padding:20px;margin-bottom:20px;transition:border-color .2s,box-shadow .2s;}
-.cow-submit-wrap.cow-drop-active{border-color:var(--tc);box-shadow:0 0 30px rgba(var(--tc-rgb),0.25);}
-.cow-submit-wrap.cow-submit-full{border-style:solid;border-color:rgba(255,100,100,0.35);background:rgba(255,60,60,0.04);}
-.cow-submit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;margin-bottom:14px;flex-wrap:wrap;}
-.cow-submit-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:var(--tc);text-shadow:0 0 16px rgba(var(--tc-rgb),0.4);line-height:1;}
-.cow-submit-sub{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.4);margin-top:6px;line-height:1.6;}
-.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;padding:28px 16px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.25);background:rgba(0,0,0,0.35);cursor:none;transition:all .2s;text-align:center;}
-.cow-dropzone:hover,.cow-dropzone.cow-drop-active{border-color:var(--tc);background:rgba(var(--tc-rgb),0.1);box-shadow:0 0 24px rgba(var(--tc-rgb),0.15);}
-.cow-drop-ico{font-size:42px;filter:drop-shadow(0 0 12px rgba(var(--tc-rgb),0.6));}
-.cow-drop-label{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:3px;color:#fff;}
-.cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);}
-.cow-divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:3px;color:rgba(255,255,255,0.2);}
-.cow-divider::before,.cow-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.08);}
-.cow-methods{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:12px;}
-.cow-method{display:flex;align-items:center;gap:8px;padding:8px 10px;border-radius:4px;border:1px solid rgba(255,255,255,0.06);background:rgba(0,0,0,0.25);}
-.cow-method-tag{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:2px 7px;border-radius:2px;background:rgba(var(--tc-rgb),0.15);color:var(--tc);flex-shrink:0;}
-.cow-method-tag.yt{background:rgba(var(--yt-rgb),0.15);color:var(--yt);}
-.cow-method-tag.tk{background:rgba(var(--tk-rgb),0.15);color:var(--tk);}
-.cow-method-ex{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:0.5px;color:rgba(255,255,255,0.3);overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.cow-how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
+.cow-step{padding:10px 8px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.12);background:rgba(var(--tc-rgb),0.03);text-align:center;}
+.cow-step-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tc);line-height:1;text-shadow:0 0 10px rgba(var(--tc-rgb),0.4);}
+.cow-step-txt{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,0.3);margin-top:4px;line-height:1.4;}
+.cow-status-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.2);background:rgba(var(--tc-rgb),0.06);}
+.cow-status-slots{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--tc);line-height:1;}
+.cow-status-lead{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.45);text-align:right;max-width:55%;}
+.cow-submit-wrap{border-radius:8px;border:2px dashed rgba(var(--tc-rgb),0.4);background:linear-gradient(160deg,rgba(var(--tc-rgb),0.07) 0%,rgba(0,0,0,0.35) 100%);padding:16px;margin-bottom:16px;transition:border-color .2s,box-shadow .2s;}
+.cow-submit-wrap.cow-drop-active{border-color:var(--tc);box-shadow:0 0 30px rgba(var(--tc-rgb),0.2);}
+.cow-submit-wrap.cow-submit-full{border-style:solid;border-color:rgba(255,100,100,0.3);background:rgba(255,60,60,0.03);}
+.cow-submit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}
+.cow-submit-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--tc);text-shadow:0 0 12px rgba(var(--tc-rgb),0.35);line-height:1.1;}
+.cow-submit-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.38);margin-top:5px;line-height:1.5;}
+.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:22px 14px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.3);background:rgba(0,0,0,0.4);cursor:none;transition:all .2s;text-align:center;}
+.cow-dropzone:hover,.cow-dropzone.cow-drop-active{border-color:var(--tc);background:rgba(var(--tc-rgb),0.08);box-shadow:0 0 20px rgba(var(--tc-rgb),0.12);}
+.cow-drop-ico{font-size:36px;filter:drop-shadow(0 0 10px rgba(var(--tc-rgb),0.5));}
+.cow-drop-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;}
+.cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);}
+.cow-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.22);}
+.cow-divider::before,.cow-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
+.cow-supported{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;}
+.cow-supported-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-right:2px;}
+.cow-supported span{font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:3px;background:rgba(var(--tc-rgb),0.12);color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.2);}
+.cow-supported span.yt{background:rgba(var(--yt-rgb),0.12);color:var(--yt);border-color:rgba(var(--yt-rgb),0.2);}
+.cow-supported span.tk{background:rgba(var(--tk-rgb),0.12);color:var(--tk);border-color:rgba(var(--tk-rgb),0.2);}
 .cow-link-row{display:flex;gap:8px;flex-wrap:wrap;}
-.cow-actions{display:flex;gap:10px;margin-top:16px;flex-wrap:wrap;align-items:center;}
-.cow-btn-primary{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:12px 28px;border-radius:4px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.9);color:#0a0600;box-shadow:0 0 20px rgba(var(--tc-rgb),0.35);transition:all .18s;}
-.cow-btn-primary:hover{box-shadow:0 0 32px rgba(var(--tc-rgb),0.55);}
-.cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;padding:10px 18px;border-radius:4px;cursor:none;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.45);transition:all .18s;}
-.cow-leaderboard-head{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:4px;color:rgba(255,255,255,0.5);margin-bottom:12px;display:flex;align-items:center;gap:10px;}
-.cow-leaderboard-head span{color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.5);}
-.cow-clip-card{position:relative;padding:14px;border-radius:8px;background:rgba(0,0,0,0.35);transition:box-shadow .2s;}
-.cow-clip-card.cow-rank-1{border:1px solid rgba(var(--g-rgb,200,150,10),0.5);box-shadow:0 0 28px rgba(var(--g-rgb,200,150,10),0.15);}
-.cow-clip-card.cow-rank-2,.cow-clip-card.cow-rank-3{border:1px solid rgba(255,255,255,0.08);}
-.cow-rank-badge{font-family:'Bebas Neue',sans-serif;font-size:32px;line-height:1;color:rgba(255,255,255,0.12);position:absolute;top:10px;left:12px;z-index:1;}
-.cow-clip-card.cow-rank-1 .cow-rank-badge{color:var(--g);text-shadow:0 0 16px rgba(var(--g-rgb,200,150,10),0.6);}
-.cow-clip-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;padding-left:36px;gap:8px;flex-wrap:wrap;}
-.cow-type-badge{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.35);}
-.cow-vote-btn{font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:9px 20px;border-radius:4px;cursor:none;transition:all .18s;flex-shrink:0;}
-.cow-vote-btn.voted{background:rgba(var(--tc-rgb),0.9);color:#0a0600;border:1px solid var(--tc);box-shadow:0 0 16px rgba(var(--tc-rgb),0.5);}
-.cow-vote-btn:not(.voted){background:transparent;color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.45);}
-.cow-clip-foot{display:flex;justify-content:space-between;align-items:center;margin-top:12px;gap:10px;flex-wrap:wrap;padding-left:36px;}
-.cow-clip-label{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.65);}
-.cow-empty-hero{text-align:center;padding:40px 20px;margin-bottom:20px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.15);background:rgba(var(--tc-rgb),0.03);}
-.cow-empty-hero-ico{font-size:56px;margin-bottom:12px;filter:drop-shadow(0 0 20px rgba(var(--tc-rgb),0.5));}
-.cow-empty-hero-title{font-family:'Bebas Neue',sans-serif;font-size:clamp(28px,6vw,42px);letter-spacing:4px;color:#fff;margin-bottom:8px;}
-.cow-empty-hero-sub{font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:2px;color:rgba(255,255,255,0.35);line-height:1.8;max-width:420px;margin:0 auto;}
+.cow-link-row .ta{flex:1;min-width:0;}
+.cow-actions{display:flex;gap:8px;margin-top:14px;}
+.cow-btn-primary{flex:1;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:13px 20px;border-radius:4px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.9);color:#0a0600;box-shadow:0 0 16px rgba(var(--tc-rgb),0.3);transition:all .18s;}
+.cow-btn-primary:hover{box-shadow:0 0 28px rgba(var(--tc-rgb),0.5);}
+.cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;padding:13px 16px;border-radius:4px;cursor:none;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.4);}
+.cow-leaderboard-head{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:rgba(255,255,255,0.45);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
+.cow-leaderboard-head span{color:var(--g);text-shadow:0 0 8px rgba(var(--g-rgb,200,150,10),0.45);}
+.cow-clip-card{position:relative;padding:12px;border-radius:8px;background:rgba(0,0,0,0.35);transition:box-shadow .2s;}
+.cow-clip-card.cow-rank-1{border:1px solid rgba(var(--g-rgb,200,150,10),0.45);box-shadow:0 0 22px rgba(var(--g-rgb,200,150,10),0.12);}
+.cow-clip-card.cow-rank-2,.cow-clip-card.cow-rank-3{border:1px solid rgba(255,255,255,0.07);}
+.cow-rank-badge{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:rgba(255,255,255,0.1);position:absolute;top:8px;left:10px;z-index:1;}
+.cow-clip-card.cow-rank-1 .cow-rank-badge{color:var(--g);text-shadow:0 0 12px rgba(var(--g-rgb,200,150,10),0.5);}
+.cow-clip-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding-left:32px;gap:6px;flex-wrap:wrap;}
+.cow-type-badge{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.32);}
+.cow-vote-btn{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:8px 16px;border-radius:4px;cursor:none;transition:all .18s;flex-shrink:0;}
+.cow-vote-btn.voted{background:rgba(var(--tc-rgb),0.9);color:#0a0600;border:1px solid var(--tc);box-shadow:0 0 12px rgba(var(--tc-rgb),0.4);}
+.cow-vote-btn:not(.voted){background:transparent;color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.4);}
+.cow-clip-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap;padding-left:32px;}
+.cow-clip-label{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);}
+.cow-byline{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.28);margin-top:2px;}
+#cow .shell{padding:24px 16px 60px;}
+#cow-how-wrap.cow-how-done .cow-how{display:none;}
+#cow-how-wrap.cow-how-done .cow-how-mini{display:flex;}
+.cow-how-mini{display:none;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;border-radius:4px;border:1px solid rgba(var(--tc-rgb),0.12);background:rgba(var(--tc-rgb),0.03);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.3);}
+.cow-how-mini b{color:var(--tc);font-weight:400;}
+.cow-empty-hint{text-align:center;padding:18px 14px;margin-bottom:14px;border-radius:6px;border:1px dashed rgba(var(--tc-rgb),0.15);background:rgba(0,0,0,0.2);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:0.5px;}
+.cow-empty-hint span{display:block;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.22);margin-top:6px;font-weight:400;}
+@media(max-width:560px){
+  #cow .shell{padding:16px 12px 56px;}
+  .cow-status-lead{font-size:11px;max-width:50%;}
+  .cow-submit-title{font-size:20px;}
+  .cow-clip-meta,.cow-clip-foot{padding-left:0;}
+  .cow-rank-badge{position:static;margin-bottom:2px;font-size:22px;}
+  .cow-link-row{flex-direction:column;}
+  .cow-link-row .ta{width:100%;}
+}
 /* onboarding overlay */
 #cow-onboard{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
 #cow-onboard.open{display:flex;}
@@ -606,8 +619,7 @@ input.ta{padding:8px 12px;}
 .cow-ob-btn{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;padding:12px 32px;border-radius:4px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.9);color:#0a0600;width:100%;}
 .cow-ob-skip{font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.25);margin-top:14px;cursor:none;}
 .cow-ob-name{width:100%;margin-bottom:14px;text-align:center;font-size:14px;}
-.cow-byline{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.25);}
-@media(max-width:560px){.cow-how{grid-template-columns:1fr;}.cow-submit-title{font-size:22px;}.cow-clip-meta,.cow-clip-foot{padding-left:0;}.cow-rank-badge{position:static;margin-bottom:4px;}}
+.cow-byline{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.28);}
 
 /* inline edit fields */
 .ie-field{background:transparent;border:none;border-bottom:1px solid rgba(255,255,255,0.06);color:rgba(255,255,255,0.6);font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;width:100%;outline:none;padding:4px 0;transition:border-color .18s;}
@@ -2060,30 +2072,34 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     <button onclick="showCowOnboard(true)" style="position:absolute;right:0;top:0;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;width:28px;height:28px;cursor:none;" title="How it works">?</button>
   </div>
 
-  <!-- how it works -->
-  <div class="cow-how">
-    <div class="cow-step"><div class="cow-step-num">01</div><div class="cow-step-txt">POST YOUR<br>CLIP</div></div>
-    <div class="cow-step"><div class="cow-step-num">02</div><div class="cow-step-txt">COMMUNITY<br>VOTES</div></div>
-    <div class="cow-step"><div class="cow-step-num">03</div><div class="cow-step-txt">WINNER GETS<br>FEATURED</div></div>
+  <!-- how it works (collapses after onboarding) -->
+  <div id="cow-how-wrap">
+    <div class="cow-how">
+      <div class="cow-step"><div class="cow-step-num">01</div><div class="cow-step-txt">POST<br>CLIP</div></div>
+      <div class="cow-step"><div class="cow-step-num">02</div><div class="cow-step-txt">COMMUNITY<br>VOTES</div></div>
+      <div class="cow-step"><div class="cow-step-num">03</div><div class="cow-step-txt">WINNER<br>FEATURED</div></div>
+    </div>
+    <div class="cow-how-mini"><b>POST</b> → <b>VOTE</b> → <b>WIN</b> · 3 slots · 1 per person</div>
   </div>
 
   <!-- status bar -->
   <div class="cow-status-bar">
     <div>
       <div class="cow-status-slots" id="cow-counter">0 / 3 SLOTS</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:2px;color:rgba(255,255,255,0.3);margin-top:4px;">MAX 3 CLIPS COMPETING</div>
+      <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.28);margin-top:3px;">COMMUNITY CLIPS</div>
     </div>
     <div class="cow-status-lead" id="cow-leader-txt">No leader yet — be the first!</div>
   </div>
 
-  <!-- empty state hero (shown when no clips) -->
-  <div id="cow-empty-hero" class="cow-empty-hero" style="display:none;">
-    <div class="cow-empty-hero-ico">🎬</div>
-    <div class="cow-empty-hero-title">NO CLIPS YET</div>
-    <div class="cow-empty-hero-sub">Submit your best play below.<br>Up to 3 clips compete — community picks the winner.</div>
+  <div id="cow-empty-hint" class="cow-empty-hint" style="display:none;">🎬 NO CLIPS YET<span>Post below · 3 slots · community votes · winner featured</span></div>
+
+  <!-- leaderboard (above submit when clips exist) -->
+  <div id="cow-leaderboard-wrap" style="display:none;">
+    <div class="cow-leaderboard-head">◈ <span>LEADERBOARD</span></div>
+    <div id="cow-list" style="display:flex;flex-direction:column;gap:12px;"></div>
   </div>
 
-  <!-- COMMUNITY: submit clip panel -->
+  <!-- submit clip panel -->
   <div id="cow-submit-wrap" class="cow-submit-wrap" style="display:none;">
     <div class="cow-submit-head">
       <div>
@@ -2093,46 +2109,35 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
       <div id="cow-slots-left" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.4);"></div>
     </div>
 
+    <div id="cow-already-posted" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--g);margin-bottom:12px;display:none;text-align:center;padding:10px;border-radius:4px;background:rgba(var(--g-rgb,200,150,10),0.06);border:1px solid rgba(var(--g-rgb,200,150,10),0.2);">✓ YOU POSTED — REMOVE YOURS FROM THE LEADERBOARD TO POST AGAIN</div>
+    <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,100,100,0.85);margin-bottom:12px;display:none;text-align:center;padding:10px;border-radius:4px;background:rgba(255,60,60,0.07);border:1px solid rgba(255,100,100,0.22);">ALL 3 SLOTS FULL — VOTE ON THE LEADERBOARD ABOVE</div>
+
     <div id="cow-form-fields">
-    <div class="cow-link-row" style="margin-bottom:10px;">
-      <input class="ta" id="cow-name-inp" placeholder="Your name (shown on leaderboard)" style="flex:1;min-width:140px;font-size:13px;">
+      <input class="ta" id="cow-name-inp" placeholder="Your name (required)" style="width:100%;font-size:14px;margin-bottom:10px;box-sizing:border-box;">
+
+      <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
+
+      <div class="cow-dropzone" id="cow-dropzone" onclick="document.getElementById('cow-file-inp').click()">
+        <div class="cow-drop-ico">📤</div>
+        <div class="cow-drop-label">TAP TO UPLOAD VIDEO</div>
+        <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
+      </div>
+
+      <div class="cow-divider">OR PASTE A LINK BELOW</div>
+
+      <div class="cow-supported">
+        <span class="cow-supported-lbl">works with</span>
+        <span>MEDAL</span><span class="yt">YOUTUBE</span><span class="tk">TIKTOK</span><span>MP4</span>
+      </div>
+
+      <input class="ta" id="cow-url-inp" placeholder="Paste Medal · YouTube · TikTok or MP4 link" style="width:100%;font-size:14px;margin-bottom:8px;box-sizing:border-box;">
+      <input class="ta" id="cow-label-inp" placeholder="Clip name — e.g. insane clutch (optional)" style="width:100%;font-size:14px;margin-bottom:4px;box-sizing:border-box;">
+
+      <div class="cow-actions">
+        <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
+        <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
+      </div>
     </div>
-
-    <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
-
-    <div class="cow-dropzone" id="cow-dropzone" onclick="document.getElementById('cow-file-inp').click()">
-      <div class="cow-drop-ico">📤</div>
-      <div class="cow-drop-label">TAP TO UPLOAD VIDEO</div>
-      <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
-    </div>
-
-    <div class="cow-divider">OR PASTE A LINK</div>
-
-    <div class="cow-methods">
-      <div class="cow-method"><span class="cow-method-tag">MEDAL</span><span class="cow-method-ex">medal.tv/clips/…</span></div>
-      <div class="cow-method"><span class="cow-method-tag yt">YOUTUBE</span><span class="cow-method-ex">youtube.com/watch?v=…</span></div>
-      <div class="cow-method"><span class="cow-method-tag tk">TIKTOK</span><span class="cow-method-ex">tiktok.com/@user/video/…</span></div>
-      <div class="cow-method"><span class="cow-method-tag">MP4 LINK</span><span class="cow-method-ex">direct .mp4 URL</span></div>
-    </div>
-
-    <div class="cow-link-row">
-      <input class="ta" id="cow-url-inp" placeholder="Medal · YouTube · TikTok · MP4 URL" style="flex:2;min-width:160px;font-size:13px;">
-      <input class="ta" id="cow-label-inp" placeholder="Clip name (e.g. insane clutch)" style="flex:1;min-width:120px;font-size:13px;">
-    </div>
-
-    <div class="cow-actions">
-      <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
-      <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
-    </div>
-    </div><!-- /cow-form-fields -->
-    <div id="cow-already-posted" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:var(--g);margin-top:12px;display:none;text-align:center;">YOU ALREADY POSTED A CLIP — REMOVE YOURS BELOW TO POST A NEW ONE</div>
-    <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:3px;color:rgba(255,100,100,0.8);margin-top:14px;display:none;text-align:center;padding:12px;border-radius:4px;background:rgba(255,60,60,0.08);border:1px solid rgba(255,100,100,0.25);">ALL 3 SLOTS FULL — VOTE BELOW OR CHECK BACK LATER</div>
-  </div>
-
-  <!-- leaderboard -->
-  <div id="cow-leaderboard-wrap" style="display:none;">
-    <div class="cow-leaderboard-head">◈ <span>LEADERBOARD</span> — TAP TO VOTE</div>
-    <div id="cow-list" style="display:flex;flex-direction:column;gap:14px;"></div>
   </div>
 
   <div class="pfoot"><div class="pfoot-name">QUICKSENSE</div><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
@@ -6741,10 +6746,18 @@ function cowOnboardNext(){
   }
 }
 function cowOnboardSkip(){ cowOnboardFinish(); }
+function cowSyncHowCollapse(){
+  const wrap = document.getElementById('cow-how-wrap');
+  if(!wrap) return;
+  let done = false;
+  try{ done = !!localStorage.getItem('ndz_cow_onboarded'); }catch(e){}
+  wrap.classList.toggle('cow-how-done', done);
+}
 function cowOnboardFinish(){
   const ob = document.getElementById('cow-onboard');
   if(ob) ob.classList.remove('open');
   try{ localStorage.setItem('ndz_cow_onboarded','1'); }catch(e){}
+  cowSyncHowCollapse();
   const ni = document.getElementById('cow-name-inp');
   if(ni && getCowName()) ni.value = getCowName();
 }
@@ -6765,18 +6778,17 @@ function voteClip(id){
 }
 
 function renderClipsOfWeek(){
+  cowSyncHowCollapse();
   const list = document.getElementById('cow-list');
   const counter = document.getElementById('cow-counter');
   const leaderTxt = document.getElementById('cow-leader-txt');
-  const emptyHero = document.getElementById('cow-empty-hero');
+  const emptyHint = document.getElementById('cow-empty-hint');
   const submitWrap = document.getElementById('cow-submit-wrap');
   const lbWrap = document.getElementById('cow-leaderboard-wrap');
   const slotsLeft = document.getElementById('cow-slots-left');
   const submitSub = document.getElementById('cow-submit-sub');
   const fullNote = document.getElementById('cow-full-note');
   const alreadyNote = document.getElementById('cow-already-posted');
-  const addBtn = document.getElementById('cow-add-btn');
-  const dropzone = document.getElementById('cow-dropzone');
   const formFields = document.getElementById('cow-form-fields');
   const nameInp = document.getElementById('cow-name-inp');
 
@@ -6810,21 +6822,16 @@ function renderClipsOfWeek(){
     }
   }
 
-  // section visibility
-  if(emptyHero) emptyHero.style.display = n ? 'none' : 'block';
-  if(emptyHero && !n){
-    const sub = emptyHero.querySelector('.cow-empty-hero-sub');
-    if(sub) sub.innerHTML = 'Be the first to post below.<br>3 slots · community votes · winner featured.';
-  }
   if(lbWrap) lbWrap.style.display = n ? 'block' : 'none';
+  if(emptyHint) emptyHint.style.display = n ? 'none' : 'block';
 
   if(submitWrap){
     submitWrap.style.display = 'block';
     submitWrap.classList.toggle('cow-submit-full', full && !alreadyPosted);
     if(slotsLeft) slotsLeft.textContent = full ? 'FULL' : `${slots} SLOT${slots!==1?'S':''} LEFT`;
     if(submitSub){
-      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours below to submit a new one';
-      else if(full) submitSub.textContent = 'All 3 slots are taken — vote below or check back later';
+      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours from the leaderboard to post again';
+      else if(full) submitSub.textContent = 'All 3 slots are taken — vote on the leaderboard above';
       else submitSub.textContent = 'Anyone can post · 3 slots total · 1 clip per person';
     }
     const showForm = canPost;
