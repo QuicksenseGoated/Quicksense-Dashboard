@@ -662,6 +662,8 @@ input.ta{padding:8px 12px;}
   .cow-slot-track{grid-template-columns:repeat(2,1fr);}
   .cow-slot-pill{font-size:11px;}
 }
+.cow-cloud-note{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;line-height:1.45;color:rgba(127,216,255,0.85);text-align:center;padding:10px 12px;margin-bottom:14px;border-radius:8px;border:1px solid rgba(127,216,255,0.25);background:rgba(127,216,255,0.06);}
+.cow-local-note{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;line-height:1.4;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px;}
 .cow-posting-as{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.25);background:rgba(var(--tc-rgb),0.08);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.55);}
 .cow-posting-as span{color:var(--tc);font-size:16px;font-weight:700;}
 .cow-posting-change{margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;}
@@ -1853,7 +1855,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
   <div class="cow-ob-card">
     <div class="cow-ob-ico" id="cow-ob-ico">🎬</div>
     <div class="cow-ob-title" id="cow-ob-title">CLIP OF THE WEEK</div>
-    <div class="cow-ob-body" id="cow-ob-body">Post a clip · community votes · winner gets featured.<br><br><b>10 slots total</b> · <b>1 clip per Twitch name</b></div>
+    <div class="cow-ob-body" id="cow-ob-body">Paste a Medal, YouTube or TikTok link · everyone sees it · community votes · winner featured.<br><br><b>10 slots</b> · <b>1 clip per Twitch name</b></div>
     <button class="cow-ob-btn" id="cow-ob-btn" onclick="cowOnboardFinish()">GOT IT →</button>
   </div>
 </div>
@@ -2191,7 +2193,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
   <div class="cow-main-tabs">
     <button type="button" class="cow-main-tab post on" id="cow-nav-post" onclick="cowSetPageTab('post')">
-      📤 POST CLIP <span class="cow-main-tab-badge" id="cow-nav-post-badge">3</span>
+      📤 POST CLIP <span class="cow-main-tab-badge" id="cow-nav-post-badge">10</span>
     </button>
     <button type="button" class="cow-main-tab leaderboard" id="cow-nav-leaderboard" onclick="cowSetPageTab('leaderboard')">
       🏆 LEADERBOARD <span class="cow-main-tab-badge" id="cow-nav-lb-badge">0</span>
@@ -2205,12 +2207,12 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
         <div class="cow-post-hero-tag">◈ Submit your play</div>
         <div class="cow-post-hero-title">POST YOUR <span class="acc">CLIP</span></div>
         <div class="cow-post-hero-line"></div>
-        <div class="cow-post-slots-big" id="cow-slots-left">3 LEFT</div>
+        <div class="cow-post-slots-big" id="cow-slots-left">10 LEFT</div>
         <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 10 total · 1 per Twitch name</div>
       </div>
 
       <div class="cow-post-body">
-        <div class="cow-post-flow">Upload a file or paste a link · community votes · winner featured</div>
+        <div class="cow-post-flow">Paste a Medal, YouTube or TikTok link — everyone sees it · votes sync</div>
 
         <div class="cow-post-meta">
           <div class="cow-post-stat"><span>Posting as</span><b id="cow-post-user" style="font-size:18px;">@you</b></div>
@@ -2236,20 +2238,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div id="cow-form-fields">
             <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
 
-            <label class="cow-dropzone" id="cow-dropzone" for="cow-file-inp"
-              ondragover="cowDragOver(event)"
-              ondragleave="cowDragLeave(event)"
-              ondrop="cowFileDrop(event)">
-              <div class="cow-drop-content">
-                <div class="cow-drop-ico">📤</div>
-                <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
-                <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
-              </div>
-            </label>
-            <input type="file" id="cow-file-inp" class="cow-file-inp" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.mov,.webm" onchange="cowFilePicked(this)">
-            <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
-
-            <div class="cow-or-divider">or paste a link</div>
+            <div class="cow-cloud-note">🔗 Paste a link below to share with everyone · saved to cloud automatically</div>
 
             <div class="cow-source-row">
               <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
@@ -2267,6 +2256,22 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
               <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
               <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
             </div>
+
+            <div class="cow-or-divider">optional · this device only</div>
+
+            <label class="cow-dropzone" id="cow-dropzone" for="cow-file-inp"
+              ondragover="cowDragOver(event)"
+              ondragleave="cowDragLeave(event)"
+              ondrop="cowFileDrop(event)">
+              <div class="cow-drop-content">
+                <div class="cow-drop-ico">📤</div>
+                <div class="cow-drop-label">LOCAL UPLOAD</div>
+                <div class="cow-drop-hint" id="cow-file-name">MP4 · only you see this · use Medal link to share</div>
+              </div>
+            </label>
+            <input type="file" id="cow-file-inp" class="cow-file-inp" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.mov,.webm" onchange="cowFilePicked(this)">
+            <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
+            <div class="cow-local-note">Uploads stay on your browser only — not shared with others</div>
           </div>
         </section>
       </div>
@@ -3014,6 +3019,15 @@ renderAllGoals();
   if(id==='s-current')renderGear();
   if(id==='s-upgrades')renderUpgrades();
   if(id==='cow' && typeof renderClipsOfWeek==='function')renderClipsOfWeek();
+  if(id==='cow' && typeof cowLoadFromCloud==='function'){
+    cowLoadFromCloud().then(changed=>{
+      if(changed){
+        try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){}
+        if(typeof renderClipsOfWeek==='function') renderClipsOfWeek();
+        if(typeof rehydrateUploads==='function') rehydrateUploads();
+      }
+    });
+  }
   if(id==='cow' && typeof cowInitPageTab==='function') cowInitPageTab();
   if(id==='cow' && typeof showAccountSetup==='function' && !hasUserAccount()) showAccountSetup(true);
   syncCowPopup(id);
@@ -6753,9 +6767,83 @@ document.addEventListener('DOMContentLoaded',()=>{
 // ── V4: PROFESSIONAL CLIP OF THE WEEK ──
 const COW_MAX = 10;
 const COW_MAX_BYTES = 200 * 1024 * 1024; // 200MB per clip
+const COW_CLOUD_BIN_ID = '6a5d13b1f5f4af5e29a49985';
 let CLIPS_OF_WEEK = [];
+let _cowCloudBusy = false;
 
-// Hard cap: never more than 3 clips; one clip per browser + Twitch name
+function cowLinkClipsMeta(){
+  return CLIPS_OF_WEEK.filter(c=>!c.up&&!c.local).map(cowMeta);
+}
+function cowMergeCloudClips(cloudClips){
+  if(!Array.isArray(cloudClips) || !cloudClips.length) return false;
+  const byId = {};
+  CLIPS_OF_WEEK.forEach(c=>{ if(c&&c.id) byId[c.id]=c; });
+  cloudClips.forEach(c=>{
+    if(!c||!c.id||c.up) return;
+    const prev = byId[c.id]||{};
+    byId[c.id] = Object.assign({}, prev, c, {
+      votes: Math.max(prev.votes||0, c.votes||0)
+    });
+  });
+  const localOnly = CLIPS_OF_WEEK.filter(c=>c.up||c.local);
+  CLIPS_OF_WEEK = Object.values(byId).concat(localOnly);
+  cowEnsureTkeys();
+  cowDedupeSid();
+  cowDedupeTwitch();
+  cowEnforceMax();
+  return true;
+}
+async function cowLoadFromCloud(){
+  if(!COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return false;
+  try{
+    const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_MASTER }
+    });
+    if(!res.ok) return false;
+    const j = await res.json();
+    return cowMergeCloudClips(j.record && j.record.clips);
+  }catch(e){ return false; }
+}
+async function cowPushToCloud(){
+  if(_cowCloudBusy || !COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return;
+  _cowCloudBusy = true;
+  try{
+    let cloudClips = [];
+    try{
+      const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_MASTER }
+      });
+      if(res.ok){
+        const j = await res.json();
+        cloudClips = (j.record && j.record.clips) || [];
+      }
+    }catch(e){}
+    const byId = {};
+    cowLinkClipsMeta().forEach(c=>{ byId[c.id]=c; });
+    cloudClips.forEach(c=>{
+      if(!c||!c.id||!byId[c.id]) return;
+      byId[c.id].votes = Math.max(byId[c.id].votes||0, c.votes||0);
+    });
+    let merged = Object.values(byId);
+    merged.sort((a,b)=>(b.votes||0)-(a.votes||0));
+    merged = merged.slice(0, COW_MAX);
+    await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_MASTER
+      },
+      body: JSON.stringify({ clips: merged, v: 1, ts: Date.now() })
+    });
+    if(typeof showSyncIndicator==='function') showSyncIndicator('✓ clips synced');
+  }catch(e){
+    console.warn('cow cloud save failed', e);
+  }finally{
+    _cowCloudBusy = false;
+  }
+}
+
+// Hard cap clip count; one clip per Twitch name
 function cowEnforceMax(){
   if(CLIPS_OF_WEEK.length > COW_MAX){
     CLIPS_OF_WEEK.slice(COW_MAX).forEach(c=>{
@@ -7146,7 +7234,7 @@ function persistClipsOfWeek(){
     localStorage.setItem('ndz_state', JSON.stringify(s));
   }catch(e){}
   if(typeof saveState==='function' && checkOwner()){ try{ saveState(); }catch(e){} }
-  else if(typeof syncToCloud==='function' && typeof BIN_ID!=='undefined' && BIN_ID){ try{ syncToCloud(); }catch(e){} }
+  cowPushToCloud();
 }
 
 // submit UI helpers
@@ -7251,8 +7339,8 @@ function cowUpdateFileUI(f){
   const preview = document.getElementById('cow-file-preview');
   const vid = document.getElementById('cow-file-preview-vid');
   if(nameEl){
-    if(f) nameEl.innerHTML = `<span style="color:var(--tc);">✓ ${f.name}</span> · ready to post`;
-    else nameEl.textContent = 'MP4 · max 200MB';
+    if(f) nameEl.innerHTML = `<span style="color:var(--tc);">✓ ${f.name}</span> · local only`;
+    else nameEl.textContent = 'MP4 · only you see this · use Medal link to share';
   }
   if(dropzone) dropzone.classList.toggle('cow-drop-active', !!f);
   if(preview && vid){
@@ -7365,6 +7453,9 @@ function addClipOfWeek(){
   cowClearForm();
   renderClipsOfWeek();
   persistClipsOfWeek();
+  if(clip.up){
+    if(typeof showSyncIndicator==='function') showSyncIndicator('Saved on this device only');
+  }
   cowSetPageTab('leaderboard');
 }
 
@@ -7416,6 +7507,24 @@ async function rehydrateUploads(){
   }catch(e){ CLIPS_OF_WEEK = []; }
   renderClipsOfWeek();
   rehydrateUploads();
+  cowLoadFromCloud().then(changed=>{
+    if(changed){
+      try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){}
+      renderClipsOfWeek();
+      rehydrateUploads();
+    }
+  });
+  setInterval(()=>{
+    if(document.getElementById('cow')?.classList.contains('on')){
+      cowLoadFromCloud().then(changed=>{
+        if(changed){
+          try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){}
+          renderClipsOfWeek();
+          rehydrateUploads();
+        }
+      });
+    }
+  }, 30000);
   cowSelectSource('medal');
   initAppUser();
   cowInitPageTab();
