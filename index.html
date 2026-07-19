@@ -544,7 +544,10 @@ input.ta{padding:8px 12px;}
 .clip-remove:hover{color:var(--yt);}
 
 /* ── CLIP OF THE WEEK PAGE (revamp) ── */
-#cow .shell{padding:20px 16px 64px;max-width:920px;}
+#cow .shell{padding:20px 16px 64px;max-width:680px;margin-left:auto;margin-right:auto;}
+#cow .tnav{justify-content:center;position:relative;margin-bottom:22px;}
+#cow .tnav .back{position:absolute;left:0;top:50%;transform:translateY(-50%);}
+#cow .tnav .bc{text-align:center;flex:1;padding:0 72px;}
 .cow-help-btn{position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.35);font-family:'Share Tech Mono',monospace;font-size:11px;cursor:none;transition:all .18s;}
 .cow-help-btn:hover{border-color:rgba(var(--tc-rgb),0.45);color:var(--tc);}
 .cow-how{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px;}
@@ -648,7 +651,7 @@ input.ta{padding:8px 12px;}
 .cow-btn-primary:hover{box-shadow:0 0 28px rgba(var(--tc-rgb),0.45);}
 .cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:14px 14px;border-radius:8px;cursor:none;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.55);}
 @media(min-width:760px){
-  .cow-main-tabs,.cow-lb-screen,.cow-post-screen{max-width:720px;margin-left:auto;margin-right:auto;}
+  .cow-lb-screen,.cow-post-screen{max-width:100%;}
 }
 @media(max-width:560px){
   #cow .shell{padding:14px 12px 56px;}
@@ -668,7 +671,7 @@ input.ta{padding:8px 12px;}
 .cow-user-pill b{color:var(--tc);}
 #cow.cow-tab-leaderboard .shell{background:radial-gradient(ellipse at 50% 0%,rgba(var(--g-rgb,200,150,10),0.07) 0%,transparent 55%);}
 #cow.cow-tab-post .shell{background:radial-gradient(ellipse at 50% 0%,rgba(var(--tc-rgb),0.1) 0%,transparent 55%);}
-.cow-main-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;margin:0 0 18px;border-radius:14px;padding:5px;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.45);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);}
+.cow-main-tabs{display:grid;grid-template-columns:1fr 1fr;gap:0;max-width:440px;margin:0 auto 20px;border-radius:14px;padding:5px;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.45);position:sticky;top:0;z-index:20;backdrop-filter:blur(12px);}
 .cow-main-tab{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;padding:16px 10px;border-radius:10px;cursor:none;border:1px solid transparent;background:transparent;color:rgba(255,255,255,0.38);transition:all .2s;display:flex;align-items:center;justify-content:center;gap:8px;line-height:1.1;}
 .cow-main-tab.on{color:#fff;box-shadow:0 4px 24px rgba(0,0,0,0.35);}
 .cow-main-tab.leaderboard.on{border-color:rgba(var(--g-rgb,200,150,10),0.45);background:linear-gradient(180deg,rgba(var(--g-rgb,200,150,10),0.22) 0%,rgba(var(--g-rgb,200,150,10),0.08) 100%);text-shadow:0 0 16px rgba(var(--g-rgb,200,150,10),0.35);}
@@ -701,10 +704,9 @@ input.ta{padding:8px 12px;}
 .cow-post-stat b{color:var(--tc);}
 .cow-post-slots-big{font-family:'Bebas Neue',sans-serif;font-size:42px;letter-spacing:3px;color:var(--tc);text-shadow:0 0 20px rgba(var(--tc-rgb),0.4);line-height:1;margin-top:8px;}
 .cow-post-slots-lbl{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,0.5);margin-top:6px;}
-.cow-post-steps{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:16px 0;}
-.cow-post-step{padding:12px 8px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.18);background:rgba(var(--tc-rgb),0.06);text-align:center;}
-.cow-post-step-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tc);}
-.cow-post-step-txt{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;color:rgba(255,255,255,0.55);margin-top:4px;line-height:1.3;text-transform:uppercase;}
+.cow-post-flow{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;letter-spacing:0.5px;color:rgba(255,255,255,0.5);text-align:center;margin:0 0 16px;line-height:1.5;}
+.cow-or-divider{display:flex;align-items:center;gap:12px;margin:16px 0;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.35);text-transform:uppercase;}
+.cow-or-divider::before,.cow-or-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.1);}
 .cow-post-form-wrap{padding:0 16px 20px;}
 .cow-post-form-wrap .cow-submit-wrap{border:none;background:transparent;padding:0;margin:0;box-shadow:none;}
 .cow-post-form-wrap .cow-submit-head{display:none;}
@@ -2179,24 +2181,99 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 </div></div>
 
 <!-- ═══════════ CLIP OF THE WEEK (dedicated page) ═══════════ -->
-<div id="cow" class="pg cow-tab-leaderboard">
+<div id="cow" class="pg cow-tab-post">
 <div class="shell ain">
   <div class="tnav">
     <button class="back" onclick="go('landing')">← Home</button>
-    <div class="bc">QUICKSENSE <b>/ Clip of the Week</b></div>
+    <div class="bc">QUICKSENSE <b>/ Post Clip</b></div>
   </div>
 
   <div class="cow-main-tabs">
-    <button type="button" class="cow-main-tab leaderboard on" id="cow-nav-leaderboard" onclick="cowSetPageTab('leaderboard')">
-      🏆 LEADERBOARD <span class="cow-main-tab-badge" id="cow-nav-lb-badge">0</span>
-    </button>
-    <button type="button" class="cow-main-tab post" id="cow-nav-post" onclick="cowSetPageTab('post')">
+    <button type="button" class="cow-main-tab post on" id="cow-nav-post" onclick="cowSetPageTab('post')">
       📤 POST CLIP <span class="cow-main-tab-badge" id="cow-nav-post-badge">3</span>
+    </button>
+    <button type="button" class="cow-main-tab leaderboard" id="cow-nav-leaderboard" onclick="cowSetPageTab('leaderboard')">
+      🏆 LEADERBOARD <span class="cow-main-tab-badge" id="cow-nav-lb-badge">0</span>
     </button>
   </div>
 
+  <!-- ═══ POST CLIP TAB (full page) ═══ -->
+  <div id="cow-panel-post" class="cow-page-panel on">
+    <div class="cow-post-screen">
+      <div class="cow-post-hero">
+        <div class="cow-post-hero-tag">◈ Submit your play</div>
+        <div class="cow-post-hero-title">POST YOUR <span class="acc">CLIP</span></div>
+        <div class="cow-post-hero-line"></div>
+        <div class="cow-post-slots-big" id="cow-slots-left">3 LEFT</div>
+        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 3 total · 1 per Twitch name</div>
+      </div>
+
+      <div class="cow-post-body">
+        <div class="cow-post-flow">Upload a file or paste a link · community votes · winner featured</div>
+
+        <div class="cow-post-meta">
+          <div class="cow-post-stat"><span>Posting as</span><b id="cow-post-user" style="font-size:18px;">@you</b></div>
+          <div class="cow-post-stat"><span>Slots filled</span><b id="cow-post-counter">0 / 3</b></div>
+        </div>
+
+        <div class="cow-slot-label">Slot status</div>
+        <div class="cow-slot-track" id="cow-slot-track"></div>
+      </div>
+
+      <div class="cow-post-form-wrap">
+        <section id="cow-submit-wrap" class="cow-submit-wrap">
+          <div class="cow-submit-head">
+            <div>
+              <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
+              <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 3 slots · 1 clip per Twitch name</div>
+            </div>
+          </div>
+
+          <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS ON THE LEADERBOARD TAB TO POST AGAIN</div>
+          <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
+
+          <div id="cow-form-fields">
+            <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
+
+            <label class="cow-dropzone" id="cow-dropzone" for="cow-file-inp"
+              ondragover="cowDragOver(event)"
+              ondragleave="cowDragLeave(event)"
+              ondrop="cowFileDrop(event)">
+              <div class="cow-drop-content">
+                <div class="cow-drop-ico">📤</div>
+                <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
+                <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
+              </div>
+            </label>
+            <input type="file" id="cow-file-inp" class="cow-file-inp" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.mov,.webm" onchange="cowFilePicked(this)">
+            <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
+
+            <div class="cow-or-divider">or paste a link</div>
+
+            <div class="cow-source-row">
+              <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
+              <button type="button" class="cow-source yt" data-src="youtube" onclick="cowSelectSource('youtube')">YOUTUBE</button>
+              <button type="button" class="cow-source tk" data-src="tiktok" onclick="cowSelectSource('tiktok')">TIKTOK</button>
+              <button type="button" class="cow-source" data-src="mp4" onclick="cowSelectSource('mp4')">MP4 URL</button>
+            </div>
+            <input class="ta cow-url-inp" id="cow-url-inp" placeholder="https://medal.tv/clips/..." oninput="cowUrlChanged()">
+            <div class="cow-link-preview" id="cow-link-preview"></div>
+
+            <div class="cow-field-label" style="margin-top:12px;">CLIP TITLE (OPTIONAL)</div>
+            <input class="ta cow-label-inp" id="cow-label-inp" placeholder="e.g. insane clutch">
+
+            <div class="cow-actions">
+              <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
+              <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
+            </div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </div>
+
   <!-- ═══ LEADERBOARD TAB (full page) ═══ -->
-  <div id="cow-panel-leaderboard" class="cow-page-panel on">
+  <div id="cow-panel-leaderboard" class="cow-page-panel">
     <div class="cow-lb-screen">
       <div class="cow-lb-hero">
         <button class="cow-help-float" onclick="showCowHelp()" title="How it works">?</button>
@@ -2223,92 +2300,6 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div class="cow-lb-list-head">◈ <span>LIVE CLIPS</span> · tap ☆ to vote</div>
           <div id="cow-list"></div>
         </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- ═══ POST CLIP TAB (full page) ═══ -->
-  <div id="cow-panel-post" class="cow-page-panel">
-    <div class="cow-post-screen">
-      <div class="cow-post-hero">
-        <div class="cow-post-hero-tag">◈ Submit your play</div>
-        <div class="cow-post-hero-title">POST YOUR <span class="acc">CLIP</span></div>
-        <div class="cow-post-hero-line"></div>
-        <div class="cow-post-slots-big" id="cow-slots-left">3 LEFT</div>
-        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 3 total · 1 per Twitch name</div>
-      </div>
-
-      <div class="cow-post-body">
-        <div class="cow-post-steps">
-          <div class="cow-post-step"><div class="cow-post-step-num">1</div><div class="cow-post-step-txt">Upload or link</div></div>
-          <div class="cow-post-step"><div class="cow-post-step-num">2</div><div class="cow-post-step-txt">Community votes</div></div>
-          <div class="cow-post-step"><div class="cow-post-step-num">3</div><div class="cow-post-step-txt">Winner featured</div></div>
-        </div>
-
-        <div class="cow-post-meta">
-          <div class="cow-post-stat"><span>Posting as</span><b id="cow-post-user" style="font-size:18px;">@you</b></div>
-          <div class="cow-post-stat"><span>Slots filled</span><b id="cow-post-counter">0 / 3</b></div>
-        </div>
-
-        <div class="cow-slot-label">Slot status</div>
-        <div class="cow-slot-track" id="cow-slot-track"></div>
-      </div>
-
-      <div class="cow-post-form-wrap">
-        <section id="cow-submit-wrap" class="cow-submit-wrap">
-          <div class="cow-submit-head">
-            <div>
-              <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
-              <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 3 slots · 1 clip per Twitch name</div>
-            </div>
-          </div>
-
-          <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS ON THE LEADERBOARD TAB TO POST AGAIN</div>
-          <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
-
-          <div id="cow-form-fields">
-            <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
-
-            <div class="cow-tabs">
-              <button type="button" class="cow-tab on" id="cow-tab-upload" onclick="cowSetTab('upload')">📤 UPLOAD MP4</button>
-              <button type="button" class="cow-tab" id="cow-tab-link" onclick="cowSetTab('link')">🔗 PASTE LINK</button>
-            </div>
-
-            <div id="cow-panel-upload" class="cow-tab-panel on">
-              <label class="cow-dropzone" id="cow-dropzone" for="cow-file-inp"
-                ondragover="cowDragOver(event)"
-                ondragleave="cowDragLeave(event)"
-                ondrop="cowFileDrop(event)">
-                <div class="cow-drop-content">
-                  <div class="cow-drop-ico">📤</div>
-                  <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
-                  <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
-                </div>
-              </label>
-              <input type="file" id="cow-file-inp" class="cow-file-inp" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.mov,.webm" onchange="cowFilePicked(this)">
-              <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
-            </div>
-
-            <div id="cow-panel-link" class="cow-tab-panel">
-              <div class="cow-source-row">
-                <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
-                <button type="button" class="cow-source yt" data-src="youtube" onclick="cowSelectSource('youtube')">YOUTUBE</button>
-                <button type="button" class="cow-source tk" data-src="tiktok" onclick="cowSelectSource('tiktok')">TIKTOK</button>
-                <button type="button" class="cow-source" data-src="mp4" onclick="cowSelectSource('mp4')">MP4 URL</button>
-              </div>
-              <input class="ta cow-url-inp" id="cow-url-inp" placeholder="https://medal.tv/clips/..." oninput="cowUrlChanged()">
-              <div class="cow-link-preview" id="cow-link-preview"></div>
-            </div>
-
-            <div class="cow-field-label" style="margin-top:12px;">CLIP TITLE (OPTIONAL)</div>
-            <input class="ta cow-label-inp" id="cow-label-inp" placeholder="e.g. insane clutch">
-
-            <div class="cow-actions">
-              <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
-              <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
-            </div>
-          </div>
-        </section>
       </div>
     </div>
   </div>
@@ -7231,14 +7222,13 @@ function cowInitPageTab(){
     const saved = localStorage.getItem('ndz_cow_tab');
     if(saved === 'post' || saved === 'leaderboard'){ cowSetPageTab(saved); return; }
   }catch(e){}
-  cowSetPageTab(CLIPS_OF_WEEK.length ? 'leaderboard' : 'post');
+  cowSetPageTab('post');
 }
 function cowSelectSource(src){
   cowLinkSource = src;
   document.querySelectorAll('.cow-source').forEach(el=>el.classList.toggle('on', el.dataset.src===src));
   const inp = document.getElementById('cow-url-inp');
   if(inp && !inp.value.trim()) inp.placeholder = COW_LINK_PLACEHOLDERS[src] || 'Paste link';
-  cowSetTab('link');
   if(inp) inp.focus();
 }
 function cowUrlChanged(){
@@ -7252,7 +7242,6 @@ function cowUrlChanged(){
   const note = (type==='twitch' && !/medal|youtube|tiktok|\.mp4|\.webm/i.test(raw)) ? 'Opens on Twitch (no embed)' : 'Link detected · ready to post';
   prev.style.display = 'flex';
   prev.innerHTML = `<span class="cow-preview-badge ${cls}">${labels[type]||'LINK'}</span><span class="cow-preview-txt">${note}</span>`;
-  cowSetTab('link');
 }
 function cowUpdateFileUI(f){
   _cowPendingFile = f || null;
@@ -7288,7 +7277,6 @@ function cowFilePicked(inp){
     return;
   }
   cowUpdateFileUI(f || null);
-  if(f) cowSetTab('upload');
 }
 function cowFileDrop(e){
   e.preventDefault();
@@ -7299,7 +7287,6 @@ function cowFileDrop(e){
   if(!cowIsVideoFile(f)){ alert('Please drop a video file (MP4, MOV, or WebM).'); return; }
   cowSyncFileInput(f);
   cowUpdateFileUI(f);
-  cowSetTab('upload');
 }
 function cowClearForm(){
   const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp');
@@ -7346,7 +7333,6 @@ function addClipOfWeek(){
 
   const file = _cowPendingFile || (fileInp && fileInp.files && fileInp.files[0]);
   const rawUrl = urlInp ? urlInp.value.trim() : '';
-  const onUploadTab = document.getElementById('cow-panel-upload')?.classList.contains('on');
 
   let clip;
   if(file){
@@ -7366,7 +7352,7 @@ function addClipOfWeek(){
     clip.tkey = tkey;
     clip.sid = sid;
   } else {
-    alert(onUploadTab ? 'Choose a video file first (tap the upload area).' : 'Paste a Medal, YouTube, TikTok or MP4 link first.');
+    alert('Upload a video file or paste a Medal, YouTube, TikTok or MP4 link.');
     return;
   }
 
