@@ -648,8 +648,7 @@ input.ta{padding:8px 12px;}
 .cow-btn-primary:hover{box-shadow:0 0 28px rgba(var(--tc-rgb),0.45);}
 .cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:14px 14px;border-radius:8px;cursor:none;border:1px solid rgba(255,255,255,0.15);background:transparent;color:rgba(255,255,255,0.55);}
 @media(min-width:760px){
-  .cow-layout{display:grid;grid-template-columns:1.05fr 0.95fr;gap:16px;align-items:start;}
-  .cow-arena{margin-bottom:0;}
+  .cow-page-nav{max-width:520px;margin-left:auto;margin-right:auto;}
 }
 @media(max-width:560px){
   #cow .shell{padding:14px 12px 56px;}
@@ -673,6 +672,16 @@ input.ta{padding:8px 12px;}
 .cow-poster-lbl{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;letter-spacing:1px;color:rgba(255,255,255,0.4);margin-right:6px;text-transform:uppercase;}
 .cow-user-pill{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.5);margin-top:6px;}
 .cow-user-pill b{color:var(--tc);}
+.cow-page-nav{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:16px;}
+.cow-page-nav-btn{font-family:'Bebas Neue',sans-serif;font-size:17px;letter-spacing:2px;padding:14px 12px;border-radius:10px;cursor:none;border:1px solid rgba(255,255,255,0.1);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.45);transition:all .18s;display:flex;align-items:center;justify-content:center;gap:8px;}
+.cow-page-nav-btn.on{border-color:rgba(var(--tc-rgb),0.5);background:rgba(var(--tc-rgb),0.14);color:#fff;box-shadow:0 0 20px rgba(var(--tc-rgb),0.18);}
+.cow-page-nav-btn.on.leaderboard{border-color:rgba(var(--g-rgb,200,150,10),0.45);background:rgba(var(--g-rgb,200,150,10),0.1);box-shadow:0 0 20px rgba(var(--g-rgb,200,150,10),0.12);}
+.cow-page-nav-badge{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:700;padding:2px 7px;border-radius:999px;background:rgba(255,255,255,0.1);color:rgba(255,255,255,0.55);}
+.cow-page-nav-btn.on .cow-page-nav-badge{background:rgba(0,0,0,0.25);color:var(--tc);}
+.cow-page-nav-btn.on.leaderboard .cow-page-nav-badge{color:var(--g);}
+.cow-page-panel{display:none;}
+.cow-page-panel.on{display:block;}
+.cow-arena-page .cow-arena{margin-bottom:0;}
 /* onboarding overlay */
 #cow-onboard{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
 #ndz-account{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
@@ -2184,24 +2193,35 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     </div>
   </div>
 
-  <div class="cow-layout">
+  <div class="cow-page-nav">
+    <button type="button" class="cow-page-nav-btn leaderboard on" id="cow-nav-leaderboard" onclick="cowSetPageTab('leaderboard')">
+      🏆 LEADERBOARD <span class="cow-page-nav-badge" id="cow-nav-lb-badge">0</span>
+    </button>
+    <button type="button" class="cow-page-nav-btn" id="cow-nav-post" onclick="cowSetPageTab('post')">
+      📤 POST CLIP
+    </button>
+  </div>
+
+  <div id="cow-panel-leaderboard" class="cow-page-panel on cow-arena-page">
     <section class="cow-arena">
       <div id="cow-empty-hint" class="cow-empty-hint" style="display:none;">
         <div class="cow-empty-ico">🎬</div>
-        <div class="cow-empty-title">ARENA EMPTY</div>
-        <span class="cow-empty-sub">Upload or paste a link to fill a slot · max 3 clips · vote for the winner</span>
+        <div class="cow-empty-title">NO CLIPS YET</div>
+        <span class="cow-empty-sub">Switch to <b style="color:var(--tc);">Post Clip</b> to submit · max 3 clips · vote for the winner</span>
       </div>
 
-      <div id="cow-leaderboard-wrap" style="display:none;">
+      <div id="cow-leaderboard-wrap">
         <div class="cow-arena-head">
           <div class="cow-arena-title">◈ <span>LEADERBOARD</span></div>
-          <div class="cow-arena-sub">sorted by votes</div>
+          <div class="cow-arena-sub">sorted by votes · tap ☆ vote</div>
         </div>
         <div id="cow-list"></div>
       </div>
     </section>
+  </div>
 
-    <section id="cow-submit-wrap" class="cow-submit-wrap" style="display:none;">
+  <div id="cow-panel-post" class="cow-page-panel">
+    <section id="cow-submit-wrap" class="cow-submit-wrap">
       <div class="cow-submit-head">
         <div>
           <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
@@ -2209,8 +2229,8 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
         </div>
       </div>
 
-      <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS FROM THE LEADERBOARD TO POST AGAIN</div>
-      <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — VOTE ON THE LEADERBOARD</div>
+      <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS ON THE LEADERBOARD TAB TO POST AGAIN</div>
+      <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
 
       <div id="cow-form-fields">
         <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
@@ -2966,6 +2986,7 @@ renderAllGoals();
   if(id==='s-current')renderGear();
   if(id==='s-upgrades')renderUpgrades();
   if(id==='cow' && typeof renderClipsOfWeek==='function')renderClipsOfWeek();
+  if(id==='cow' && typeof cowInitPageTab==='function') cowInitPageTab();
   if(id==='cow' && typeof showAccountSetup==='function' && !hasUserAccount()) showAccountSetup(true);
   syncCowPopup(id);
 }
@@ -7015,14 +7036,15 @@ function renderClipsOfWeek(){
 
   if(lbWrap) lbWrap.style.display = n ? 'block' : 'none';
   if(emptyHint) emptyHint.style.display = n ? 'none' : 'block';
+  const lbBadge = document.getElementById('cow-nav-lb-badge');
+  if(lbBadge) lbBadge.textContent = String(n);
 
   if(submitWrap){
-    submitWrap.style.display = 'block';
     submitWrap.classList.toggle('cow-submit-full', full && !alreadyPosted);
     if(slotsLeft) slotsLeft.textContent = full ? 'FULL' : `${slots} SLOT${slots!==1?'S':''} LEFT`;
     if(submitSub){
-      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours from the arena to post again';
-      else if(full) submitSub.textContent = 'All 3 slots taken — vote in the arena';
+      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours on the Leaderboard tab to post again';
+      else if(full) submitSub.textContent = 'All 3 slots taken — switch to Leaderboard tab to vote';
       else submitSub.textContent = 'Anyone can post · 3 slots · 1 clip per Twitch name';
     }
     const showForm = canPost;
@@ -7134,6 +7156,27 @@ function cowSetTab(tab){
     if(btn) btn.classList.toggle('on', t===tab);
     if(panel) panel.classList.toggle('on', t===tab);
   });
+}
+let cowPageTab = 'leaderboard';
+function cowSetPageTab(tab){
+  if(tab !== 'leaderboard' && tab !== 'post') return;
+  cowPageTab = tab;
+  try{ localStorage.setItem('ndz_cow_tab', tab); }catch(e){}
+  const lbBtn = document.getElementById('cow-nav-leaderboard');
+  const postBtn = document.getElementById('cow-nav-post');
+  const lbPanel = document.getElementById('cow-panel-leaderboard');
+  const postPanel = document.getElementById('cow-panel-post');
+  if(lbBtn) lbBtn.classList.toggle('on', tab === 'leaderboard');
+  if(postBtn) postBtn.classList.toggle('on', tab === 'post');
+  if(lbPanel) lbPanel.classList.toggle('on', tab === 'leaderboard');
+  if(postPanel) postPanel.classList.toggle('on', tab === 'post');
+}
+function cowInitPageTab(){
+  try{
+    const saved = localStorage.getItem('ndz_cow_tab');
+    if(saved === 'post' || saved === 'leaderboard'){ cowSetPageTab(saved); return; }
+  }catch(e){}
+  cowSetPageTab(CLIPS_OF_WEEK.length ? 'leaderboard' : 'post');
 }
 function cowSelectSource(src){
   cowLinkSource = src;
@@ -7280,6 +7323,7 @@ function addClipOfWeek(){
   cowClearForm();
   renderClipsOfWeek();
   persistClipsOfWeek();
+  cowSetPageTab('leaderboard');
 }
 
 function removeClipOfWeek(i){
@@ -7332,6 +7376,7 @@ async function rehydrateUploads(){
   rehydrateUploads();
   cowSelectSource('medal');
   initAppUser();
+  cowInitPageTab();
 })();
 
 function openClipOfWeek(){
