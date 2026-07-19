@@ -1,0 +1,22 @@
+---
+description: Local PC workflow for Quicksense Dashboard
+alwaysApply: true
+---
+
+# Quicksense Dashboard — local workflow
+
+## Git
+- Work on **`main`** directly. Do **not** create feature branches or pull requests unless the user explicitly asks.
+- Commit and push to `origin main` after meaningful changes.
+- Keep changes focused in `index.html` unless adding dev tooling.
+
+## Running locally
+- Single-page app: `index.html` at repo root.
+- Start dev server: `npm run dev` → **http://localhost:3000**
+- Clip of the Week page: **http://localhost:3000/#cow**
+- Hard refresh or add `?v=1` if the browser caches an old build.
+
+## Project notes
+- GitHub Pages live URL: https://quicksensegoated.github.io/Quicksense-Dashboard/
+- Clip of the Week: max 3 clips, 1 per browser, community upload + voting.
+- Uploaded MP4s use IndexedDB (device-local); link-based clips sync via JSONBin/localStorage.
