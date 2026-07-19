@@ -616,8 +616,10 @@ input.ta{padding:8px 12px;}
 .cow-tab.on{border-color:rgba(var(--tc-rgb),0.45);background:rgba(var(--tc-rgb),0.14);color:#fff;box-shadow:0 0 16px rgba(var(--tc-rgb),0.15);}
 .cow-tab-panel{display:none;}
 .cow-tab-panel.on{display:block;}
-.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 14px;border-radius:10px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(0,0,0,0.42);cursor:none;transition:all .2s;text-align:center;}
+.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 14px;border-radius:10px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(0,0,0,0.42);cursor:pointer;transition:all .2s;text-align:center;position:relative;}
 .cow-dropzone:hover,.cow-dropzone.cow-drop-active,.cow-dropzone.cow-drag{border-color:var(--tc);background:rgba(var(--tc-rgb),0.08);box-shadow:0 0 22px rgba(var(--tc-rgb),0.14);}
+.cow-file-inp{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0;opacity:0;pointer-events:none;}
+.cow-drop-content{display:flex;flex-direction:column;align-items:center;gap:8px;width:100%;pointer-events:none;}
 .cow-drop-ico{font-size:34px;filter:drop-shadow(0 0 10px rgba(var(--tc-rgb),0.45));}
 .cow-drop-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;}
 .cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.34);}
@@ -2178,16 +2180,17 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
         </div>
 
         <div id="cow-panel-upload" class="cow-tab-panel on">
-          <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
-          <div class="cow-dropzone" id="cow-dropzone"
-            onclick="document.getElementById('cow-file-inp').click()"
-            ondragover="event.preventDefault();this.classList.add('cow-drag')"
-            ondragleave="this.classList.remove('cow-drag')"
+          <label class="cow-dropzone" id="cow-dropzone" for="cow-file-inp"
+            ondragover="cowDragOver(event)"
+            ondragleave="cowDragLeave(event)"
             ondrop="cowFileDrop(event)">
-            <div class="cow-drop-ico">📤</div>
-            <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
-            <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
-          </div>
+            <div class="cow-drop-content">
+              <div class="cow-drop-ico">📤</div>
+              <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
+              <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
+            </div>
+          </label>
+          <input type="file" id="cow-file-inp" class="cow-file-inp" accept="video/mp4,video/webm,video/quicktime,video/*,.mp4,.mov,.webm" onchange="cowFilePicked(this)">
           <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
         </div>
 
@@ -6991,6 +6994,32 @@ const COW_LINK_PLACEHOLDERS = {
   mp4:'https://example.com/clip.mp4'
 };
 let cowLinkSource = 'medal';
+let _cowPendingFile = null;
+
+function cowIsVideoFile(f){
+  if(!f) return false;
+  if(/^video\//i.test(f.type || '')) return true;
+  return /\.(mp4|webm|mov|m4v|mkv)$/i.test(f.name || '');
+}
+function cowSyncFileInput(f){
+  const inp = document.getElementById('cow-file-inp');
+  if(!inp) return;
+  if(!f){ inp.value = ''; return; }
+  try{
+    const dt = new DataTransfer();
+    dt.items.add(f);
+    inp.files = dt.files;
+  }catch(e){}
+}
+function cowDragOver(e){
+  e.preventDefault();
+  e.stopPropagation();
+  document.getElementById('cow-dropzone')?.classList.add('cow-drag');
+}
+function cowDragLeave(e){
+  e.preventDefault();
+  document.getElementById('cow-dropzone')?.classList.remove('cow-drag');
+}
 
 function cowSetTab(tab){
   ['upload','link'].forEach(t=>{
@@ -7022,6 +7051,7 @@ function cowUrlChanged(){
   cowSetTab('link');
 }
 function cowUpdateFileUI(f){
+  _cowPendingFile = f || null;
   const nameEl = document.getElementById('cow-file-name');
   const dropzone = document.getElementById('cow-dropzone');
   const preview = document.getElementById('cow-file-preview');
@@ -7047,30 +7077,30 @@ function cowUpdateFileUI(f){
 }
 function cowFilePicked(inp){
   const f = inp && inp.files && inp.files[0];
-  cowUpdateFileUI(f);
+  if(f && !cowIsVideoFile(f)){
+    alert('Please choose a video file (MP4, MOV, or WebM).');
+    cowSyncFileInput(null);
+    cowUpdateFileUI(null);
+    return;
+  }
+  cowUpdateFileUI(f || null);
   if(f) cowSetTab('upload');
 }
 function cowFileDrop(e){
   e.preventDefault();
   e.stopPropagation();
-  e.currentTarget.classList.remove('cow-drag');
+  document.getElementById('cow-dropzone')?.classList.remove('cow-drag');
   const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
   if(!f) return;
-  if(!/^video\//i.test(f.type || '')){ alert('Please drop a video file (MP4).'); return; }
-  const inp = document.getElementById('cow-file-inp');
-  if(!inp) return;
-  try{
-    const dt = new DataTransfer();
-    dt.items.add(f);
-    inp.files = dt.files;
-    cowFilePicked(inp);
-  }catch(err){
-    alert('Could not attach file. Try the upload button instead.');
-  }
+  if(!cowIsVideoFile(f)){ alert('Please drop a video file (MP4, MOV, or WebM).'); return; }
+  cowSyncFileInput(f);
+  cowUpdateFileUI(f);
+  cowSetTab('upload');
 }
 function cowClearForm(){
-  const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp'), f=document.getElementById('cow-file-inp');
-  if(u) u.value=''; if(l) l.value=''; if(f) f.value='';
+  const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp');
+  if(u) u.value=''; if(l) l.value='';
+  cowSyncFileInput(null);
   cowUpdateFileUI(null);
   const prev = document.getElementById('cow-link-preview');
   if(prev){ prev.style.display='none'; prev.innerHTML=''; }
@@ -7102,8 +7132,9 @@ function addClipOfWeek(){
     return;
   }
   setCowName(by);
-  const file = fileInp && fileInp.files && fileInp.files[0];
+  const file = _cowPendingFile || (fileInp && fileInp.files && fileInp.files[0]);
   const rawUrl = urlInp ? urlInp.value.trim() : '';
+  const onUploadTab = document.getElementById('cow-panel-upload')?.classList.contains('on');
   const sid = getCowSid();
 
   let clip;
@@ -7123,8 +7154,7 @@ function addClipOfWeek(){
     clip.by = by;
     clip.sid = sid;
   } else {
-    const onLink = document.getElementById('cow-panel-link')?.classList.contains('on');
-    alert(onLink ? 'Paste a Medal, YouTube, TikTok or MP4 link first.' : 'Upload a video or switch to Paste Link.');
+    alert(onUploadTab ? 'Choose a video file first (tap the upload area).' : 'Paste a Medal, YouTube, TikTok or MP4 link first.');
     return;
   }
 
