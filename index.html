@@ -566,7 +566,7 @@ input.ta{padding:8px 12px;}
 .cow-hero-title{font-family:'Bebas Neue',sans-serif;font-size:34px;letter-spacing:3px;color:#fff;line-height:1;text-shadow:0 0 20px rgba(var(--tc-rgb),0.3);}
 .cow-hero-slots{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:2px;color:var(--g);text-shadow:0 0 12px rgba(var(--g-rgb,200,150,10),0.45);padding:8px 14px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.35);background:rgba(var(--g-rgb,200,150,10),0.12);white-space:nowrap;}
 .cow-slot-label{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:2px;color:rgba(255,255,255,0.55);margin-bottom:8px;text-transform:uppercase;}
-.cow-slot-track{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;position:relative;}
+.cow-slot-track{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:14px;position:relative;}
 .cow-slot-pill{display:flex;align-items:center;justify-content:center;gap:6px;padding:11px 8px;border-radius:8px;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;transition:all .2s;line-height:1.2;text-align:center;}
 .cow-slot-pill.open{border:1px dashed rgba(var(--tc-rgb),0.35);color:rgba(255,255,255,0.55);background:rgba(0,0,0,0.3);}
 .cow-slot-pill.filled{border:1px solid rgba(var(--tc-rgb),0.45);color:#fff;background:rgba(var(--tc-rgb),0.14);box-shadow:0 0 14px rgba(var(--tc-rgb),0.15);}
@@ -633,7 +633,7 @@ input.ta{padding:8px 12px;}
 .cow-drop-hint{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;letter-spacing:0.5px;color:rgba(255,255,255,0.55);}
 .cow-file-preview{display:none;margin-top:10px;border-radius:8px;overflow:hidden;border:1px solid rgba(var(--tc-rgb),0.25);background:#000;}
 .cow-file-preview video{width:100%;display:block;aspect-ratio:16/9;object-fit:contain;background:#000;}
-.cow-source-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;}
+.cow-source-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;justify-content:center;}
 .cow-source{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:1.5px;padding:8px 12px;border-radius:999px;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.6);cursor:none;transition:all .15s;}
 .cow-source.on{border-color:rgba(var(--tc-rgb),0.45);color:#fff;background:rgba(var(--tc-rgb),0.12);}
 .cow-source.yt.on{border-color:rgba(var(--yt-rgb),0.45);color:var(--yt);background:rgba(var(--yt-rgb),0.12);}
@@ -659,6 +659,7 @@ input.ta{padding:8px 12px;}
   .cow-lb-hero-title,.cow-post-hero-title{font-size:34px;}
   .cow-post-slots-big{font-size:34px;}
   .cow-submit-title{font-size:24px;}
+  .cow-slot-track{grid-template-columns:repeat(2,1fr);}
   .cow-slot-pill{font-size:11px;}
 }
 .cow-posting-as{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.25);background:rgba(var(--tc-rgb),0.08);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.55);}
@@ -1852,7 +1853,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
   <div class="cow-ob-card">
     <div class="cow-ob-ico" id="cow-ob-ico">🎬</div>
     <div class="cow-ob-title" id="cow-ob-title">CLIP OF THE WEEK</div>
-    <div class="cow-ob-body" id="cow-ob-body">Post a clip · community votes · winner gets featured.<br><br><b>3 slots total</b> · <b>1 clip per Twitch name</b></div>
+    <div class="cow-ob-body" id="cow-ob-body">Post a clip · community votes · winner gets featured.<br><br><b>10 slots total</b> · <b>1 clip per Twitch name</b></div>
     <button class="cow-ob-btn" id="cow-ob-btn" onclick="cowOnboardFinish()">GOT IT →</button>
   </div>
 </div>
@@ -2205,7 +2206,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
         <div class="cow-post-hero-title">POST YOUR <span class="acc">CLIP</span></div>
         <div class="cow-post-hero-line"></div>
         <div class="cow-post-slots-big" id="cow-slots-left">3 LEFT</div>
-        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 3 total · 1 per Twitch name</div>
+        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 10 total · 1 per Twitch name</div>
       </div>
 
       <div class="cow-post-body">
@@ -2213,7 +2214,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
         <div class="cow-post-meta">
           <div class="cow-post-stat"><span>Posting as</span><b id="cow-post-user" style="font-size:18px;">@you</b></div>
-          <div class="cow-post-stat"><span>Slots filled</span><b id="cow-post-counter">0 / 3</b></div>
+          <div class="cow-post-stat"><span>Slots filled</span><b id="cow-post-counter">0 / 10</b></div>
         </div>
 
         <div class="cow-slot-label">Slot status</div>
@@ -2225,12 +2226,12 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div class="cow-submit-head">
             <div>
               <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
-              <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 3 slots · 1 clip per Twitch name</div>
+              <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 10 slots · 1 clip per Twitch name</div>
             </div>
           </div>
 
           <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS ON THE LEADERBOARD TAB TO POST AGAIN</div>
-          <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
+          <div id="cow-full-note" class="cow-alert err">ALL 10 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
 
           <div id="cow-form-fields">
             <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
@@ -2285,7 +2286,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
       <div class="cow-lb-body">
         <div class="cow-lb-meta">
-          <div class="cow-lb-stat"><span>Clips live</span><b id="cow-counter">0 / 3</b></div>
+          <div class="cow-lb-stat"><span>Clips live</span><b id="cow-counter">0 / 10</b></div>
           <div class="cow-lb-stat"><span>Your Twitch</span><b id="cow-lb-user" style="font-size:18px;">—</b></div>
         </div>
 
@@ -6749,8 +6750,8 @@ document.addEventListener('DOMContentLoaded',()=>{
 </script>
 
 <script>
-// ── V4: PROFESSIONAL CLIP OF THE WEEK (max 3) ──
-const COW_MAX = 3;
+// ── V4: PROFESSIONAL CLIP OF THE WEEK ──
+const COW_MAX = 10;
 const COW_MAX_BYTES = 200 * 1024 * 1024; // 200MB per clip
 let CLIPS_OF_WEEK = [];
 
@@ -7074,12 +7075,12 @@ function renderClipsOfWeek(){
     if(slotsLbl){
       if(full) slotsLbl.textContent = 'all slots taken · vote on the leaderboard';
       else if(alreadyPosted) slotsLbl.textContent = 'you already posted · remove yours to post again';
-      else slotsLbl.textContent = 'open slots · max 3 total · 1 per Twitch name';
+      else slotsLbl.textContent = `open slots · max ${COW_MAX} total · 1 per Twitch name`;
     }
     if(submitSub){
       if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours on the Leaderboard tab to post again';
-      else if(full) submitSub.textContent = 'All 3 slots taken — switch to Leaderboard tab to vote';
-      else submitSub.textContent = 'Anyone can post · 3 slots · 1 clip per Twitch name';
+      else if(full) submitSub.textContent = `All ${COW_MAX} slots taken — switch to Leaderboard tab to vote`;
+      else submitSub.textContent = `Anyone can post · ${COW_MAX} slots · 1 clip per Twitch name`;
     }
     const showForm = canPost;
     if(formFields) formFields.style.display = showForm ? 'block' : 'none';
@@ -7307,7 +7308,7 @@ function addClipOfWeek(){
   cowDedupeTwitch();
   cowEnforceMax();
   if(CLIPS_OF_WEEK.length >= COW_MAX){
-    alert('All 3 slots are full. Vote in the arena or check back later.');
+    alert(`All ${COW_MAX} slots are full. Vote in the arena or check back later.`);
     renderClipsOfWeek();
     return;
   }
