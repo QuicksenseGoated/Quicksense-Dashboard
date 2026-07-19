@@ -543,68 +543,112 @@ input.ta{padding:8px 12px;}
 .clip-remove{font-size:11px;color:rgba(255,255,255,0.08);transition:color .15s;}
 .clip-remove:hover{color:var(--yt);}
 
-/* ── CLIP OF THE WEEK PAGE ── */
-.cow-how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:14px;}
-.cow-step{padding:10px 8px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.12);background:rgba(var(--tc-rgb),0.03);text-align:center;}
-.cow-step-num{font-family:'Bebas Neue',sans-serif;font-size:22px;color:var(--tc);line-height:1;text-shadow:0 0 10px rgba(var(--tc-rgb),0.4);}
-.cow-step-txt{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,0.3);margin-top:4px;line-height:1.4;}
-.cow-status-bar{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;padding:10px 14px;margin-bottom:14px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.2);background:rgba(var(--tc-rgb),0.06);}
-.cow-status-slots{font-family:'Bebas Neue',sans-serif;font-size:20px;letter-spacing:2px;color:var(--tc);line-height:1;}
-.cow-status-lead{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;color:rgba(255,255,255,0.45);text-align:right;max-width:55%;}
-.cow-submit-wrap{border-radius:8px;border:2px dashed rgba(var(--tc-rgb),0.4);background:linear-gradient(160deg,rgba(var(--tc-rgb),0.07) 0%,rgba(0,0,0,0.35) 100%);padding:16px;margin-bottom:16px;transition:border-color .2s,box-shadow .2s;}
-.cow-submit-wrap.cow-drop-active{border-color:var(--tc);box-shadow:0 0 30px rgba(var(--tc-rgb),0.2);}
-.cow-submit-wrap.cow-submit-full{border-style:solid;border-color:rgba(255,100,100,0.3);background:rgba(255,60,60,0.03);}
-.cow-submit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;}
-.cow-submit-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:2px;color:var(--tc);text-shadow:0 0 12px rgba(var(--tc-rgb),0.35);line-height:1.1;}
-.cow-submit-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.38);margin-top:5px;line-height:1.5;}
-.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:22px 14px;border-radius:6px;border:1px solid rgba(var(--tc-rgb),0.3);background:rgba(0,0,0,0.4);cursor:none;transition:all .2s;text-align:center;}
-.cow-dropzone:hover,.cow-dropzone.cow-drop-active{border-color:var(--tc);background:rgba(var(--tc-rgb),0.08);box-shadow:0 0 20px rgba(var(--tc-rgb),0.12);}
-.cow-drop-ico{font-size:36px;filter:drop-shadow(0 0 10px rgba(var(--tc-rgb),0.5));}
-.cow-drop-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;}
-.cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.35);}
-.cow-divider{display:flex;align-items:center;gap:10px;margin:14px 0;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.22);}
-.cow-divider::before,.cow-divider::after{content:'';flex:1;height:1px;background:rgba(255,255,255,0.07);}
-.cow-supported{display:flex;flex-wrap:wrap;gap:6px;align-items:center;margin-bottom:10px;}
-.cow-supported-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.25);margin-right:2px;}
-.cow-supported span{font-family:'Rajdhani',sans-serif;font-size:8px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:3px;background:rgba(var(--tc-rgb),0.12);color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.2);}
-.cow-supported span.yt{background:rgba(var(--yt-rgb),0.12);color:var(--yt);border-color:rgba(var(--yt-rgb),0.2);}
-.cow-supported span.tk{background:rgba(var(--tk-rgb),0.12);color:var(--tk);border-color:rgba(var(--tk-rgb),0.2);}
-.cow-link-row{display:flex;gap:8px;flex-wrap:wrap;}
-.cow-link-row .ta{flex:1;min-width:0;}
-.cow-actions{display:flex;gap:8px;margin-top:14px;}
-.cow-btn-primary{flex:1;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:13px 20px;border-radius:4px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.9);color:#0a0600;box-shadow:0 0 16px rgba(var(--tc-rgb),0.3);transition:all .18s;}
-.cow-btn-primary:hover{box-shadow:0 0 28px rgba(var(--tc-rgb),0.5);}
-.cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;padding:13px 16px;border-radius:4px;cursor:none;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.4);}
-.cow-leaderboard-head{font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:3px;color:rgba(255,255,255,0.45);margin-bottom:10px;display:flex;align-items:center;gap:8px;}
-.cow-leaderboard-head span{color:var(--g);text-shadow:0 0 8px rgba(var(--g-rgb,200,150,10),0.45);}
-.cow-clip-card{position:relative;padding:12px;border-radius:8px;background:rgba(0,0,0,0.35);transition:box-shadow .2s;}
-.cow-clip-card.cow-rank-1{border:1px solid rgba(var(--g-rgb,200,150,10),0.45);box-shadow:0 0 22px rgba(var(--g-rgb,200,150,10),0.12);}
-.cow-clip-card.cow-rank-2,.cow-clip-card.cow-rank-3{border:1px solid rgba(255,255,255,0.07);}
-.cow-rank-badge{font-family:'Bebas Neue',sans-serif;font-size:28px;line-height:1;color:rgba(255,255,255,0.1);position:absolute;top:8px;left:10px;z-index:1;}
-.cow-clip-card.cow-rank-1 .cow-rank-badge{color:var(--g);text-shadow:0 0 12px rgba(var(--g-rgb,200,150,10),0.5);}
-.cow-clip-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;padding-left:32px;gap:6px;flex-wrap:wrap;}
-.cow-type-badge{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.32);}
-.cow-vote-btn{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:8px 16px;border-radius:4px;cursor:none;transition:all .18s;flex-shrink:0;}
-.cow-vote-btn.voted{background:rgba(var(--tc-rgb),0.9);color:#0a0600;border:1px solid var(--tc);box-shadow:0 0 12px rgba(var(--tc-rgb),0.4);}
-.cow-vote-btn:not(.voted){background:transparent;color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.4);}
-.cow-clip-foot{display:flex;justify-content:space-between;align-items:center;margin-top:10px;gap:8px;flex-wrap:wrap;padding-left:32px;}
-.cow-clip-label{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.6);}
-.cow-byline{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.28);margin-top:2px;}
-#cow .shell{padding:24px 16px 60px;}
+/* ── CLIP OF THE WEEK PAGE (revamp) ── */
+#cow .shell{padding:20px 16px 64px;max-width:920px;}
+.cow-help-btn{position:absolute;right:0;top:0;width:30px;height:30px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(255,255,255,0.04);color:rgba(255,255,255,0.35);font-family:'Share Tech Mono',monospace;font-size:11px;cursor:none;transition:all .18s;}
+.cow-help-btn:hover{border-color:rgba(var(--tc-rgb),0.45);color:var(--tc);}
+.cow-how{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;}
+.cow-step{padding:10px 8px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.14);background:linear-gradient(180deg,rgba(var(--tc-rgb),0.06) 0%,rgba(0,0,0,0.25) 100%);text-align:center;}
+.cow-step-num{font-family:'Bebas Neue',sans-serif;font-size:20px;color:var(--tc);line-height:1;text-shadow:0 0 12px rgba(var(--tc-rgb),0.45);}
+.cow-step-txt{font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;color:rgba(255,255,255,0.32);margin-top:4px;line-height:1.35;}
 #cow-how-wrap.cow-how-done .cow-how{display:none;}
 #cow-how-wrap.cow-how-done .cow-how-mini{display:flex;}
-.cow-how-mini{display:none;align-items:center;gap:8px;margin-bottom:12px;padding:8px 12px;border-radius:4px;border:1px solid rgba(var(--tc-rgb),0.12);background:rgba(var(--tc-rgb),0.03);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.3);}
+.cow-how-mini{display:none;align-items:center;justify-content:center;gap:8px;margin-bottom:12px;padding:8px 12px;border-radius:999px;border:1px solid rgba(var(--tc-rgb),0.14);background:rgba(var(--tc-rgb),0.04);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.32);}
 .cow-how-mini b{color:var(--tc);font-weight:400;}
-.cow-empty-hint{text-align:center;padding:18px 14px;margin-bottom:14px;border-radius:6px;border:1px dashed rgba(var(--tc-rgb),0.15);background:rgba(0,0,0,0.2);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.35);letter-spacing:0.5px;}
-.cow-empty-hint span{display:block;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.22);margin-top:6px;font-weight:400;}
+.cow-hero{position:relative;margin-bottom:16px;padding:16px;border-radius:12px;border:1px solid rgba(var(--tc-rgb),0.22);background:radial-gradient(ellipse at top,rgba(var(--tc-rgb),0.12) 0%,rgba(0,0,0,0.45) 55%,rgba(0,0,0,0.65) 100%);overflow:hidden;}
+.cow-hero::before{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(var(--g-rgb,200,150,10),0.05) 0%,transparent 45%);pointer-events:none;}
+.cow-hero-top{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:12px;position:relative;}
+.cow-hero-kicker{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,255,255,0.28);margin-bottom:4px;}
+.cow-hero-title{font-family:'Bebas Neue',sans-serif;font-size:26px;letter-spacing:3px;color:#fff;line-height:1;text-shadow:0 0 18px rgba(var(--tc-rgb),0.25);}
+.cow-hero-slots{font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--g);text-shadow:0 0 12px rgba(var(--g-rgb,200,150,10),0.45);padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.25);background:rgba(var(--g-rgb,200,150,10),0.08);white-space:nowrap;}
+.cow-slot-track{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px;position:relative;}
+.cow-slot-pill{display:flex;align-items:center;justify-content:center;gap:6px;padding:8px 6px;border-radius:8px;font-family:'Share Tech Mono',monospace;font-size:7px;letter-spacing:1px;text-transform:uppercase;transition:all .2s;}
+.cow-slot-pill.open{border:1px dashed rgba(var(--tc-rgb),0.22);color:rgba(255,255,255,0.28);background:rgba(0,0,0,0.25);}
+.cow-slot-pill.filled{border:1px solid rgba(var(--tc-rgb),0.35);color:var(--tc);background:rgba(var(--tc-rgb),0.1);box-shadow:0 0 14px rgba(var(--tc-rgb),0.12);}
+.cow-slot-dot{width:6px;height:6px;border-radius:50%;background:currentColor;opacity:0.7;flex-shrink:0;}
+.cow-slot-pill.open .cow-slot-dot{background:rgba(var(--tc-rgb),0.35);}
+.cow-hero-stats{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;position:relative;}
+.cow-status-slots{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:var(--tc);}
+.cow-status-lead{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:rgba(255,255,255,0.48);text-align:right;max-width:62%;line-height:1.35;}
+.cow-arena{margin-bottom:16px;}
+.cow-arena-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;}
+.cow-arena-title{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:3px;color:rgba(255,255,255,0.42);}
+.cow-arena-title span{color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.4);}
+.cow-arena-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.22);}
+.cow-empty-hint{text-align:center;padding:28px 16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.16);background:rgba(0,0,0,0.28);}
+.cow-empty-ico{font-size:40px;margin-bottom:10px;filter:drop-shadow(0 0 16px rgba(var(--tc-rgb),0.35));}
+.cow-empty-title{font-family:'Bebas Neue',sans-serif;font-size:22px;letter-spacing:3px;color:rgba(255,255,255,0.42);}
+.cow-empty-sub{display:block;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.22);margin-top:8px;line-height:1.6;}
+#cow-list{display:flex;flex-direction:column;gap:14px;}
+.cow-clip-card{position:relative;padding:14px;border-radius:12px;background:rgba(0,0,0,0.42);border:1px solid rgba(255,255,255,0.06);transition:transform .18s,box-shadow .18s;}
+.cow-clip-card.cow-rank-1{border-color:rgba(var(--g-rgb,200,150,10),0.42);box-shadow:0 0 28px rgba(var(--g-rgb,200,150,10),0.12);background:linear-gradient(180deg,rgba(var(--g-rgb,200,150,10),0.06) 0%,rgba(0,0,0,0.42) 100%);}
+.cow-clip-head{display:flex;justify-content:space-between;align-items:flex-start;gap:8px;margin-bottom:10px;}
+.cow-clip-head-left{display:flex;align-items:center;gap:10px;min-width:0;}
+.cow-rank-badge{font-family:'Bebas Neue',sans-serif;font-size:24px;line-height:1;color:rgba(255,255,255,0.12);flex-shrink:0;}
+.cow-clip-card.cow-rank-1 .cow-rank-badge{color:var(--g);text-shadow:0 0 14px rgba(var(--g-rgb,200,150,10),0.55);}
+.cow-src-badge{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:4px 8px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);color:rgba(255,255,255,0.45);white-space:nowrap;}
+.cow-src-badge.medal{color:var(--tc);border-color:rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.1);}
+.cow-src-badge.youtube{color:var(--yt);border-color:rgba(var(--yt-rgb),0.35);background:rgba(var(--yt-rgb),0.1);}
+.cow-src-badge.tiktok{color:var(--tk);border-color:rgba(var(--tk-rgb),0.35);background:rgba(var(--tk-rgb),0.1);}
+.cow-src-badge.upload{color:#7fd8ff;border-color:rgba(127,216,255,0.35);background:rgba(127,216,255,0.08);}
+.cow-clip-media{border-radius:8px;overflow:hidden;background:#000;}
+.cow-clip-foot{display:flex;justify-content:space-between;align-items:center;gap:10px;margin-top:12px;flex-wrap:wrap;}
+.cow-clip-info{min-width:0;flex:1;}
+.cow-clip-label{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:700;color:rgba(255,255,255,0.72);line-height:1.25;}
+.cow-byline{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.28);margin-top:3px;}
+.cow-vote-btn{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:9px 16px;border-radius:8px;cursor:none;transition:all .18s;flex-shrink:0;}
+.cow-vote-btn.voted{background:rgba(var(--tc-rgb),0.92);color:#0a0600;border:1px solid var(--tc);box-shadow:0 0 16px rgba(var(--tc-rgb),0.35);}
+.cow-vote-btn:not(.voted){background:rgba(0,0,0,0.35);color:var(--tc);border:1px solid rgba(var(--tc-rgb),0.35);}
+.cow-remove-btn{font-size:16px;color:rgba(255,255,255,0.18);padding:4px 6px;cursor:none;transition:color .15s;line-height:1;}
+.cow-remove-btn:hover{color:var(--yt);}
+.cow-submit-wrap{border-radius:12px;border:1px solid rgba(var(--tc-rgb),0.28);background:linear-gradient(180deg,rgba(var(--tc-rgb),0.08) 0%,rgba(0,0,0,0.5) 100%);padding:16px;margin-bottom:16px;transition:border-color .2s,box-shadow .2s;}
+.cow-submit-wrap.cow-submit-full{border-color:rgba(255,100,100,0.28);background:linear-gradient(180deg,rgba(255,60,60,0.06) 0%,rgba(0,0,0,0.5) 100%);}
+.cow-submit-head{display:flex;justify-content:space-between;align-items:flex-start;gap:10px;margin-bottom:14px;}
+.cow-submit-title{font-family:'Bebas Neue',sans-serif;font-size:24px;letter-spacing:2px;color:var(--tc);line-height:1;text-shadow:0 0 14px rgba(var(--tc-rgb),0.35);}
+.cow-submit-sub{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.34);margin-top:5px;line-height:1.5;}
+.cow-alert{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;margin-bottom:12px;display:none;text-align:center;padding:10px 12px;border-radius:8px;}
+.cow-alert.ok{color:var(--g);background:rgba(var(--g-rgb,200,150,10),0.07);border:1px solid rgba(var(--g-rgb,200,150,10),0.22);}
+.cow-alert.err{color:rgba(255,120,120,0.9);background:rgba(255,60,60,0.07);border:1px solid rgba(255,100,100,0.22);}
+.cow-field-label{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.28);margin-bottom:6px;}
+.cow-name-inp{width:100%;font-size:14px;margin-bottom:14px;box-sizing:border-box;}
+.cow-tabs{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:12px;}
+.cow-tab{font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;padding:11px 10px;border-radius:8px;cursor:none;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.38);transition:all .18s;}
+.cow-tab.on{border-color:rgba(var(--tc-rgb),0.45);background:rgba(var(--tc-rgb),0.14);color:#fff;box-shadow:0 0 16px rgba(var(--tc-rgb),0.15);}
+.cow-tab-panel{display:none;}
+.cow-tab-panel.on{display:block;}
+.cow-dropzone{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;padding:24px 14px;border-radius:10px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(0,0,0,0.42);cursor:none;transition:all .2s;text-align:center;}
+.cow-dropzone:hover,.cow-dropzone.cow-drop-active,.cow-dropzone.cow-drag{border-color:var(--tc);background:rgba(var(--tc-rgb),0.08);box-shadow:0 0 22px rgba(var(--tc-rgb),0.14);}
+.cow-drop-ico{font-size:34px;filter:drop-shadow(0 0 10px rgba(var(--tc-rgb),0.45));}
+.cow-drop-label{font-family:'Bebas Neue',sans-serif;font-size:18px;letter-spacing:2px;color:#fff;}
+.cow-drop-hint{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.34);}
+.cow-file-preview{display:none;margin-top:10px;border-radius:8px;overflow:hidden;border:1px solid rgba(var(--tc-rgb),0.25);background:#000;}
+.cow-file-preview video{width:100%;display:block;aspect-ratio:16/9;object-fit:contain;background:#000;}
+.cow-source-row{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px;}
+.cow-source{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:6px 10px;border-radius:999px;border:1px solid rgba(255,255,255,0.08);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.42);cursor:none;transition:all .15s;}
+.cow-source.on{border-color:rgba(var(--tc-rgb),0.45);color:#fff;background:rgba(var(--tc-rgb),0.12);}
+.cow-source.yt.on{border-color:rgba(var(--yt-rgb),0.45);color:var(--yt);background:rgba(var(--yt-rgb),0.12);}
+.cow-source.tk.on{border-color:rgba(var(--tk-rgb),0.45);color:var(--tk);background:rgba(var(--tk-rgb),0.12);}
+.cow-url-inp{width:100%;font-size:14px;margin-bottom:8px;box-sizing:border-box;}
+.cow-label-inp{width:100%;font-size:14px;margin-bottom:4px;box-sizing:border-box;}
+.cow-link-preview{display:none;align-items:center;gap:8px;padding:8px 10px;margin-bottom:8px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.2);background:rgba(var(--tc-rgb),0.06);}
+.cow-preview-badge{font-family:'Rajdhani',sans-serif;font-size:9px;font-weight:700;letter-spacing:1.5px;padding:3px 8px;border-radius:999px;background:rgba(var(--tc-rgb),0.15);color:var(--tc);}
+.cow-preview-badge.youtube{background:rgba(var(--yt-rgb),0.15);color:var(--yt);}
+.cow-preview-badge.tiktok{background:rgba(var(--tk-rgb),0.15);color:var(--tk);}
+.cow-preview-badge.mp4{background:rgba(127,216,255,0.12);color:#7fd8ff;}
+.cow-preview-txt{font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;color:rgba(255,255,255,0.35);}
+.cow-actions{display:flex;gap:8px;margin-top:14px;}
+.cow-btn-primary{flex:1;font-family:'Bebas Neue',sans-serif;font-size:15px;letter-spacing:2px;padding:13px 18px;border-radius:8px;cursor:none;border:1px solid var(--tc);background:rgba(var(--tc-rgb),0.92);color:#0a0600;box-shadow:0 0 18px rgba(var(--tc-rgb),0.28);transition:all .18s;}
+.cow-btn-primary:hover{box-shadow:0 0 28px rgba(var(--tc-rgb),0.45);}
+.cow-btn-ghost{font-family:'Bebas Neue',sans-serif;font-size:12px;letter-spacing:2px;padding:13px 14px;border-radius:8px;cursor:none;border:1px solid rgba(255,255,255,0.12);background:transparent;color:rgba(255,255,255,0.38);}
+@media(min-width:760px){
+  .cow-layout{display:grid;grid-template-columns:1.05fr 0.95fr;gap:16px;align-items:start;}
+  .cow-arena{margin-bottom:0;}
+}
 @media(max-width:560px){
-  #cow .shell{padding:16px 12px 56px;}
-  .cow-status-lead{font-size:11px;max-width:50%;}
+  #cow .shell{padding:14px 12px 56px;}
+  .cow-hero-title{font-size:22px;}
+  .cow-status-lead{font-size:11px;max-width:58%;}
   .cow-submit-title{font-size:20px;}
-  .cow-clip-meta,.cow-clip-foot{padding-left:0;}
-  .cow-rank-badge{position:static;margin-bottom:2px;font-size:22px;}
-  .cow-link-row{flex-direction:column;}
-  .cow-link-row .ta{width:100%;}
 }
 /* onboarding overlay */
 #cow-onboard{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
@@ -2069,10 +2113,9 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     <div class="ph-tag tc">◈ Featured</div>
     <div class="ph-title">CLIP OF THE <span class="acc">WEEK</span></div>
     <div class="ph-line tc"></div>
-    <button onclick="showCowOnboard(true)" style="position:absolute;right:0;top:0;font-family:'Share Tech Mono',monospace;font-size:11px;color:rgba(255,255,255,0.25);background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:50%;width:28px;height:28px;cursor:none;" title="How it works">?</button>
+    <button class="cow-help-btn" onclick="showCowOnboard(true)" title="How it works">?</button>
   </div>
 
-  <!-- how it works (collapses after onboarding) -->
   <div id="cow-how-wrap">
     <div class="cow-how">
       <div class="cow-step"><div class="cow-step-num">01</div><div class="cow-step-txt">POST<br>CLIP</div></div>
@@ -2082,62 +2125,92 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
     <div class="cow-how-mini"><b>POST</b> → <b>VOTE</b> → <b>WIN</b> · 3 slots · 1 per person</div>
   </div>
 
-  <!-- status bar -->
-  <div class="cow-status-bar">
-    <div>
-      <div class="cow-status-slots" id="cow-counter">0 / 3 SLOTS</div>
-      <div style="font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1.5px;color:rgba(255,255,255,0.28);margin-top:3px;">COMMUNITY CLIPS</div>
-    </div>
-    <div class="cow-status-lead" id="cow-leader-txt">No leader yet — be the first!</div>
-  </div>
-
-  <div id="cow-empty-hint" class="cow-empty-hint" style="display:none;">🎬 NO CLIPS YET<span>Post below · 3 slots · community votes · winner featured</span></div>
-
-  <!-- leaderboard (above submit when clips exist) -->
-  <div id="cow-leaderboard-wrap" style="display:none;">
-    <div class="cow-leaderboard-head">◈ <span>LEADERBOARD</span></div>
-    <div id="cow-list" style="display:flex;flex-direction:column;gap:12px;"></div>
-  </div>
-
-  <!-- submit clip panel -->
-  <div id="cow-submit-wrap" class="cow-submit-wrap" style="display:none;">
-    <div class="cow-submit-head">
+  <div class="cow-hero">
+    <div class="cow-hero-top">
       <div>
-        <div class="cow-submit-title" id="cow-submit-title">⬆ SUBMIT YOUR CLIP</div>
-        <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 3 slots total · 1 clip per person</div>
+        <div class="cow-hero-kicker">COMMUNITY COMPETITION</div>
+        <div class="cow-hero-title">WEEKLY SHOWDOWN</div>
       </div>
-      <div id="cow-slots-left" style="font-family:'Bebas Neue',sans-serif;font-size:14px;letter-spacing:2px;color:var(--g);text-shadow:0 0 10px rgba(var(--g-rgb,200,150,10),0.4);"></div>
+      <div class="cow-hero-slots" id="cow-slots-left">3 SLOTS LEFT</div>
     </div>
-
-    <div id="cow-already-posted" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:var(--g);margin-bottom:12px;display:none;text-align:center;padding:10px;border-radius:4px;background:rgba(var(--g-rgb,200,150,10),0.06);border:1px solid rgba(var(--g-rgb,200,150,10),0.2);">✓ YOU POSTED — REMOVE YOURS FROM THE LEADERBOARD TO POST AGAIN</div>
-    <div id="cow-full-note" style="font-family:'Bebas Neue',sans-serif;font-size:13px;letter-spacing:2px;color:rgba(255,100,100,0.85);margin-bottom:12px;display:none;text-align:center;padding:10px;border-radius:4px;background:rgba(255,60,60,0.07);border:1px solid rgba(255,100,100,0.22);">ALL 3 SLOTS FULL — VOTE ON THE LEADERBOARD ABOVE</div>
-
-    <div id="cow-form-fields">
-      <input class="ta" id="cow-name-inp" placeholder="Your name (required)" style="width:100%;font-size:14px;margin-bottom:10px;box-sizing:border-box;">
-
-      <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
-
-      <div class="cow-dropzone" id="cow-dropzone" onclick="document.getElementById('cow-file-inp').click()">
-        <div class="cow-drop-ico">📤</div>
-        <div class="cow-drop-label">TAP TO UPLOAD VIDEO</div>
-        <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
-      </div>
-
-      <div class="cow-divider">OR PASTE A LINK BELOW</div>
-
-      <div class="cow-supported">
-        <span class="cow-supported-lbl">works with</span>
-        <span>MEDAL</span><span class="yt">YOUTUBE</span><span class="tk">TIKTOK</span><span>MP4</span>
-      </div>
-
-      <input class="ta" id="cow-url-inp" placeholder="Paste Medal · YouTube · TikTok or MP4 link" style="width:100%;font-size:14px;margin-bottom:8px;box-sizing:border-box;">
-      <input class="ta" id="cow-label-inp" placeholder="Clip name — e.g. insane clutch (optional)" style="width:100%;font-size:14px;margin-bottom:4px;box-sizing:border-box;">
-
-      <div class="cow-actions">
-        <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
-        <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
-      </div>
+    <div class="cow-slot-track" id="cow-slot-track"></div>
+    <div class="cow-hero-stats">
+      <div class="cow-status-slots" id="cow-counter">0 / 3 SLOTS</div>
+      <div class="cow-status-lead" id="cow-leader-txt">No leader yet — be the first!</div>
     </div>
+  </div>
+
+  <div class="cow-layout">
+    <section class="cow-arena">
+      <div id="cow-empty-hint" class="cow-empty-hint" style="display:none;">
+        <div class="cow-empty-ico">🎬</div>
+        <div class="cow-empty-title">ARENA EMPTY</div>
+        <span class="cow-empty-sub">Upload or paste a link · 3 slots · vote for the winner</span>
+      </div>
+
+      <div id="cow-leaderboard-wrap" style="display:none;">
+        <div class="cow-arena-head">
+          <div class="cow-arena-title">◈ <span>LEADERBOARD</span></div>
+          <div class="cow-arena-sub">sorted by votes</div>
+        </div>
+        <div id="cow-list"></div>
+      </div>
+    </section>
+
+    <section id="cow-submit-wrap" class="cow-submit-wrap" style="display:none;">
+      <div class="cow-submit-head">
+        <div>
+          <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
+          <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 3 slots total · 1 clip per person</div>
+        </div>
+      </div>
+
+      <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS FROM THE LEADERBOARD TO POST AGAIN</div>
+      <div id="cow-full-note" class="cow-alert err">ALL 3 SLOTS FULL — VOTE ON THE LEADERBOARD</div>
+
+      <div id="cow-form-fields">
+        <div class="cow-field-label">YOUR NAME</div>
+        <input class="ta cow-name-inp" id="cow-name-inp" placeholder="Shown on the leaderboard">
+
+        <div class="cow-tabs">
+          <button type="button" class="cow-tab on" id="cow-tab-upload" onclick="cowSetTab('upload')">📤 UPLOAD MP4</button>
+          <button type="button" class="cow-tab" id="cow-tab-link" onclick="cowSetTab('link')">🔗 PASTE LINK</button>
+        </div>
+
+        <div id="cow-panel-upload" class="cow-tab-panel on">
+          <input type="file" id="cow-file-inp" accept="video/mp4,video/*" style="display:none;" onchange="cowFilePicked(this)">
+          <div class="cow-dropzone" id="cow-dropzone"
+            onclick="document.getElementById('cow-file-inp').click()"
+            ondragover="event.preventDefault();this.classList.add('cow-drag')"
+            ondragleave="this.classList.remove('cow-drag')"
+            ondrop="cowFileDrop(event)">
+            <div class="cow-drop-ico">📤</div>
+            <div class="cow-drop-label">DROP OR TAP TO UPLOAD</div>
+            <div class="cow-drop-hint" id="cow-file-name">MP4 · max 200MB</div>
+          </div>
+          <div class="cow-file-preview" id="cow-file-preview"><video id="cow-file-preview-vid" muted playsinline controls></video></div>
+        </div>
+
+        <div id="cow-panel-link" class="cow-tab-panel">
+          <div class="cow-source-row">
+            <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
+            <button type="button" class="cow-source yt" data-src="youtube" onclick="cowSelectSource('youtube')">YOUTUBE</button>
+            <button type="button" class="cow-source tk" data-src="tiktok" onclick="cowSelectSource('tiktok')">TIKTOK</button>
+            <button type="button" class="cow-source" data-src="mp4" onclick="cowSelectSource('mp4')">MP4 URL</button>
+          </div>
+          <input class="ta cow-url-inp" id="cow-url-inp" placeholder="https://medal.tv/clips/..." oninput="cowUrlChanged()">
+          <div class="cow-link-preview" id="cow-link-preview"></div>
+        </div>
+
+        <div class="cow-field-label" style="margin-top:12px;">CLIP TITLE (OPTIONAL)</div>
+        <input class="ta cow-label-inp" id="cow-label-inp" placeholder="e.g. insane clutch">
+
+        <div class="cow-actions">
+          <button class="cow-btn-primary" id="cow-add-btn" onclick="addClipOfWeek()">+ POST CLIP</button>
+          <button class="cow-btn-ghost" id="cow-clear-btn" onclick="cowClearForm()">Clear</button>
+        </div>
+      </div>
+    </section>
   </div>
 
   <div class="pfoot"><div class="pfoot-name">QUICKSENSE</div><div class="pfoot-url"><div class="dot-live"></div>twitch.tv/QuicksenseGoated</div></div>
@@ -6645,8 +6718,7 @@ function detectClipType(url){
 }
 
 function getMedalEmbed(url){
-  // medal share links: https://medal.tv/games/.../clips/...
-  const match = url.match(/medal\.tv\/(?:games\/[^/]+\/clips|clips)\/([^/?]+)/);
+  const match = url.match(/medal\.tv\/(?:games\/[^/]+\/clips|clips|clip)\/([^/?]+)/i);
   if(match) return `https://medal.tv/clip/${match[1]}/embed`;
   return url;
 }
@@ -6699,7 +6771,7 @@ function cowClipInner(c){
 // ── voting ──
 const COW_OB_STEPS = [
   {ico:'🎬', title:'CLIP OF THE WEEK', body:'The community posts clips and votes for the best play. Winner gets featured!'},
-  {ico:'⬆', title:'POST YOUR CLIP', body:'Upload a video or paste a Medal · YouTube · TikTok link.<br><br><b>3 slots total</b> competing at once · <b>1 clip per person</b>'},
+  {ico:'⬆', title:'POST YOUR CLIP', body:'Use <b>Upload MP4</b> or <b>Paste Link</b> for Medal · YouTube · TikTok.<br><br><b>3 slots total</b> · <b>1 clip per person</b>'},
   {ico:'☆', title:'VOTE & WIN', body:'Watch the clips below and tap <b>☆ VOTE</b> on your favorite.<br><br>Most votes wins the week!'},
   {ico:'👋', title:"WHAT'S YOUR NAME?", body:'Shown on the leaderboard when you post a clip.'},
 ];
@@ -6818,8 +6890,23 @@ function renderClipsOfWeek(){
       const sorted = [...CLIPS_OF_WEEK].sort((a,b)=>(b.votes||0)-(a.votes||0));
       const top = sorted[0];
       if((top.votes||0)>0) leaderTxt.innerHTML = `👑 Leading: <span style="color:var(--g);">${top.label||top.typeBadge||'Clip'}</span> · ${top.votes} vote${top.votes!==1?'s':''}`;
-      else leaderTxt.textContent = 'No votes yet — watch & vote below!';
+      else leaderTxt.textContent = 'No votes yet — watch the arena & vote!';
     }
+  }
+
+  const track = document.getElementById('cow-slot-track');
+  if(track){
+    let pills = '';
+    for(let i=0; i<COW_MAX; i++){
+      const c = CLIPS_OF_WEEK[i];
+      if(c){
+        const tag = (c.by || c.label || 'Clip').slice(0,14);
+        pills += `<div class="cow-slot-pill filled"><span class="cow-slot-dot"></span><span>${tag}</span></div>`;
+      } else {
+        pills += `<div class="cow-slot-pill open"><span class="cow-slot-dot"></span><span>OPEN</span></div>`;
+      }
+    }
+    track.innerHTML = pills;
   }
 
   if(lbWrap) lbWrap.style.display = n ? 'block' : 'none';
@@ -6830,8 +6917,8 @@ function renderClipsOfWeek(){
     submitWrap.classList.toggle('cow-submit-full', full && !alreadyPosted);
     if(slotsLeft) slotsLeft.textContent = full ? 'FULL' : `${slots} SLOT${slots!==1?'S':''} LEFT`;
     if(submitSub){
-      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours from the leaderboard to post again';
-      else if(full) submitSub.textContent = 'All 3 slots are taken — vote on the leaderboard above';
+      if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours from the arena to post again';
+      else if(full) submitSub.textContent = 'All 3 slots taken — vote in the arena';
       else submitSub.textContent = 'Anyone can post · 3 slots total · 1 clip per person';
     }
     const showForm = canPost;
@@ -6849,22 +6936,24 @@ function renderClipsOfWeek(){
       const rank = sorted.indexOf(c)+1;
       const sid = getCowSid();
       const canRemove = owner || (c.sid && c.sid === sid);
-      const removeBtn = canRemove ? `<span class="clip-remove" style="font-size:18px;cursor:none;padding:4px 8px;" onclick="removeClipOfWeek(${i})" title="Remove clip">✕</span>` : '';
-      const localTag = c.up ? ' · UPLOADED' : (c.local ? ' · LOCAL' : '');
+      const srcCls = c.up ? 'upload' : (c.type==='youtube'?'youtube':c.type==='tiktok'?'tiktok':c.type==='medal'?'medal':'');
+      const srcLabel = c.typeBadge || (c.up ? 'UPLOAD' : 'CLIP');
+      const removeBtn = canRemove ? `<span class="cow-remove-btn" onclick="removeClipOfWeek(${i})" title="Remove clip">✕</span>` : '';
+      const localTag = c.up ? ' · FILE' : (c.local ? ' · LOCAL' : '');
       const isLeader = maxVotes>0 && (c.votes||0)===maxVotes;
       const crown = isLeader ? ' 👑' : '';
       const voted = hasVoted(c.id);
       const rankCls = rank<=3 ? ` cow-rank-${rank}` : '';
       const byline = c.by ? `<div class="cow-byline">by ${c.by}</div>` : '';
-      const label = c.label ? `<div class="cow-clip-label">▸ ${c.label}</div>` : `<div class="cow-clip-label" style="opacity:0.3;">Untitled clip</div>`;
+      const label = c.label ? `<div class="cow-clip-label">${c.label}</div>` : `<div class="cow-clip-label" style="opacity:0.35;">Untitled clip</div>`;
       return `<div class="cow-clip-card${rankCls}">`
+        + `<div class="cow-clip-head"><div class="cow-clip-head-left">`
         + `<div class="cow-rank-badge">#${rank}</div>`
-        + `<div class="cow-clip-meta">`
-        + `<div class="cow-type-badge">◈ ${c.typeBadge||''}${localTag}${crown}</div>`
-        + removeBtn + `</div>`
-        + cowClipInner(c)
+        + `<span class="cow-src-badge ${srcCls}">${srcLabel}${localTag}${crown}</span>`
+        + `</div>${removeBtn}</div>`
+        + `<div class="cow-clip-media">${cowClipInner(c)}</div>`
         + `<div class="cow-clip-foot">`
-        + `<div>` + label + byline + `</div>`
+        + `<div class="cow-clip-info">` + label + byline + `</div>`
         + `<button class="cow-vote-btn${voted?' voted':''}" onclick="voteClip('${c.id}')">${voted?'★ VOTED':'☆ VOTE'} · ${c.votes||0}</button>`
         + `</div></div>`;
     }).join('');
@@ -6894,24 +6983,97 @@ function persistClipsOfWeek(){
   else if(typeof syncToCloud==='function' && typeof BIN_ID!=='undefined' && BIN_ID){ try{ syncToCloud(); }catch(e){} }
 }
 
-// styled upload button helpers
-function cowFilePicked(inp){
+// submit UI helpers
+const COW_LINK_PLACEHOLDERS = {
+  medal:'https://medal.tv/clips/...',
+  youtube:'https://youtube.com/watch?v=...',
+  tiktok:'https://tiktok.com/@user/video/...',
+  mp4:'https://example.com/clip.mp4'
+};
+let cowLinkSource = 'medal';
+
+function cowSetTab(tab){
+  ['upload','link'].forEach(t=>{
+    const btn = document.getElementById('cow-tab-'+t);
+    const panel = document.getElementById('cow-panel-'+t);
+    if(btn) btn.classList.toggle('on', t===tab);
+    if(panel) panel.classList.toggle('on', t===tab);
+  });
+}
+function cowSelectSource(src){
+  cowLinkSource = src;
+  document.querySelectorAll('.cow-source').forEach(el=>el.classList.toggle('on', el.dataset.src===src));
+  const inp = document.getElementById('cow-url-inp');
+  if(inp && !inp.value.trim()) inp.placeholder = COW_LINK_PLACEHOLDERS[src] || 'Paste link';
+  cowSetTab('link');
+  if(inp) inp.focus();
+}
+function cowUrlChanged(){
+  const raw = document.getElementById('cow-url-inp')?.value.trim() || '';
+  const prev = document.getElementById('cow-link-preview');
+  if(!prev) return;
+  if(!raw){ prev.style.display='none'; prev.innerHTML=''; return; }
+  const type = detectClipType(raw);
+  const labels = {medal:'MEDAL.TV', youtube:'YOUTUBE', tiktok:'TIKTOK', mp4:'MP4 VIDEO', twitch:'TWITCH'};
+  const cls = type==='youtube'?'youtube':type==='tiktok'?'tiktok':type==='mp4'?'mp4':'';
+  const note = (type==='twitch' && !/medal|youtube|tiktok|\.mp4|\.webm/i.test(raw)) ? 'Opens on Twitch (no embed)' : 'Link detected · ready to post';
+  prev.style.display = 'flex';
+  prev.innerHTML = `<span class="cow-preview-badge ${cls}">${labels[type]||'LINK'}</span><span class="cow-preview-txt">${note}</span>`;
+  cowSetTab('link');
+}
+function cowUpdateFileUI(f){
   const nameEl = document.getElementById('cow-file-name');
   const dropzone = document.getElementById('cow-dropzone');
-  const f = inp && inp.files && inp.files[0];
+  const preview = document.getElementById('cow-file-preview');
+  const vid = document.getElementById('cow-file-preview-vid');
   if(nameEl){
     if(f) nameEl.innerHTML = `<span style="color:var(--tc);">✓ ${f.name}</span> · ready to post`;
     else nameEl.textContent = 'MP4 · max 200MB';
   }
   if(dropzone) dropzone.classList.toggle('cow-drop-active', !!f);
+  if(preview && vid){
+    if(f){
+      if(vid._objUrl) try{ URL.revokeObjectURL(vid._objUrl); }catch(e){}
+      vid._objUrl = URL.createObjectURL(f);
+      vid.src = vid._objUrl;
+      preview.style.display = 'block';
+    } else {
+      if(vid._objUrl) try{ URL.revokeObjectURL(vid._objUrl); }catch(e){}
+      vid._objUrl = null;
+      vid.removeAttribute('src');
+      preview.style.display = 'none';
+    }
+  }
+}
+function cowFilePicked(inp){
+  const f = inp && inp.files && inp.files[0];
+  cowUpdateFileUI(f);
+  if(f) cowSetTab('upload');
+}
+function cowFileDrop(e){
+  e.preventDefault();
+  e.stopPropagation();
+  e.currentTarget.classList.remove('cow-drag');
+  const f = e.dataTransfer && e.dataTransfer.files && e.dataTransfer.files[0];
+  if(!f) return;
+  if(!/^video\//i.test(f.type || '')){ alert('Please drop a video file (MP4).'); return; }
+  const inp = document.getElementById('cow-file-inp');
+  if(!inp) return;
+  try{
+    const dt = new DataTransfer();
+    dt.items.add(f);
+    inp.files = dt.files;
+    cowFilePicked(inp);
+  }catch(err){
+    alert('Could not attach file. Try the upload button instead.');
+  }
 }
 function cowClearForm(){
-  const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp'),
-        f=document.getElementById('cow-file-inp'), n=document.getElementById('cow-file-name'),
-        dz=document.getElementById('cow-dropzone');
+  const u=document.getElementById('cow-url-inp'), l=document.getElementById('cow-label-inp'), f=document.getElementById('cow-file-inp');
   if(u) u.value=''; if(l) l.value=''; if(f) f.value='';
-  if(n) n.textContent='MP4 · max 200MB';
-  if(dz) dz.classList.remove('cow-drop-active');
+  cowUpdateFileUI(null);
+  const prev = document.getElementById('cow-link-preview');
+  if(prev){ prev.style.display='none'; prev.innerHTML=''; }
 }
 
 function addClipOfWeek(){
@@ -6941,6 +7103,7 @@ function addClipOfWeek(){
   }
   setCowName(by);
   const file = fileInp && fileInp.files && fileInp.files[0];
+  const rawUrl = urlInp ? urlInp.value.trim() : '';
   const sid = getCowSid();
 
   let clip;
@@ -6951,16 +7114,18 @@ function addClipOfWeek(){
     }
     const id = cowId();
     const objUrl = URL.createObjectURL(file);
-    clip = {id, url:objUrl, type:'mp4', label:label || file.name, typeBadge:'VIDEO', raw:objUrl, up:true, votes:0, fname:file.name, _hydrated:true, by, sid};
+    clip = {id, url:objUrl, type:'mp4', label:label || file.name.replace(/\.[^.]+$/,''), typeBadge:'UPLOAD', raw:objUrl, up:true, votes:0, fname:file.name, _hydrated:true, by, sid};
     cowPutBlob(id, file).catch(e=>{ console.warn('upload store failed', e); clip.up=false; clip.local=true; });
-  } else {
-    const raw = urlInp ? urlInp.value.trim() : '';
-    if(!raw){ alert('Upload a video or paste a link first.'); return; }
-    clip = normalizeClip(raw, label);
+  } else if(rawUrl){
+    clip = normalizeClip(rawUrl, label);
     clip.id = cowId();
     clip.votes = 0;
     clip.by = by;
     clip.sid = sid;
+  } else {
+    const onLink = document.getElementById('cow-panel-link')?.classList.contains('on');
+    alert(onLink ? 'Paste a Medal, YouTube, TikTok or MP4 link first.' : 'Upload a video or switch to Paste Link.');
+    return;
   }
 
   CLIPS_OF_WEEK.push(clip);
@@ -7014,6 +7179,7 @@ async function rehydrateUploads(){
   }catch(e){ CLIPS_OF_WEEK = []; }
   renderClipsOfWeek();
   rehydrateUploads();
+  cowSelectSource('medal');
 })();
 
 function openClipOfWeek(){
