@@ -1,7 +1,5 @@
 {
-  "owner": "QuicksenseGoated",
-  "repo": "Quicksense-Dashboard",
-  "branch": "main",
+  "binId": "6a5d13b1f5f4af5e29a49985",
   "clipsPath": "data/cow-clips.json",
-  "note": "Clip of the Week — link clips sync to this GitHub repo file"
+  "note": "Live clips via JSONBin · mirrored into the repo file by GitHub Actions"
 }
