@@ -1,4 +1,7 @@
 {
-  "binId": "6a5d13b1f5f4af5e29a49985",
-  "note": "Shared Clip of the Week cloud — link clips sync here via JSONBin"
+  "owner": "QuicksenseGoated",
+  "repo": "Quicksense-Dashboard",
+  "branch": "main",
+  "clipsPath": "data/cow-clips.json",
+  "note": "Clip of the Week — link clips sync to this GitHub repo file"
 }

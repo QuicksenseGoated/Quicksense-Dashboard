@@ -1,0 +1,52 @@
+name: COW clips sync
+
+on:
+  repository_dispatch:
+    types: [cow-clips-update]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  merge-clips:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Merge dispatched clips into repo file
+        if: github.event_name == 'repository_dispatch'
+        env:
+          PAYLOAD: ${{ toJson(github.event.client_payload) }}
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'data/cow-clips.json';
+          const max = 10;
+          let file = { v: 1, updatedAt: new Date().toISOString(), clips: [] };
+          if (fs.existsSync(path)) {
+            try { file = JSON.parse(fs.readFileSync(path, 'utf8')); } catch (e) {}
+          }
+          let payload = {};
+          try { payload = JSON.parse(process.env.PAYLOAD || '{}'); } catch (e) {}
+          const incoming = Array.isArray(payload.clips) ? payload.clips : [];
+          const byId = {};
+          (file.clips || []).forEach(c => { if (c && c.id) byId[c.id] = c; });
+          incoming.forEach(c => {
+            if (!c || !c.id || c.up) return;
+            const prev = byId[c.id] || {};
+            byId[c.id] = Object.assign({}, prev, c, {
+              votes: Math.max(prev.votes || 0, c.votes || 0)
+            });
+          });
+          file.clips = Object.values(byId)
+            .sort((a, b) => (b.votes || 0) - (a.votes || 0))
+            .slice(0, max);
+          file.updatedAt = new Date().toISOString();
+          fs.writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        if: github.event_name == 'repository_dispatch'
+        with:
+          commit_message: 'COW: sync clips from community'
+          file_pattern: data/cow-clips.json
