@@ -68,6 +68,16 @@ git push origin main
 
 Vercel redeploys from `main` automatically unless you changed that in the Vercel project.
 
+### Push Clerk keys to Vercel (one command)
+
+After `.env.local` has your Clerk keys and you’ve run `npx vercel login` + `npx vercel link`:
+
+```powershell
+npm run setup:vercel-clerk
+```
+
+That uploads `CLERK_SECRET_KEY` + publishable keys to Production/Preview/Development and triggers a production redeploy.
+
 ### Optional: stop “every push goes live”
 
 In **Vercel → Project → Settings → Git**:

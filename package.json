@@ -8,6 +8,7 @@
     "dev:static": "npx --yes serve . -l 3000",
     "check": "node scripts/check.mjs",
     "setup:clerk": "clerk env pull",
+    "setup:vercel-clerk": "node scripts/push-clerk-env-vercel.mjs",
     "deploy": "vercel --prod",
     "start": "npm run dev"
   },
