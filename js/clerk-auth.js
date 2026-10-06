@@ -1,25 +1,48 @@
 /* global Clerk */
 let _clerkInitPromise = null;
 
-function updateCowAuthUI() {
+function clerkDisplayName(user) {
+  if (!user) return '';
+  if (user.username) return user.username;
+  const email = user.primaryEmailAddress && user.primaryEmailAddress.emailAddress;
+  return email || 'Account';
+}
+
+function setBlockVisible(el, show) {
+  if (!el) return;
+  if (show) el.removeAttribute('hidden');
+  else el.setAttribute('hidden', '');
+}
+
+function mountUserButton(el) {
+  if (!el || !window.Clerk || !window.__clerkUserId) return;
+  el.innerHTML = '';
+  try {
+    window.Clerk.mountUserButton(el, {
+      afterSignOutUrl: window.location.href,
+    });
+  } catch (e) {
+    console.warn('Clerk user button mount failed', e);
+  }
+}
+
+function updateAuthUI() {
+  const has = !!window.__clerkUserId;
+  const user = window.__clerkUser;
+
   const signedOut = document.getElementById('cow-signed-out-block');
   const formFields = document.getElementById('cow-form-fields');
-  const userBtn = document.getElementById('clerk-user-btn');
-  const has = !!window.__clerkUserId;
-
   if (signedOut) signedOut.style.display = has ? 'none' : 'block';
   if (formFields && !has) formFields.style.display = 'none';
 
-  if (userBtn && window.Clerk && has) {
-    userBtn.innerHTML = '';
-    try {
-      window.Clerk.mountUserButton(userBtn, {
-        afterSignOutUrl: window.location.href,
-      });
-    } catch (e) {
-      console.warn('Clerk user button mount failed', e);
-    }
-  }
+  setBlockVisible(document.getElementById('qs-auth-out'), !has);
+  setBlockVisible(document.getElementById('qs-auth-in'), has);
+
+  const nameEl = document.getElementById('qs-auth-name');
+  if (nameEl) nameEl.textContent = has ? clerkDisplayName(user) : '';
+
+  mountUserButton(document.getElementById('clerk-user-btn'));
+  mountUserButton(document.getElementById('qs-clerk-user-btn'));
 
   if (typeof renderClipsOfWeek === 'function') renderClipsOfWeek();
 }
@@ -27,7 +50,7 @@ function updateCowAuthUI() {
 function applyClerkUser(user) {
   window.__clerkUser = user || null;
   window.__clerkUserId = user ? user.id : '';
-  updateCowAuthUI();
+  updateAuthUI();
 }
 
 function loadClerkScript() {
@@ -53,8 +76,8 @@ async function initClerkAuth() {
     } catch (e) {}
 
     if (!cfg.publishableKey) {
-      console.warn('Clerk: add CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY on Vercel');
-      updateCowAuthUI();
+      console.warn('Clerk: set CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY (Vercel or .env.local)');
+      updateAuthUI();
       return false;
     }
 
@@ -70,12 +93,24 @@ async function initClerkAuth() {
 async function openCowSignIn() {
   await initClerkAuth();
   if (!window.Clerk) {
-    alert('Sign-in is not configured yet. Add Clerk keys in Vercel project settings.');
+    alert('Sign-in is not configured yet. Add Clerk keys in Vercel or run `clerk env pull`.');
     return;
   }
   window.Clerk.openSignIn({
     redirectUrl: window.location.href,
     signUpForceRedirectUrl: window.location.href,
+  });
+}
+
+async function openCowSignUp() {
+  await initClerkAuth();
+  if (!window.Clerk) {
+    alert('Sign-up is not configured yet. Add Clerk keys in Vercel or run `clerk env pull`.');
+    return;
+  }
+  window.Clerk.openSignUp({
+    redirectUrl: window.location.href,
+    signInForceRedirectUrl: window.location.href,
   });
 }
 
@@ -87,6 +122,7 @@ async function openClerkAccount() {
 
 window.initClerkAuth = initClerkAuth;
 window.openCowSignIn = openCowSignIn;
+window.openCowSignUp = openCowSignUp;
 window.openClerkAccount = openClerkAccount;
 
 document.addEventListener('DOMContentLoaded', () => {

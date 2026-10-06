@@ -9,6 +9,7 @@
     "start": "npm run dev"
   },
   "dependencies": {
+    "@clerk/clerk-js": "^5.128.0",
     "@vercel/kv": "^3.0.0"
   },
   "devDependencies": {

@@ -27,6 +27,23 @@ Static-only (no API):
 npm run dev:static
 ```
 
+## Clerk CLI (link app `app_3KJuRHZeiueeEBWgolcso5OwFuG`)
+
+This project is vanilla JS + Vercel APIs (not Next.js). From your machine:
+
+```bash
+npm install -g clerk   # or: curl -fsSL https://clerk.com/install | bash
+clerk auth login
+cd path/to/Quicksense-Dashboard
+clerk init --app app_3KJuRHZeiueeEBWgolcso5OwFuG --framework javascript --pm npm -y
+clerk env pull
+clerk doctor
+```
+
+Cloud agents cannot finish the browser OAuth step for you. After `clerk env pull`, local `npm run dev` reads `.env.local` automatically.
+
+Enable **Username** in the [Clerk Dashboard](https://dashboard.clerk.com/) so Clip of the Week shows handles.
+
 ## Deploy on Vercel
 
 1. Import this repo at [vercel.com/new](https://vercel.com/new)

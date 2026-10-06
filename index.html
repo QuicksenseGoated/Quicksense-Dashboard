@@ -667,6 +667,13 @@ input.ta{padding:8px 12px;}
 .cow-clerk-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.06);}
 .cow-clerk-gate p{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.62);margin-bottom:14px;line-height:1.45;}
 #clerk-user-btn{display:inline-flex;margin-left:8px;vertical-align:middle;}
+#qs-auth-bar{position:fixed;top:14px;right:14px;z-index:99990;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.25);background:rgba(4,3,2,0.82);backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(0,0,0,0.35);}
+#qs-auth-out,#qs-auth-in{display:flex;align-items:center;gap:8px;}
+#qs-auth-name{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.65);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.qs-auth-btn{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;padding:6px 12px;border-radius:999px;cursor:pointer;border:1px solid rgba(255,255,255,0.22);background:transparent;color:rgba(255,255,255,0.75);}
+.qs-auth-btn:hover{border-color:rgba(var(--g-rgb,200,150,10),0.5);color:#fff;}
+.qs-auth-btn-primary{border-color:rgba(var(--g-rgb,200,150,10),0.55);background:rgba(var(--g-rgb,200,150,10),0.15);color:var(--g);}
+#qs-clerk-user-btn{display:inline-flex;}
 .cow-posting-as{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.25);background:rgba(var(--tc-rgb),0.08);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.55);}
 .cow-posting-as span{color:var(--tc);font-size:16px;font-weight:700;}
 .cow-posting-change{margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;}
@@ -1740,6 +1747,16 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 .card .clabel { font-size:25px!important; }
 </style></head>
 <body>
+<div id="qs-auth-bar" aria-label="Account">
+  <div id="qs-auth-out">
+    <button type="button" class="qs-auth-btn" onclick="openCowSignIn()">Sign in</button>
+    <button type="button" class="qs-auth-btn qs-auth-btn-primary" onclick="openCowSignUp()">Sign up</button>
+  </div>
+  <div id="qs-auth-in" hidden>
+    <span id="qs-auth-name"></span>
+    <span id="qs-clerk-user-btn"></span>
+  </div>
+</div>
 
 <div id="word-toolbar">
 <!-- Easter Egg flash overlay (cyberpunk only) -->
@@ -2228,7 +2245,8 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
           <div id="cow-signed-out-block" class="cow-clerk-gate">
             <p>Sign in to post clips. Pick a username in your Clerk profile after signing up.</p>
-            <button type="button" class="cow-btn-primary" onclick="openCowSignIn()">Sign in / Create account</button>
+            <button type="button" class="cow-btn-primary" onclick="openCowSignIn()">Sign in</button>
+            <button type="button" class="cow-btn-ghost" style="margin-left:8px" onclick="openCowSignUp()">Create account</button>
           </div>
 
           <div id="cow-form-fields" style="display:none">
