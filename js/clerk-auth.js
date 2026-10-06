@@ -163,6 +163,26 @@ window.openCowSignIn = openCowSignIn;
 window.openCowSignUp = openCowSignUp;
 window.openClerkAccount = openClerkAccount;
 
+function bindAuthBarClicks() {
+  const signIn = document.querySelector('#qs-auth-out .qs-auth-btn:not(.qs-auth-btn-primary)');
+  const signUp = document.querySelector('#qs-auth-out .qs-auth-btn-primary');
+  if (signIn && !signIn.dataset.bound) {
+    signIn.dataset.bound = '1';
+    signIn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCowSignIn();
+    });
+  }
+  if (signUp && !signUp.dataset.bound) {
+    signUp.dataset.bound = '1';
+    signUp.addEventListener('click', (e) => {
+      e.stopPropagation();
+      openCowSignUp();
+    });
+  }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  bindAuthBarClicks();
   initClerkAuth();
 });

@@ -100,7 +100,10 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
   padding:20px;gap:12px;
   opacity:0;pointer-events:none;transform:scale(.94);
   transition:opacity .55s .1s,transform .55s .1s cubic-bezier(0.16,1,0.3,1);}
-.land-btns-wrap.visible{opacity:1;pointer-events:all;transform:scale(1);}
+.land-btns-wrap.visible{opacity:1;pointer-events:none;transform:scale(1);}
+.land-btns-wrap.visible .land-btns,
+.land-btns-wrap.visible .land-back,
+.land-btns-wrap.visible > div{pointer-events:auto;}
 .land-btns{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%;max-width:700px;height:calc(100vh - 120px);max-height:600px;}
 .land-back{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,0.1);letter-spacing:3px;transition:color .18s;}
 .land-back:hover{color:rgba(255,255,255,0.3);}
@@ -668,10 +671,11 @@ input.ta{padding:8px 12px;}
 .cow-clerk-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.06);}
 .cow-clerk-gate p{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.62);margin-bottom:14px;line-height:1.45;}
 #clerk-user-btn{display:inline-flex;margin-left:8px;vertical-align:middle;}
-#qs-auth-bar{position:fixed;top:14px;right:14px;z-index:99990;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.25);background:rgba(4,3,2,0.82);backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(0,0,0,0.35);}
+#qs-auth-bar{position:fixed;top:14px;right:14px;z-index:100010;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.25);background:rgba(4,3,2,0.92);backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(0,0,0,0.35);pointer-events:auto!important;isolation:isolate;}
+#qs-auth-bar button,.qs-auth-btn,#qs-clerk-user-btn{pointer-events:auto!important;cursor:pointer!important;}
 #qs-auth-out,#qs-auth-in{display:flex;align-items:center;gap:8px;}
-#qs-auth-name{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.65);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-.qs-auth-btn{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;padding:6px 12px;border-radius:999px;cursor:pointer;border:1px solid rgba(255,255,255,0.22);background:transparent;color:rgba(255,255,255,0.75);}
+#qs-auth-name{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;color:rgba(255,255,255,0.65);max-width:140px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;pointer-events:none;}
+.qs-auth-btn{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:0.5px;padding:6px 12px;border-radius:999px;cursor:pointer!important;border:1px solid rgba(255,255,255,0.22);background:transparent;color:rgba(255,255,255,0.75);}
 .qs-auth-btn:hover{border-color:rgba(var(--g-rgb,200,150,10),0.5);color:#fff;}
 .qs-auth-btn-primary{border-color:rgba(var(--g-rgb,200,150,10),0.55);background:rgba(var(--g-rgb,200,150,10),0.15);color:var(--g);}
 #qs-clerk-user-btn{display:inline-flex;}
@@ -8071,4 +8075,4 @@ function exitAmbient(){
 });
 resetAmbientTimer();
 </script>
-<script src="/js/clerk-auth.js" defer></script>
+<script src="/js/clerk-auth.js"></script>
