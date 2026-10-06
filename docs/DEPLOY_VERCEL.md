@@ -12,13 +12,15 @@
 6. **Output Directory:** leave empty (serves `index.html` from repo root)
 7. Click **Deploy** (first deploy may work without KV; clips won’t persist until step 2)
 
-## 2. Add Vercel KV (shared Clip of the Week)
+## 2. Add Redis (shared Clip of the Week)
 
-1. Project → **Storage** → **Create Database** → **KV**
-2. Name it (e.g. `quicksense-kv`) → **Create**
-3. **Connect to Project** → select this Vercel project → **Connect**
+Vercel **KV** was replaced by **Marketplace Redis** (often Upstash under the hood).
 
-Vercel adds `KV_REST_API_URL` and `KV_REST_API_TOKEN` automatically.
+1. Project → **Storage** → scroll to **Marketplace Database Providers**
+2. Click **Redis** — *“Official Redis for Vercel”* → **Create**
+3. Pick a name/region → **Create** → **Connect** to **quicksense-dashboard** (your project)
+
+Vercel injects REST credentials (`KV_REST_API_URL` / `KV_REST_API_TOKEN` and/or `UPSTASH_REDIS_REST_*`). This repo reads both.
 
 ## 3. Add Clerk env vars
 
