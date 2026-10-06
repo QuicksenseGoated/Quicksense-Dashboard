@@ -2238,7 +2238,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div id="cow-form-fields">
             <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
 
-            <div class="cow-cloud-note">🔗 Paste a link — saves instantly · synced to <b>data/cow-clips.json</b> in this repo</div>
+            <div class="cow-cloud-note">🔗 Paste a link — shared via Vercel API · up to 10 clips · votes sync</div>
 
             <div class="cow-source-row">
               <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
@@ -5935,7 +5935,45 @@ function resetLanding(){
 buildThemeGrid();
 applyNDZTheme(activeTheme);
 
-// ── JSONBIN SYNC ──
+// ── BACKEND (Vercel API) + legacy JSONBin fallback ──
+let NDZ_BACKEND = false;
+const NDZ_STATE_API = '/api/dashboard/state';
+
+async function detectBackend(){
+  try{
+    const r = await fetch('/api/health', { cache: 'no-store' });
+    if(!r.ok) return false;
+    const j = await r.json();
+    NDZ_BACKEND = !!(j && j.ok);
+    return NDZ_BACKEND;
+  }catch(e){
+    NDZ_BACKEND = false;
+    return false;
+  }
+}
+
+async function loadStateFromApi(){
+  try{
+    const r = await fetch(NDZ_STATE_API, { cache: 'no-store' });
+    if(!r.ok) return false;
+    const data = await r.json();
+    if(!data || typeof data !== 'object') return false;
+    localStorage.setItem('ndz_state', JSON.stringify(data));
+    loadState();
+    return true;
+  }catch(e){ return false; }
+}
+
+async function saveStateToApi(state){
+  const r = await fetch(NDZ_STATE_API, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(state)
+  });
+  return r.ok;
+}
+
+// ── JSONBIN SYNC (legacy — GitHub Pages / offline only) ──
 const JSONBIN_MASTER = '$2a$10$71BbUNejiDdnGnp12Dj1NOTGqV.Z0OnGRjGg8amg1eeOEGnZcihu6';
 const JSONBIN_ACCESS = '$2a$10$M6HncBfRA7hmFsR0jcr9wexHVuLTFXFAtSAOrwI82lcbhUjPIYzxC';
 const JSONBIN_URL = 'https://api.jsonbin.io/v3/b';
@@ -5985,11 +6023,20 @@ async function loadBin() {
 async function syncToCloud() {
   if (!isOwner) return;
   const s = JSON.parse(localStorage.getItem('ndz_state')||'{}');
+  if(NDZ_BACKEND){
+    try{
+      if(await saveStateToApi(s)) showSyncIndicator('✓ synced');
+      return;
+    }catch(e){ console.warn('api sync failed', e); }
+  }
   await updateBin(s);
   showSyncIndicator('✓ synced');
 }
 
 async function loadFromCloud() {
+  if(NDZ_BACKEND){
+    if(await loadStateFromApi()){ showSyncIndicator('✓ loaded'); return; }
+  }
   const data = await loadBin();
   if (!data) return;
   localStorage.setItem('ndz_state', JSON.stringify(data));
@@ -6027,8 +6074,21 @@ setInterval(() => {
   if (isOwner) syncToCloud();
 }, 60000);
 
-// On load — ONLY pull from cloud, never push on startup
+// On load — pull from Vercel API or legacy JSONBin
 window.addEventListener('load', async () => {
+  await detectBackend();
+  if (NDZ_BACKEND) {
+    try{
+      await loadStateFromApi();
+      showSyncIndicator('✓ backend');
+    }catch(e){}
+    if(typeof cowLoadFromCloud==='function'){
+      cowLoadFromCloud().then(changed=>{
+        if(changed && typeof renderClipsOfWeek==='function') renderClipsOfWeek();
+      });
+    }
+    return;
+  }
   if (BIN_ID) {
     const cloud = await loadBin();
     if (cloud) {
@@ -6036,7 +6096,6 @@ window.addEventListener('load', async () => {
       loadState();
     }
   } else if (isOwner) {
-    // First time ever — create bin with current state
     syncToCloud();
   }
 });
@@ -6773,7 +6832,7 @@ const COW_REPO = {
   branch: 'main',
   path: 'data/cow-clips.json'
 };
-const COW_CLOUD_BIN_ID = '6a5d13b1f5f4af5e29a49985';
+const COW_API = '/api/cow/clips';
 let CLIPS_OF_WEEK = [];
 let _cowCloudBusy = false;
 
@@ -6797,49 +6856,45 @@ async function cowLoadFromRepo(){
     return cowMergeCloudClips(j.clips);
   }catch(e){ return false; }
 }
-async function cowLoadFromBin(){
-  if(!COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return false;
+async function cowLoadFromApi(){
   try{
-    const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
-      headers: { 'X-Master-Key': JSONBIN_MASTER }
-    });
+    const res = await fetch(`${COW_API}?t=${Date.now()}`, { cache: 'no-store' });
     if(!res.ok) return false;
     const j = await res.json();
-    return cowMergeCloudClips(j.record && j.record.clips);
+    return cowMergeCloudClips(j.clips);
   }catch(e){ return false; }
 }
 async function cowLoadFromCloud(){
-  let changed = false;
-  if(await cowLoadFromBin()) changed = true;
-  if(await cowLoadFromRepo()) changed = true;
-  return changed;
+  if(typeof NDZ_BACKEND !== 'undefined' && NDZ_BACKEND){
+    if(await cowLoadFromApi()) return true;
+  }
+  return cowLoadFromRepo();
 }
 async function cowPushToCloud(){
-  if(_cowCloudBusy || !COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return;
+  if(_cowCloudBusy) return;
   _cowCloudBusy = true;
   try{
-    let remoteClips = [];
-    try{
-      const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
-        headers: { 'X-Master-Key': JSONBIN_MASTER }
+    if(typeof NDZ_BACKEND !== 'undefined' && NDZ_BACKEND){
+      let remoteClips = [];
+      try{
+        const res = await fetch(COW_API, { cache: 'no-store' });
+        if(res.ok){
+          const j = await res.json();
+          remoteClips = j.clips || [];
+        }
+      }catch(e){}
+      const merged = cowBuildSharedPayload(remoteClips);
+      const put = await fetch(COW_API, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ clips: merged })
       });
-      if(res.ok){
-        const j = await res.json();
-        remoteClips = (j.record && j.record.clips) || [];
-      }
-    }catch(e){}
-    const merged = cowBuildSharedPayload(remoteClips);
-    await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}`, {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Master-Key': JSONBIN_MASTER
-      },
-      body: JSON.stringify({ clips: merged, v: 1, updatedAt: new Date().toISOString() })
-    });
-    if(typeof showSyncIndicator==='function') showSyncIndicator('✓ clip saved');
+      if(put.ok && typeof showSyncIndicator==='function') showSyncIndicator('✓ clip saved');
+      return;
+    }
+    if(typeof showSyncIndicator==='function') showSyncIndicator('Local only — run on Vercel for shared clips');
   }catch(e){
-    console.warn('cow cloud save failed', e);
+    console.warn('cow api save failed', e);
   }finally{
     _cowCloudBusy = false;
   }
@@ -7532,14 +7587,7 @@ async function rehydrateUploads(){
   }catch(e){ CLIPS_OF_WEEK = []; }
   renderClipsOfWeek();
   rehydrateUploads();
-  cowLoadFromCloud().then(changed=>{
-    if(changed){
-      try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){}
-      renderClipsOfWeek();
-      rehydrateUploads();
-    }
-  });
-  setInterval(()=>{
+  const cowPoll = ()=>{
     if(document.getElementById('cow')?.classList.contains('on')){
       cowLoadFromCloud().then(changed=>{
         if(changed){
@@ -7549,7 +7597,17 @@ async function rehydrateUploads(){
         }
       });
     }
-  }, 30000);
+  };
+  detectBackend().then(()=>{
+    cowLoadFromCloud().then(changed=>{
+      if(changed){
+        try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){}
+        renderClipsOfWeek();
+        rehydrateUploads();
+      }
+    });
+    setInterval(cowPoll, 30000);
+  });
   cowSelectSource('medal');
   initAppUser();
   cowInitPageTab();

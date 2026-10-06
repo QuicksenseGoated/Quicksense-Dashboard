@@ -1,8 +1,17 @@
 {
   "name": "quicksense-dashboard",
   "private": true,
+  "type": "module",
   "scripts": {
-    "dev": "npx --yes serve . -l 3000",
+    "dev": "node scripts/dev-server.mjs",
+    "dev:vercel": "vercel dev --listen 3000",
+    "dev:static": "npx --yes serve . -l 3000",
     "start": "npm run dev"
+  },
+  "dependencies": {
+    "@vercel/kv": "^3.0.0"
+  },
+  "devDependencies": {
+    "vercel": "^41.6.0"
   }
 }

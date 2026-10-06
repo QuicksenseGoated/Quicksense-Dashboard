@@ -1,5 +1,6 @@
 {
-  "binId": "6a5d13b1f5f4af5e29a49985",
-  "clipsPath": "data/cow-clips.json",
-  "note": "Live clips via JSONBin · mirrored into the repo file by GitHub Actions"
+  "backend": "vercel",
+  "cowApi": "/api/cow/clips",
+  "stateApi": "/api/dashboard/state",
+  "note": "Production: deploy on Vercel + link a KV store. Local dev: vercel dev uses data/*.json files."
 }
