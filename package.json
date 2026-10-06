@@ -6,6 +6,7 @@
     "dev": "node scripts/dev-server.mjs",
     "dev:vercel": "vercel dev --listen 3000",
     "dev:static": "npx --yes serve . -l 3000",
+    "setup:clerk": "clerk env pull",
     "start": "npm run dev"
   },
   "dependencies": {
