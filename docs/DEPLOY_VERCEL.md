@@ -62,7 +62,7 @@ Clerk → **Configure → Developers → Allowed origins** (or Domains):
 
 Clerk → **Paths / Redirect URLs** — allow your Vercel URL for sign-in redirect.
 
-Under **User & authentication → Username**: enable and set **Required** so every account has a public handle (email is never shown in the app).
+Under **User & authentication → Email, phone, username → Username**: turn **Username** on (required for `user.update({ username })`). Our app also asks for a synonym after sign-in; it does not have to be “required at sign-up” in Clerk.
 
 ## 5. Verify
 

@@ -36,13 +36,20 @@ function waitFor(fn, timeoutMs, intervalMs) {
   });
 }
 
+function synonymFromUser(user) {
+  if (!user) return '';
+  const u = String(user.username || '').trim();
+  if (u) return u;
+  const meta = user.unsafeMetadata || user.publicMetadata || {};
+  return String(meta.cowSynonym || meta.synonym || '').trim();
+}
+
 function userHasSynonym(user) {
-  return Boolean(user && String(user.username || '').trim());
+  return Boolean(synonymFromUser(user));
 }
 
 function clerkDisplayName(user) {
-  if (!user) return '';
-  const u = String(user.username || '').trim();
+  const u = synonymFromUser(user);
   return u ? (u.startsWith('@') ? u : `@${u}`) : '';
 }
 
@@ -92,7 +99,24 @@ async function saveCowSynonym() {
       alert('Sign in first.');
       return false;
     }
-    await window.Clerk.user.update({ username: un });
+    try {
+      await window.Clerk.user.update({ username: un });
+    } catch (usernameErr) {
+      const msg = String(
+        usernameErr?.message ||
+          usernameErr?.errors?.[0]?.longMessage ||
+          usernameErr?.errors?.[0]?.message ||
+          '',
+      );
+      const usernameDisabled = /username is not a valid parameter/i.test(msg);
+      if (usernameDisabled) {
+        await window.Clerk.user.update({
+          unsafeMetadata: { ...(window.Clerk.user.unsafeMetadata || {}), cowSynonym: un },
+        });
+      } else {
+        throw usernameErr;
+      }
+    }
     await window.Clerk.user.reload();
     applyClerkUser(window.Clerk.user);
     closeCowSynonymModal();
@@ -100,7 +124,15 @@ async function saveCowSynonym() {
   } catch (e) {
     console.error(e);
     if (err) {
-      err.textContent = e.message || 'That name is taken or not allowed. Try another.';
+      const msg = String(
+        e?.message || e?.errors?.[0]?.longMessage || e?.errors?.[0]?.message || '',
+      );
+      if (/username is not a valid parameter/i.test(msg)) {
+        err.textContent =
+          'Clerk username is off for this app. Enable Username under User & authentication in the Clerk dashboard, then try again.';
+      } else {
+        err.textContent = msg || 'That name is taken or not allowed. Try another.';
+      }
       err.style.display = 'block';
     }
     return false;
