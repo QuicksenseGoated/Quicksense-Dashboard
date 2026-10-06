@@ -1,6 +1,6 @@
 {
-  "backend": "vercel",
-  "cowApi": "/api/cow/clips",
-  "stateApi": "/api/dashboard/state",
-  "note": "Production: Vercel + free JSONBin (JSONBIN_COW_BIN_ID) or optional Redis. Local: data/*.json"
+  "binId": "6a5d13b1f5f4af5e29a49985",
+  "clipsPath": "data/cow-clips.json",
+  "backend": "jsonbin",
+  "note": "Live COW clips via JSONBin · repo file is read fallback / mirror"
 }

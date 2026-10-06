@@ -1,0 +1,52 @@
+name: Mirror COW clips to repo
+
+on:
+  schedule:
+    - cron: '*/15 * * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  mirror:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Pull clips from JSONBin into data/cow-clips.json
+        run: |
+          node <<'NODE'
+          const fs = require('fs');
+          const path = 'data/cow-clips.json';
+          const binId = '6a5d13b1f5f4af5e29a49985';
+          const masterKey = '$2a$10$71BbUNejiDdnGnp12Dj1NOTGqV.Z0OnGRjGg8amg1eeOEGnZcihu6';
+
+          async function main(){
+            let clips = [];
+            try{
+              const res = await fetch(`https://api.jsonbin.io/v3/b/${binId}/latest`, {
+                headers: { 'X-Master-Key': masterKey }
+              });
+              if(res.ok){
+                const j = await res.json();
+                clips = (j.record && j.record.clips) || [];
+              }
+            }catch(e){
+              console.warn('JSONBin fetch failed', e.message);
+            }
+            const file = {
+              v: 1,
+              updatedAt: new Date().toISOString(),
+              clips: Array.isArray(clips) ? clips : []
+            };
+            fs.writeFileSync(path, JSON.stringify(file, null, 2) + '\n');
+          }
+
+          main().catch(err => { console.error(err); process.exit(1); });
+          NODE
+
+      - uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: 'COW: mirror clips to repo'
+          file_pattern: data/cow-clips.json

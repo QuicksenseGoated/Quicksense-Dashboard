@@ -2291,7 +2291,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
               <span id="clerk-user-btn"></span>
             </div>
 
-            <div class="cow-cloud-note">🔗 Paste a link — shared via Vercel API · up to 10 clips · votes sync</div>
+            <div class="cow-cloud-note">🔗 Paste a link — shared via JSONBin · up to 10 clips · votes sync</div>
 
             <div class="cow-source-row">
               <button type="button" class="cow-source on" data-src="medal" onclick="cowSelectSource('medal')">MEDAL</button>
@@ -6886,6 +6886,7 @@ const COW_REPO = {
   path: 'data/cow-clips.json'
 };
 const COW_API = '/api/cow/clips';
+const COW_CLOUD_BIN_ID = '6a5d13b1f5f4af5e29a49985';
 let CLIPS_OF_WEEK = [];
 let _cowCloudBusy = false;
 
@@ -6917,37 +6918,49 @@ async function cowLoadFromApi(){
     return cowMergeCloudClips(j.clips);
   }catch(e){ return false; }
 }
+async function cowLoadFromBin(){
+  if(!COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return false;
+  try{
+    const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_MASTER }
+    });
+    if(!res.ok) return false;
+    const j = await res.json();
+    return cowMergeCloudClips(j.record && j.record.clips);
+  }catch(e){ return false; }
+}
 async function cowLoadFromCloud(){
-  if(typeof NDZ_BACKEND !== 'undefined' && NDZ_BACKEND){
-    if(await cowLoadFromApi()) return true;
-  }
-  return cowLoadFromRepo();
+  let changed = false;
+  if(await cowLoadFromBin()) changed = true;
+  if(await cowLoadFromRepo()) changed = true;
+  return changed;
 }
 async function cowPushToCloud(){
-  if(_cowCloudBusy) return;
+  if(_cowCloudBusy || !COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return;
   _cowCloudBusy = true;
   try{
-    if(typeof NDZ_BACKEND !== 'undefined' && NDZ_BACKEND){
-      let remoteClips = [];
-      try{
-        const res = await fetch(COW_API, { cache: 'no-store' });
-        if(res.ok){
-          const j = await res.json();
-          remoteClips = j.clips || [];
-        }
-      }catch(e){}
-      const merged = cowBuildSharedPayload(remoteClips);
-      const put = await fetch(COW_API, {
-        method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ clips: merged })
+    let remoteClips = [];
+    try{
+      const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
+        headers: { 'X-Master-Key': JSONBIN_MASTER }
       });
-      if(put.ok && typeof showSyncIndicator==='function') showSyncIndicator('✓ clip saved');
-      return;
-    }
-    if(typeof showSyncIndicator==='function') showSyncIndicator('Local only — run on Vercel for shared clips');
+      if(res.ok){
+        const j = await res.json();
+        remoteClips = (j.record && j.record.clips) || [];
+      }
+    }catch(e){}
+    const merged = cowBuildSharedPayload(remoteClips);
+    await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Master-Key': JSONBIN_MASTER
+      },
+      body: JSON.stringify({ clips: merged, v: 1, updatedAt: new Date().toISOString() })
+    });
+    if(typeof showSyncIndicator==='function') showSyncIndicator('✓ clip saved');
   }catch(e){
-    console.warn('cow api save failed', e);
+    console.warn('cow cloud save failed', e);
   }finally{
     _cowCloudBusy = false;
   }
