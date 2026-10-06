@@ -1,8 +1,8 @@
 # Quicksense Dashboard
 
-One repo, one branch (**`main`**), deploy on **Vercel**. No PR workflow — push to `main` and Vercel redeploys.
-
 Single-page app (`index.html`) + serverless **`/api/*`** (Clip of the Week, dashboard state, Clerk config).
+
+**Workflow:** develop and test on your PC first, then push to **`main`** when it works. See **[docs/LOCAL_FIRST.md](docs/LOCAL_FIRST.md)** (Windows paths, sign-in checklist, optional manual deploy).
 
 ## Vercel (production)
 
@@ -17,20 +17,19 @@ Full checklist: **[docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md)**
 
 Verify: `https://YOUR-APP.vercel.app/api/health` → `"storage":"kv"` · COW: `/#cow`
 
-## Local dev
+## Local dev (do this before every push)
 
 ```bash
-git clone https://github.com/QuicksenseGoated/Quicksense-Dashboard.git
-cd Quicksense-Dashboard
+git pull origin main
 npm install
-npm run setup:clerk   # once: clerk auth login, then pulls .env.local
-npm run dev
+npm run dev          # http://localhost:3000/#cow
+npm run check        # quick sanity checks before git push
 ```
 
-- http://localhost:3000/
-- http://localhost:3000/#cow
+Once: `npm run setup:clerk` (after `npx clerk login`) → `.env.local`.  
+Clerk must allow **`http://localhost:3000`** in allowed origins.
 
-Without `.env.local`, Clerk still works from the publishable key in `index.html` meta (dev only).
+Full guide: **[docs/LOCAL_FIRST.md](docs/LOCAL_FIRST.md)**
 
 ## Clip of the Week
 
