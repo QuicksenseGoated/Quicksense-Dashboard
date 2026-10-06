@@ -59,11 +59,74 @@ function ensureUiBundle(publishableKey) {
   });
 }
 
+function hasClerkSynonym(user) {
+  return Boolean(user && String(user.username || '').trim());
+}
+
+/** Public handle only — never email or real name */
 function clerkDisplayName(user) {
   if (!user) return '';
-  if (user.username) return user.username;
-  const email = user.primaryEmailAddress && user.primaryEmailAddress.emailAddress;
-  return email || 'Account';
+  const u = String(user.username || '').trim();
+  return u ? (u.startsWith('@') ? u : `@${u}`) : '';
+}
+
+function sanitizeSynonymInput(raw) {
+  let s = String(raw || '')
+    .trim()
+    .replace(/^@+/, '');
+  if (!s || s.includes('@')) return '';
+  if (s.length < 2 || s.length > 32) return '';
+  if (!/^[a-zA-Z0-9._-]+$/.test(s)) return '';
+  return s;
+}
+
+function openCowSynonymModal() {
+  const modal = document.getElementById('cow-synonym-modal');
+  if (modal) {
+    modal.classList.add('open');
+    const inp = document.getElementById('cow-synonym-inp');
+    if (inp) {
+      inp.value = '';
+      setTimeout(() => inp.focus(), 80);
+    }
+  }
+}
+
+function closeCowSynonymModal() {
+  const modal = document.getElementById('cow-synonym-modal');
+  if (modal) modal.classList.remove('open');
+}
+
+async function saveCowSynonym() {
+  const inp = document.getElementById('cow-synonym-inp');
+  const err = document.getElementById('cow-synonym-err');
+  const un = sanitizeSynonymInput(inp && inp.value);
+  if (!un) {
+    if (err) {
+      err.textContent = 'Use 2–32 characters: letters, numbers, . _ - (no email).';
+      err.style.display = 'block';
+    }
+    return false;
+  }
+  if (err) err.style.display = 'none';
+  try {
+    await initClerkAuth();
+    if (!window.Clerk || !window.Clerk.user) {
+      alert('Sign in first.');
+      return false;
+    }
+    await window.Clerk.user.update({ username: un });
+    applyClerkUser(window.Clerk.user);
+    closeCowSynonymModal();
+    return true;
+  } catch (e) {
+    console.error(e);
+    if (err) {
+      err.textContent = e.message || 'That name is taken or not allowed. Try another.';
+      err.style.display = 'block';
+    }
+    return false;
+  }
 }
 
 function setBlockVisible(el, show) {
@@ -78,6 +141,7 @@ function mountUserButton(el) {
   try {
     window.Clerk.mountUserButton(el, {
       afterSignOutUrl: window.location.href,
+      showName: false,
     });
   } catch (e) {
     console.warn('Clerk user button mount failed', e);
@@ -89,9 +153,19 @@ function updateAuthUI() {
   const user = window.__clerkUser;
 
   const signedOut = document.getElementById('cow-signed-out-block');
+  const synonymBlock = document.getElementById('cow-synonym-block');
   const formFields = document.getElementById('cow-form-fields');
+  const needsSynonym = has && !hasClerkSynonym(user);
+
   if (signedOut) signedOut.style.display = has ? 'none' : 'block';
-  if (formFields && !has) formFields.style.display = 'none';
+  if (synonymBlock) synonymBlock.style.display = needsSynonym ? 'block' : 'none';
+  if (formFields && (!has || needsSynonym)) formFields.style.display = 'none';
+
+  if (has && needsSynonym && !window.__cowSynonymPrompted) {
+    window.__cowSynonymPrompted = true;
+    openCowSynonymModal();
+  }
+  if (has && hasClerkSynonym(user)) window.__cowSynonymPrompted = false;
 
   setBlockVisible(document.getElementById('qs-auth-out'), !has);
   setBlockVisible(document.getElementById('qs-auth-in'), has);
@@ -189,7 +263,7 @@ async function openCowSignUp() {
 async function openClerkAccount() {
   await initClerkAuth();
   if (!window.Clerk) return;
-  window.Clerk.openUserProfile();
+  openCowSynonymModal();
 }
 
 function bindAuthButtons() {
@@ -215,6 +289,12 @@ window.initClerkAuth = initClerkAuth;
 window.openCowSignIn = openCowSignIn;
 window.openCowSignUp = openCowSignUp;
 window.openClerkAccount = openClerkAccount;
+window.hasClerkSynonym = () => hasClerkSynonym(window.__clerkUser);
+window.getClerkSynonym = () => clerkDisplayName(window.__clerkUser);
+window.openCowSynonymModal = openCowSynonymModal;
+window.closeCowSynonymModal = closeCowSynonymModal;
+window.saveCowSynonym = saveCowSynonym;
+window.hasCowIdentity = () => !!window.__clerkUserId && hasClerkSynonym(window.__clerkUser);
 
 document.addEventListener('DOMContentLoaded', () => {
   bindAuthButtons();

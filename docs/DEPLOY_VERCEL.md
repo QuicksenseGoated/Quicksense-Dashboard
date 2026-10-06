@@ -42,7 +42,7 @@ Clerk → **Configure → Developers → Allowed origins** (or Domains):
 
 Clerk → **Paths / Redirect URLs** — allow your Vercel URL for sign-in redirect.
 
-Enable **Username** under **User & authentication**.
+Under **User & authentication → Username**: enable and set **Required** so every account has a public handle (email is never shown in the app).
 
 ## 5. Verify
 

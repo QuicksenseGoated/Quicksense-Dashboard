@@ -739,6 +739,14 @@ input.ta{padding:8px 12px;}
 .cow-lb-list-head span{color:var(--g);}
 .cow-help-float{position:absolute;right:16px;top:16px;width:32px;height:32px;border-radius:50%;border:1px solid rgba(255,255,255,0.12);background:rgba(0,0,0,0.35);color:rgba(255,255,255,0.4);font-family:'Share Tech Mono',monospace;font-size:12px;cursor:none;}
 /* onboarding overlay */
+#cow-synonym-modal{position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,0.9);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
+#cow-synonym-modal.open{display:flex;}
+.cow-synonym-card{max-width:420px;width:100%;padding:28px 24px;border-radius:12px;border:1px solid rgba(var(--tc-rgb),0.45);background:rgba(10,6,0,0.95);box-shadow:0 0 40px rgba(var(--tc-rgb),0.2);}
+.cow-synonym-title{font-family:'Bebas Neue',sans-serif;font-size:28px;letter-spacing:3px;color:var(--tc);margin-bottom:8px;}
+.cow-synonym-sub{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.55);line-height:1.45;margin-bottom:16px;}
+.cow-synonym-inp{width:100%;padding:12px 14px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.35);background:rgba(0,0,0,0.5);color:#fff;font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:600;margin-bottom:8px;}
+.cow-synonym-err{display:none;font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:#ff8888;margin-bottom:10px;}
+.cow-synonym-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--g-rgb,200,150,10),0.4);background:rgba(var(--g-rgb,200,150,10),0.06);}
 #cow-onboard{position:fixed;inset:0;z-index:99996;background:rgba(0,0,0,0.88);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px;}
 #ndz-account{position:fixed;inset:0;z-index:99999;background:rgba(0,0,0,0.92);backdrop-filter:blur(12px);display:none;align-items:center;justify-content:center;padding:20px;}
 #ndz-account.open{display:flex;}
@@ -1869,6 +1877,17 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 <button id="theme-btn"  onclick="document.getElementById('theme-modal').style.display='flex'" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:4px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid var(--g);color:var(--g);padding:10px 28px;border-radius:6px;cursor:none;transition:all 0.25s,opacity 0.3s;box-shadow:0 0 20px var(--g);" onmouseover="this.style.boxShadow='0 0 40px var(--g)'" onmouseout="this.style.boxShadow='0 0 20px var(--g)'">◈ THEME</button>
 
 <!-- CLIP OF THE WEEK — quick help -->
+<div id="cow-synonym-modal" onclick="if(event.target===this)closeCowSynonymModal()">
+  <div class="cow-synonym-card" onclick="event.stopPropagation()">
+    <div class="cow-synonym-title">PUBLIC SYNONYM</div>
+    <div class="cow-synonym-sub">This is the only name viewers see on Clip of the Week. No email, no real name.</div>
+    <input class="cow-synonym-inp" id="cow-synonym-inp" placeholder="e.g. QuickSenseFan" maxlength="32" autocomplete="off" onkeydown="if(event.key==='Enter')saveCowSynonym()">
+    <div class="cow-synonym-err" id="cow-synonym-err"></div>
+    <button type="button" class="cow-btn-primary" style="width:100%" onclick="saveCowSynonym()">Save synonym</button>
+    <button type="button" class="cow-btn-ghost" style="width:100%;margin-top:8px" onclick="closeCowSynonymModal()">Later</button>
+  </div>
+</div>
+
 <div id="cow-onboard">
   <div class="cow-ob-card">
     <div class="cow-ob-ico" id="cow-ob-ico">🎬</div>
@@ -2254,16 +2273,21 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div id="cow-full-note" class="cow-alert err">ALL 10 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
 
           <div id="cow-signed-out-block" class="cow-clerk-gate">
-            <p>Sign in to post clips. Pick a username in your Clerk profile after signing up.</p>
+            <p>Sign in to post clips. Your email stays private — you pick a public synonym after sign-up.</p>
             <div class="cow-clerk-actions">
               <button type="button" class="cow-btn-primary" id="cow-btn-sign-in">Sign in</button>
               <button type="button" class="cow-btn-ghost" id="cow-btn-sign-up">Create account</button>
             </div>
           </div>
 
+          <div id="cow-synonym-block" class="cow-synonym-gate" style="display:none">
+            <p>Choose a public synonym (shown on the leaderboard). Email is never displayed.</p>
+            <button type="button" class="cow-btn-primary" onclick="openCowSynonymModal()">Choose synonym</button>
+          </div>
+
           <div id="cow-form-fields" style="display:none">
             <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span>
-              <span class="cow-posting-change" onclick="openClerkAccount()">profile & username</span>
+              <span class="cow-posting-change" onclick="openClerkAccount()">change synonym</span>
               <span id="clerk-user-btn"></span>
             </div>
 
@@ -7011,19 +7035,29 @@ function cowDedupeUid(){
 function getClerkUserId(){
   try{ return (window.__clerkUserId || '').trim(); }catch(e){ return ''; }
 }
+function looksLikeEmail(s){
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(String(s||'').trim());
+}
+function cowPublicDisplayName(name){
+  if(!name || looksLikeEmail(name)) return '';
+  return cowFormatTwitch(name);
+}
 function getCowDisplayName(){
   try{
-    const u = window.__clerkUser;
-    if(u){
-      const raw = u.username || u.firstName ||
-        (u.primaryEmailAddress && u.primaryEmailAddress.emailAddress
-          ? u.primaryEmailAddress.emailAddress.split('@')[0] : '');
-      if(raw) return cowFormatTwitch(raw);
+    if(typeof getClerkSynonym==='function'){
+      const syn = getClerkSynonym();
+      if(syn) return syn;
     }
+    const u = window.__clerkUser;
+    if(u && u.username) return cowFormatTwitch(u.username);
   }catch(e){}
   return '';
 }
 function hasUserAccount(){ return !!getClerkUserId(); }
+function hasCowPostingIdentity(){
+  if(typeof hasCowIdentity==='function') return hasCowIdentity();
+  return hasUserAccount() && !!getCowDisplayName();
+}
 function getUserTwitch(){ return getCowDisplayName(); }
 
 // ── IndexedDB store for uploaded video blobs (persist across reloads) ──
@@ -7201,10 +7235,10 @@ function renderClipsOfWeek(){
   const slots = COW_MAX - n;
   const myClip = myCowClip();
   const alreadyPosted = !!myClip;
-  const canPost = !full && !alreadyPosted && hasUserAccount();
+  const canPost = !full && !alreadyPosted && hasCowPostingIdentity();
 
-  const twitchDisp = hasUserAccount() ? getCowDisplayName() : 'Guest';
-  if(postingName) postingName.textContent = getCowDisplayName() || '@you';
+  const twitchDisp = hasCowPostingIdentity() ? getCowDisplayName() : (hasUserAccount() ? 'Set synonym' : 'Guest');
+  if(postingName) postingName.textContent = getCowDisplayName() || (hasUserAccount() ? 'pick synonym' : '@you');
   if(lbUser) lbUser.textContent = twitchDisp;
   if(postUser) postUser.textContent = twitchDisp;
   const countTxt = `${n} / ${COW_MAX}`;
@@ -7230,7 +7264,8 @@ function renderClipsOfWeek(){
     for(let i=0; i<COW_MAX; i++){
       const c = CLIPS_OF_WEEK[i];
       if(c){
-        const tag = (c.by || c.label || 'Clip').slice(0,14);
+        const pub = cowPublicDisplayName(c.by) || 'Clip';
+        const tag = (pub || c.label || 'Clip').replace(/^@/,'').slice(0,14);
         pills += `<div class="cow-slot-pill filled"><span class="cow-slot-dot"></span><span>Slot ${i+1} · ${tag}</span></div>`;
       } else {
         pills += `<div class="cow-slot-pill open"><span class="cow-slot-dot"></span><span>Slot ${i+1} · Open</span></div>`;
@@ -7285,7 +7320,8 @@ function renderClipsOfWeek(){
       const crown = isLeader ? ' 👑' : '';
       const voted = hasVoted(c.id);
       const rankCls = rank<=3 ? ` cow-rank-${rank}` : '';
-      const byline = c.by ? `<div class="cow-poster"><span class="cow-poster-lbl">Posted by</span>${cowFormatTwitch(c.by)}</div>` : '';
+      const pubBy = cowPublicDisplayName(c.by);
+      const byline = pubBy ? `<div class="cow-poster"><span class="cow-poster-lbl">Posted by</span>${pubBy}</div>` : '';
       const label = c.label ? `<div class="cow-clip-label">${c.label}</div>` : `<div class="cow-clip-label" style="opacity:0.35;">Untitled clip</div>`;
       return `<div class="cow-clip-card${rankCls}">`
         + `<div class="cow-clip-head"><div class="cow-clip-head-left">`
@@ -7481,6 +7517,11 @@ function addClipOfWeek(){
   if(!hasUserAccount()){
     if(typeof openCowSignIn==='function') openCowSignIn();
     else alert('Sign in to post a clip.');
+    return;
+  }
+  if(!hasCowPostingIdentity()){
+    if(typeof openCowSynonymModal==='function') openCowSynonymModal();
+    else alert('Choose a public synonym before posting.');
     return;
   }
   cowEnsureTkeys();
