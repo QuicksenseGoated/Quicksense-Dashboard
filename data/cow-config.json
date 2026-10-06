@@ -2,5 +2,5 @@
   "backend": "vercel",
   "cowApi": "/api/cow/clips",
   "stateApi": "/api/dashboard/state",
-  "note": "Production: deploy on Vercel + link a KV store. Local dev: vercel dev uses data/*.json files."
+  "note": "Production: Vercel + free JSONBin (JSONBIN_COW_BIN_ID) or optional Redis. Local: data/*.json"
 }

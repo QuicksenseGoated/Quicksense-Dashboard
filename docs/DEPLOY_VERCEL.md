@@ -10,17 +10,35 @@
 4. **Root Directory:** `./` (default)
 5. **Build Command:** leave empty
 6. **Output Directory:** leave empty (serves `index.html` from repo root)
-7. Click **Deploy** (first deploy may work without KV; clips won’t persist until step 2)
+7. Click **Deploy**
 
-## 2. Add Redis (shared Clip of the Week)
+## 2. Shared clips — free JSONBin (no Vercel Redis)
 
-Vercel **KV** was replaced by **Marketplace Redis** (often Upstash under the hood).
+Skip paid Redis. Use [JSONBin.io](https://jsonbin.io) free tier (enough for Clip of the Week).
 
-1. Project → **Storage** → scroll to **Marketplace Database Providers**
-2. Click **Redis** — *“Official Redis for Vercel”* → **Create**
-3. Pick a name/region → **Create** → **Connect** to **quicksense-dashboard** (your project)
+1. Sign up at **jsonbin.io** (free)
+2. **Create Bin** → paste starter JSON:
 
-Vercel injects REST credentials (`KV_REST_API_URL` / `KV_REST_API_TOKEN` and/or `UPSTASH_REDIS_REST_*`). This repo reads both.
+```json
+{"v":1,"updatedAt":"","clips":[]}
+```
+
+3. Set bin to **Public** read (or use API key for read/write)
+4. Copy **Bin ID** and an **API Key** (X-Access-Key from dashboard)
+5. Vercel → **Settings → Environment Variables**:
+
+| Variable | Value |
+|----------|--------|
+| `JSONBIN_COW_BIN_ID` | your bin id |
+| `JSONBIN_API_KEY` | your access key |
+
+6. **Redeploy**
+
+Check: `/api/health` → `"storage":"jsonbin"`
+
+### Optional: paid Redis
+
+If you later add Vercel **Marketplace → Redis**, env vars auto-inject and take priority over JSONBin.
 
 ## 3. Add Clerk env vars
 
@@ -48,7 +66,7 @@ Under **User & authentication → Username**: enable and set **Required** so eve
 
 ## 5. Verify
 
-- `https://YOUR-PROJECT.vercel.app/api/health` → `"storage":"kv"` and `"backend":"vercel"`
+- `https://YOUR-PROJECT.vercel.app/api/health` → `"storage":"jsonbin"` (or `"kv"` if using Redis) and `"backend":"vercel"`
 - `https://YOUR-PROJECT.vercel.app/#cow` → Sign in → post a **link** clip → open in incognito → clip appears
 
 ## 6. Custom domain (optional)
@@ -60,6 +78,6 @@ Vercel → **Settings → Domains** → add domain → follow DNS → add same d
 | Issue | Fix |
 |-------|-----|
 | `/api/health` 404 | Branch must include `api/` folder (use `main` after merge) |
-| `"storage":"file"` on Vercel | Connect KV to project and redeploy |
+| `"storage":"static"` on Vercel | Add JSONBin env vars (step 2) and redeploy |
 | Sign-in modal broken | Env vars set + redeploy; check Clerk allowed origins |
 | Clips don’t sync | Use **link** posts; file uploads are local-only until blob storage is added |

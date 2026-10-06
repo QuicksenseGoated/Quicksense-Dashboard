@@ -9,7 +9,7 @@ Single-page app (`index.html`) + serverless **`/api/*`** (Clip of the Week, dash
 1. [vercel.com/new](https://vercel.com/new) → import **QuicksenseGoated/Quicksense-Dashboard**
 2. **Production branch:** `main`
 3. **Build command:** *(empty)* · **Output:** *(empty)* · **Install:** `npm install`
-4. **Storage → KV** → connect to the project
+4. **Free clips storage:** `JSONBIN_COW_BIN_ID` + `JSONBIN_API_KEY` ([jsonbin.io](https://jsonbin.io)) — no paid Redis required
 5. **Environment variables:** `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
 6. Clerk: **Username required** · allow your `*.vercel.app` origin
 
