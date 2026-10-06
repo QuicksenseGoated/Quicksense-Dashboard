@@ -53,14 +53,48 @@ function applyClerkUser(user) {
   updateAuthUI();
 }
 
-function loadClerkScript() {
+function clerkFrontendApi(publishableKey) {
+  if (!publishableKey || !publishableKey.startsWith('pk_')) return '';
+  const encoded = publishableKey.replace(/^pk_(test|live)_/, '');
+  try {
+    const host = atob(encoded).replace(/\$$/, '');
+    return host.includes('.') ? host : '';
+  } catch {
+    return '';
+  }
+}
+
+function waitForClerk(timeoutMs) {
   if (window.Clerk) return Promise.resolve(window.Clerk);
   return new Promise((resolve, reject) => {
+    const started = Date.now();
+    const tick = () => {
+      if (window.Clerk) return resolve(window.Clerk);
+      if (Date.now() - started > timeoutMs) {
+        return reject(new Error('Clerk script did not load'));
+      }
+      requestAnimationFrame(tick);
+    };
+    tick();
+  });
+}
+
+function loadClerkScript(publishableKey) {
+  if (window.Clerk) return Promise.resolve(window.Clerk);
+
+  const existing = document.querySelector('script[data-clerk-publishable-key]');
+  if (existing) return waitForClerk(15000);
+
+  return new Promise((resolve, reject) => {
     const s = document.createElement('script');
-    s.src = 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@5/dist/clerk.browser.js';
     s.crossOrigin = 'anonymous';
-    s.async = true;
-    s.onload = () => resolve(window.Clerk);
+    s.defer = true;
+    s.dataset.clerkPublishableKey = publishableKey;
+    const fapi = clerkFrontendApi(publishableKey);
+    s.src = fapi
+      ? `https://${fapi}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`
+      : 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js';
+    s.onload = () => waitForClerk(10000).then(resolve).catch(reject);
     s.onerror = () => reject(new Error('Failed to load Clerk'));
     document.head.appendChild(s);
   });
@@ -75,14 +109,18 @@ async function initClerkAuth() {
       if (r.ok) cfg = await r.json();
     } catch (e) {}
 
-    if (!cfg.publishableKey) {
-      console.warn('Clerk: set CLERK_PUBLISHABLE_KEY and CLERK_SECRET_KEY (Vercel or .env.local)');
+    const metaPk =
+      document.querySelector('meta[name="clerk-publishable-key"]')?.content?.trim() || '';
+    const publishableKey = (cfg.publishableKey || metaPk || '').trim();
+
+    if (!publishableKey) {
+      console.warn('Clerk: set CLERK_PUBLISHABLE_KEY in .env.local (dev) or Vercel env');
       updateAuthUI();
       return false;
     }
 
-    const Clerk = await loadClerkScript();
-    await Clerk.load({ publishableKey: cfg.publishableKey });
+    const Clerk = await loadClerkScript(publishableKey);
+    await Clerk.load({ publishableKey });
     Clerk.addListener(({ user }) => applyClerkUser(user));
     applyClerkUser(Clerk.user);
     return true;
