@@ -3,6 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="clerk-publishable-key" content="pk_test_aGVscGVkLWhhbXN0ZXItNTY3My5jbGVyay5hY2NvdW50cy5kZXYk">
+<script defer crossorigin="anonymous" src="https://helped-hamster-5673.clerk.accounts.dev/npm/@clerk/ui@1/dist/ui.browser.js"></script>
+<script defer crossorigin="anonymous" data-clerk-publishable-key="pk_test_aGVscGVkLWhhbXN0ZXItNTY3My5jbGVyay5hY2NvdW50cy5kZXYk" src="https://helped-hamster-5673.clerk.accounts.dev/npm/@clerk/clerk-js@6/dist/clerk.browser.js"></script>
+<script defer src="/js/clerk-auth.js"></script>
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>QUICKSENSE · NoDroneZone</title>
 <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Rajdhani:wght@400;600;700&family=DM+Sans:wght@300;400;500&family=Share+Tech+Mono&display=swap" rel="stylesheet">
@@ -668,8 +671,10 @@ input.ta{padding:8px 12px;}
 }
 .cow-cloud-note{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;line-height:1.45;color:rgba(127,216,255,0.85);text-align:center;padding:10px 12px;margin-bottom:14px;border-radius:8px;border:1px solid rgba(127,216,255,0.25);background:rgba(127,216,255,0.06);}
 .cow-local-note{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;line-height:1.4;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px;}
-.cow-clerk-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.06);}
+.cow-clerk-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.06);position:relative;z-index:2;}
 .cow-clerk-gate p{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.62);margin-bottom:14px;line-height:1.45;}
+.cow-clerk-actions{display:flex;flex-wrap:wrap;gap:8px;justify-content:center;align-items:center;}
+.cow-clerk-gate .cow-btn-primary,.cow-clerk-gate .cow-btn-ghost{flex:none;pointer-events:auto!important;cursor:pointer!important;position:relative;z-index:3;}
 #clerk-user-btn{display:inline-flex;margin-left:8px;vertical-align:middle;}
 #qs-auth-bar{position:fixed;top:14px;right:14px;z-index:100010;display:flex;align-items:center;gap:8px;padding:6px 10px;border-radius:999px;border:1px solid rgba(var(--g-rgb,200,150,10),0.25);background:rgba(4,3,2,0.92);backdrop-filter:blur(10px);box-shadow:0 8px 32px rgba(0,0,0,0.35);pointer-events:auto!important;isolation:isolate;}
 #qs-auth-bar button,.qs-auth-btn,#qs-clerk-user-btn{pointer-events:auto!important;cursor:pointer!important;}
@@ -2250,8 +2255,10 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 
           <div id="cow-signed-out-block" class="cow-clerk-gate">
             <p>Sign in to post clips. Pick a username in your Clerk profile after signing up.</p>
-            <button type="button" class="cow-btn-primary" onclick="openCowSignIn()">Sign in</button>
-            <button type="button" class="cow-btn-ghost" style="margin-left:8px" onclick="openCowSignUp()">Create account</button>
+            <div class="cow-clerk-actions">
+              <button type="button" class="cow-btn-primary" id="cow-btn-sign-in">Sign in</button>
+              <button type="button" class="cow-btn-ghost" id="cow-btn-sign-up">Create account</button>
+            </div>
           </div>
 
           <div id="cow-form-fields" style="display:none">
@@ -8075,4 +8082,3 @@ function exitAmbient(){
 });
 resetAmbientTimer();
 </script>
-<script src="/js/clerk-auth.js"></script>

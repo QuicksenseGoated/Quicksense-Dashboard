@@ -1,6 +1,64 @@
 /* global Clerk */
 let _clerkInitPromise = null;
 
+function getPublishableKey() {
+  const meta = document.querySelector('meta[name="clerk-publishable-key"]')?.content?.trim();
+  if (meta) return meta;
+  const fromScript = document.querySelector('script[data-clerk-publishable-key]')?.getAttribute(
+    'data-clerk-publishable-key',
+  );
+  return (fromScript || '').trim();
+}
+
+function clerkFrontendApi(publishableKey) {
+  if (!publishableKey || !publishableKey.startsWith('pk_')) return '';
+  const part = publishableKey.split('_')[2];
+  if (!part) return '';
+  try {
+    const host = atob(part).replace(/\$$/, '');
+    return host.includes('.') ? host : '';
+  } catch {
+    return '';
+  }
+}
+
+function waitFor(fn, timeoutMs, intervalMs) {
+  return new Promise((resolve, reject) => {
+    const started = Date.now();
+    const tick = () => {
+      try {
+        const v = fn();
+        if (v) return resolve(v);
+      } catch (e) {}
+      if (Date.now() - started > timeoutMs) {
+        return reject(new Error('Timed out waiting for Clerk'));
+      }
+      setTimeout(tick, intervalMs);
+    };
+    tick();
+  });
+}
+
+function ensureUiBundle(publishableKey) {
+  if (window.__internal_ClerkUICtor) return Promise.resolve();
+  const fapi = clerkFrontendApi(publishableKey);
+  if (!fapi) return Promise.reject(new Error('Invalid Clerk publishable key'));
+  const existing = document.querySelector('script[data-clerk-ui-bundle]');
+  if (existing) {
+    return waitFor(() => window.__internal_ClerkUICtor, 20000, 50);
+  }
+  return new Promise((resolve, reject) => {
+    const s = document.createElement('script');
+    s.defer = true;
+    s.crossOrigin = 'anonymous';
+    s.dataset.clerkUiBundle = '1';
+    s.src = `https://${fapi}/npm/@clerk/ui@1/dist/ui.browser.js`;
+    s.onload = () => waitFor(() => window.__internal_ClerkUICtor, 20000, 50).then(resolve).catch(reject);
+    s.onerror = () => reject(new Error('Failed to load Clerk UI bundle'));
+    document.head.appendChild(s);
+  });
+}
+
 function clerkDisplayName(user) {
   if (!user) return '';
   if (user.username) return user.username;
@@ -53,103 +111,79 @@ function applyClerkUser(user) {
   updateAuthUI();
 }
 
-function clerkFrontendApi(publishableKey) {
-  if (!publishableKey || !publishableKey.startsWith('pk_')) return '';
-  const encoded = publishableKey.replace(/^pk_(test|live)_/, '');
+async function resolvePublishableKey() {
+  let cfg = {};
   try {
-    const host = atob(encoded).replace(/\$$/, '');
-    return host.includes('.') ? host : '';
-  } catch {
-    return '';
-  }
-}
-
-function waitForClerk(timeoutMs) {
-  if (window.Clerk) return Promise.resolve(window.Clerk);
-  return new Promise((resolve, reject) => {
-    const started = Date.now();
-    const tick = () => {
-      if (window.Clerk) return resolve(window.Clerk);
-      if (Date.now() - started > timeoutMs) {
-        return reject(new Error('Clerk script did not load'));
-      }
-      requestAnimationFrame(tick);
-    };
-    tick();
-  });
-}
-
-function loadClerkScript(publishableKey) {
-  if (window.Clerk) return Promise.resolve(window.Clerk);
-
-  const existing = document.querySelector('script[data-clerk-publishable-key]');
-  if (existing) return waitForClerk(15000);
-
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.crossOrigin = 'anonymous';
-    s.defer = true;
-    s.dataset.clerkPublishableKey = publishableKey;
-    const fapi = clerkFrontendApi(publishableKey);
-    s.src = fapi
-      ? `https://${fapi}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`
-      : 'https://cdn.jsdelivr.net/npm/@clerk/clerk-js@6/dist/clerk.browser.js';
-    s.onload = () => waitForClerk(10000).then(resolve).catch(reject);
-    s.onerror = () => reject(new Error('Failed to load Clerk'));
-    document.head.appendChild(s);
-  });
+    const r = await fetch('/api/auth/config', { cache: 'no-store' });
+    if (r.ok) cfg = await r.json();
+  } catch (e) {}
+  return (cfg.publishableKey || getPublishableKey() || '').trim();
 }
 
 async function initClerkAuth() {
   if (_clerkInitPromise) return _clerkInitPromise;
   _clerkInitPromise = (async () => {
-    let cfg = {};
     try {
-      const r = await fetch('/api/auth/config', { cache: 'no-store' });
-      if (r.ok) cfg = await r.json();
-    } catch (e) {}
+      const publishableKey = await resolvePublishableKey();
+      if (!publishableKey) {
+        console.warn('Clerk: missing publishable key');
+        updateAuthUI();
+        return false;
+      }
 
-    const metaPk =
-      document.querySelector('meta[name="clerk-publishable-key"]')?.content?.trim() || '';
-    const publishableKey = (cfg.publishableKey || metaPk || '').trim();
+      await ensureUiBundle(publishableKey);
+      await waitFor(() => window.Clerk, 20000, 50);
 
-    if (!publishableKey) {
-      console.warn('Clerk: set CLERK_PUBLISHABLE_KEY in .env.local (dev) or Vercel env');
+      await window.Clerk.load({
+        publishableKey,
+        ui: { ClerkUI: window.__internal_ClerkUICtor },
+      });
+
+      window.Clerk.addListener(({ user }) => applyClerkUser(user));
+      applyClerkUser(window.Clerk.user);
+      return true;
+    } catch (e) {
+      console.error('Clerk init failed', e);
+      _clerkInitPromise = null;
       updateAuthUI();
       return false;
     }
-
-    const Clerk = await loadClerkScript(publishableKey);
-    await Clerk.load({ publishableKey });
-    Clerk.addListener(({ user }) => applyClerkUser(user));
-    applyClerkUser(Clerk.user);
-    return true;
   })();
   return _clerkInitPromise;
 }
 
 async function openCowSignIn() {
-  await initClerkAuth();
-  if (!window.Clerk) {
-    alert('Sign-in is not configured yet. Add Clerk keys in Vercel or run `clerk env pull`.');
-    return;
+  try {
+    const ok = await initClerkAuth();
+    if (!ok || !window.Clerk) {
+      alert('Sign-in could not start. Run npm run dev and git pull the latest branch.');
+      return;
+    }
+    window.Clerk.openSignIn({
+      redirectUrl: window.location.href,
+      signUpForceRedirectUrl: window.location.href,
+    });
+  } catch (e) {
+    console.error(e);
+    alert('Sign-in error: ' + (e.message || e));
   }
-  window.Clerk.openSignIn({
-    redirectUrl: window.location.href,
-    signUpForceRedirectUrl: window.location.href,
-  });
 }
 
 async function openCowSignUp() {
-  await initClerkAuth();
-  if (!window.Clerk) {
-    alert('Sign-up is not configured yet. Add Clerk keys in Vercel or run `clerk env pull`.');
-    return;
+  try {
+    const ok = await initClerkAuth();
+    if (!ok || !window.Clerk) {
+      alert('Sign-up could not start. Run npm run dev and git pull the latest branch.');
+      return;
+    }
+    window.Clerk.openSignUp({
+      redirectUrl: window.location.href,
+      signInForceRedirectUrl: window.location.href,
+    });
+  } catch (e) {
+    console.error(e);
+    alert('Sign-up error: ' + (e.message || e));
   }
-  window.Clerk.openSignUp({
-    redirectUrl: window.location.href,
-    signInForceRedirectUrl: window.location.href,
-  });
 }
 
 async function openClerkAccount() {
@@ -158,31 +192,31 @@ async function openClerkAccount() {
   window.Clerk.openUserProfile();
 }
 
+function bindAuthButtons() {
+  const pairs = [
+    ['#qs-auth-out .qs-auth-btn:not(.qs-auth-btn-primary)', openCowSignIn],
+    ['#qs-auth-out .qs-auth-btn-primary', openCowSignUp],
+    ['#cow-btn-sign-in', openCowSignIn],
+    ['#cow-btn-sign-up', openCowSignUp],
+  ];
+  pairs.forEach(([sel, fn]) => {
+    const el = document.querySelector(sel);
+    if (!el || el.dataset.clerkBound) return;
+    el.dataset.clerkBound = '1';
+    el.addEventListener('click', (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      fn();
+    });
+  });
+}
+
 window.initClerkAuth = initClerkAuth;
 window.openCowSignIn = openCowSignIn;
 window.openCowSignUp = openCowSignUp;
 window.openClerkAccount = openClerkAccount;
 
-function bindAuthBarClicks() {
-  const signIn = document.querySelector('#qs-auth-out .qs-auth-btn:not(.qs-auth-btn-primary)');
-  const signUp = document.querySelector('#qs-auth-out .qs-auth-btn-primary');
-  if (signIn && !signIn.dataset.bound) {
-    signIn.dataset.bound = '1';
-    signIn.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openCowSignIn();
-    });
-  }
-  if (signUp && !signUp.dataset.bound) {
-    signUp.dataset.bound = '1';
-    signUp.addEventListener('click', (e) => {
-      e.stopPropagation();
-      openCowSignUp();
-    });
-  }
-}
-
 document.addEventListener('DOMContentLoaded', () => {
-  bindAuthBarClicks();
+  bindAuthButtons();
   initClerkAuth();
 });
