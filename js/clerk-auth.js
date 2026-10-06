@@ -36,7 +36,7 @@ function waitFor(fn, timeoutMs, intervalMs) {
   });
 }
 
-function hasClerkSynonym(user) {
+function userHasSynonym(user) {
   return Boolean(user && String(user.username || '').trim());
 }
 
@@ -133,7 +133,7 @@ function updateAuthUI() {
   const signedOut = document.getElementById('cow-signed-out-block');
   const synonymBlock = document.getElementById('cow-synonym-block');
   const formFields = document.getElementById('cow-form-fields');
-  const needsSynonym = has && !hasClerkSynonym(user);
+  const needsSynonym = has && !userHasSynonym(user);
 
   if (signedOut) signedOut.style.display = has ? 'none' : 'block';
   if (synonymBlock) synonymBlock.style.display = needsSynonym ? 'block' : 'none';
@@ -143,7 +143,7 @@ function updateAuthUI() {
     window.__cowSynonymPrompted = true;
     openCowSynonymModal();
   }
-  if (has && hasClerkSynonym(user)) window.__cowSynonymPrompted = false;
+  if (has && userHasSynonym(user)) window.__cowSynonymPrompted = false;
 
   setBlockVisible(document.getElementById('qs-auth-out'), !has);
   setBlockVisible(document.getElementById('qs-auth-in'), has);
@@ -380,12 +380,12 @@ window.initClerkAuth = initClerkAuth;
 window.openCowSignIn = openCowSignIn;
 window.openCowSignUp = openCowSignUp;
 window.openClerkAccount = openClerkAccount;
-window.hasClerkSynonym = () => hasClerkSynonym(window.__clerkUser);
+window.hasClerkSynonym = () => userHasSynonym(window.__clerkUser);
 window.getClerkSynonym = () => clerkDisplayName(window.__clerkUser);
 window.openCowSynonymModal = openCowSynonymModal;
 window.closeCowSynonymModal = closeCowSynonymModal;
 window.saveCowSynonym = saveCowSynonym;
-window.hasCowIdentity = () => !!window.__clerkUserId && hasClerkSynonym(window.__clerkUser);
+window.hasCowIdentity = () => !!window.__clerkUserId && userHasSynonym(window.__clerkUser);
 window.refreshClerkUser = refreshClerkUser;
 
 document.addEventListener('DOMContentLoaded', () => {
