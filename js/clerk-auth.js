@@ -41,7 +41,11 @@ function synonymFromUser(user) {
   const u = String(user.username || '').trim();
   if (u) return u;
   const meta = user.unsafeMetadata || user.publicMetadata || {};
-  return String(meta.cowSynonym || meta.synonym || '').trim();
+  const fromMeta = String(meta.cowSynonym || meta.synonym || '').trim();
+  if (fromMeta) return fromMeta;
+  const uid = user.id || window.__clerkUserId || '';
+  const cloud = uid && window.__cowCloudSynonyms ? window.__cowCloudSynonyms[uid] : '';
+  return String(cloud || '').trim();
 }
 
 function userHasSynonym(user) {
@@ -99,26 +103,47 @@ async function saveCowSynonym() {
       alert('Sign in first.');
       return false;
     }
-    const sessionToken = await window.Clerk.session?.getToken?.();
-    if (!sessionToken) {
-      throw new Error('Session expired — sign in again.');
+    const userId = window.Clerk.user.id;
+    let saved = false;
+
+    try {
+      const cfg = await fetch('/api/auth/config', { cache: 'no-store' }).then((r) => r.json());
+      if (cfg.configured) {
+        const sessionToken = await window.Clerk.session?.getToken?.();
+        if (sessionToken) {
+          const resp = await fetch('/api/auth/synonym', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              Authorization: `Bearer ${sessionToken}`,
+            },
+            body: JSON.stringify({ synonym: un }),
+          });
+          const data = await resp.json().catch(() => ({}));
+          if (resp.ok) {
+            saved = true;
+            await window.Clerk.user.reload();
+          }
+        }
+      }
+    } catch (apiErr) {
+      console.warn('Clerk server synonym save skipped', apiErr);
     }
-    const resp = await fetch('/api/auth/synonym', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        Authorization: `Bearer ${sessionToken}`,
-      },
-      body: JSON.stringify({ synonym: un }),
-    });
-    const data = await resp.json().catch(() => ({}));
-    if (!resp.ok) {
-      const err = new Error(data.error || data.hint || 'Could not save synonym');
-      err.hint = data.hint;
-      throw err;
+
+    if (!saved) {
+      if (typeof window.cowSynonymSaveToBin === 'function') {
+        saved = await window.cowSynonymSaveToBin(userId, un);
+      }
+      if (!saved) {
+        window.__cowCloudSynonyms = window.__cowCloudSynonyms || {};
+        window.__cowCloudSynonyms[userId] = un;
+        saved = true;
+      }
     }
-    await window.Clerk.user.reload();
+
+    if (!saved) throw new Error('Could not save synonym');
     applyClerkUser(window.Clerk.user);
+    if (typeof cowLoadFromCloud === 'function') void cowLoadFromCloud();
     closeCowSynonymModal();
     return true;
   } catch (e) {
@@ -349,6 +374,7 @@ async function initClerkAuth() {
         } catch (e) {}
       }
       await refreshClerkUser();
+      if (typeof cowLoadFromCloud === 'function') void cowLoadFromCloud();
       return true;
     } catch (e) {
       console.error('Clerk init failed', e);

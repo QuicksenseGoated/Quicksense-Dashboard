@@ -2,7 +2,9 @@
 
 Single-page app (`index.html`) + serverless **`/api/*`** (Clip of the Week, dashboard state, Clerk config).
 
-**Workflow:** develop and test on your PC first, then push to **`main`** when it works. See **[docs/LOCAL_FIRST.md](docs/LOCAL_FIRST.md)** (Windows paths, sign-in checklist, optional manual deploy).
+**Workflow:** edit in Cursor → **`git push origin main`** → live at **https://quicksense-dashboard-6chi.vercel.app/** (auto-deploy). Synonyms + clips sync via JSONBin — no Vercel env vars required for COW.
+
+Optional: `npm run dev` → http://localhost:3000/#cow · **[docs/LOCAL_FIRST.md](docs/LOCAL_FIRST.md)**
 
 ## Vercel (production)
 

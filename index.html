@@ -6925,6 +6925,43 @@ async function cowLoadFromApi(){
     return cowMergeCloudClips(j.clips);
   }catch(e){ return false; }
 }
+window.__cowCloudSynonyms = window.__cowCloudSynonyms || {};
+
+function cowApplySynonymsFromRecord(record){
+  if(!record || !record.synonyms || typeof record.synonyms !== 'object') return;
+  window.__cowCloudSynonyms = Object.assign({}, window.__cowCloudSynonyms, record.synonyms);
+}
+
+async function cowSynonymSaveToBin(uid, synonym){
+  if(!uid || !synonym || !COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return false;
+  try{
+    let record = { clips: [], synonyms: {}, v: 1 };
+    const res = await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}/latest`, {
+      headers: { 'X-Master-Key': JSONBIN_MASTER }
+    });
+    if(res.ok){
+      const j = await res.json();
+      if(j.record && typeof j.record === 'object') record = j.record;
+    }
+    record.synonyms = Object.assign({}, record.synonyms || {}, { [uid]: synonym });
+    window.__cowCloudSynonyms = record.synonyms;
+    await fetch(`${JSONBIN_URL}/${COW_CLOUD_BIN_ID}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'X-Master-Key': JSONBIN_MASTER },
+      body: JSON.stringify({
+        clips: Array.isArray(record.clips) ? record.clips : [],
+        synonyms: record.synonyms,
+        v: 1,
+        updatedAt: new Date().toISOString()
+      })
+    });
+    return true;
+  }catch(e){
+    console.warn('cow synonym save failed', e);
+    return false;
+  }
+}
+
 async function cowLoadFromBin(){
   if(!COW_CLOUD_BIN_ID || typeof JSONBIN_URL==='undefined' || typeof JSONBIN_MASTER==='undefined') return false;
   try{
@@ -6933,6 +6970,7 @@ async function cowLoadFromBin(){
     });
     if(!res.ok) return false;
     const j = await res.json();
+    cowApplySynonymsFromRecord(j.record);
     return cowMergeCloudClips(j.record && j.record.clips);
   }catch(e){ return false; }
 }
@@ -6963,7 +7001,12 @@ async function cowPushToCloud(){
         'Content-Type': 'application/json',
         'X-Master-Key': JSONBIN_MASTER
       },
-      body: JSON.stringify({ clips: merged, v: 1, updatedAt: new Date().toISOString() })
+      body: JSON.stringify({
+        clips: merged,
+        synonyms: window.__cowCloudSynonyms || {},
+        v: 1,
+        updatedAt: new Date().toISOString()
+      })
     });
     if(typeof showSyncIndicator==='function') showSyncIndicator('✓ clip saved');
   }catch(e){
