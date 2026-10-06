@@ -1,6 +1,15 @@
 /* global Clerk */
 let _clerkInitPromise = null;
 
+function clerkRedirectUrl() {
+  return window.location.origin + window.location.pathname + (window.location.hash || '');
+}
+
+function clerkRedirectPending() {
+  const blob = window.location.search + window.location.hash;
+  return /__clerk|clerk_status|clerk_created_session/i.test(blob);
+}
+
 function getPublishableKey() {
   const meta = document.querySelector('meta[name="clerk-publishable-key"]')?.content?.trim();
   if (meta) return meta;
@@ -8,18 +17,6 @@ function getPublishableKey() {
     'data-clerk-publishable-key',
   );
   return (fromScript || '').trim();
-}
-
-function clerkFrontendApi(publishableKey) {
-  if (!publishableKey || !publishableKey.startsWith('pk_')) return '';
-  const part = publishableKey.split('_')[2];
-  if (!part) return '';
-  try {
-    const host = atob(part).replace(/\$$/, '');
-    return host.includes('.') ? host : '';
-  } catch {
-    return '';
-  }
 }
 
 function waitFor(fn, timeoutMs, intervalMs) {
@@ -39,31 +36,10 @@ function waitFor(fn, timeoutMs, intervalMs) {
   });
 }
 
-function ensureUiBundle(publishableKey) {
-  if (window.__internal_ClerkUICtor) return Promise.resolve();
-  const fapi = clerkFrontendApi(publishableKey);
-  if (!fapi) return Promise.reject(new Error('Invalid Clerk publishable key'));
-  const existing = document.querySelector('script[data-clerk-ui-bundle]');
-  if (existing) {
-    return waitFor(() => window.__internal_ClerkUICtor, 20000, 50);
-  }
-  return new Promise((resolve, reject) => {
-    const s = document.createElement('script');
-    s.defer = true;
-    s.crossOrigin = 'anonymous';
-    s.dataset.clerkUiBundle = '1';
-    s.src = `https://${fapi}/npm/@clerk/ui@1/dist/ui.browser.js`;
-    s.onload = () => waitFor(() => window.__internal_ClerkUICtor, 20000, 50).then(resolve).catch(reject);
-    s.onerror = () => reject(new Error('Failed to load Clerk UI bundle'));
-    document.head.appendChild(s);
-  });
-}
-
 function hasClerkSynonym(user) {
   return Boolean(user && String(user.username || '').trim());
 }
 
-/** Public handle only — never email or real name */
 function clerkDisplayName(user) {
   if (!user) return '';
   const u = String(user.username || '').trim();
@@ -111,11 +87,13 @@ async function saveCowSynonym() {
   if (err) err.style.display = 'none';
   try {
     await initClerkAuth();
+    await refreshClerkUser();
     if (!window.Clerk || !window.Clerk.user) {
       alert('Sign in first.');
       return false;
     }
     await window.Clerk.user.update({ username: un });
+    await window.Clerk.user.reload();
     applyClerkUser(window.Clerk.user);
     closeCowSynonymModal();
     return true;
@@ -140,7 +118,7 @@ function mountUserButton(el) {
   el.innerHTML = '';
   try {
     window.Clerk.mountUserButton(el, {
-      afterSignOutUrl: window.location.href,
+      afterSignOutUrl: clerkRedirectUrl(),
       showName: false,
     });
   } catch (e) {
@@ -171,7 +149,9 @@ function updateAuthUI() {
   setBlockVisible(document.getElementById('qs-auth-in'), has);
 
   const nameEl = document.getElementById('qs-auth-name');
-  if (nameEl) nameEl.textContent = has ? clerkDisplayName(user) : '';
+  if (nameEl) {
+    nameEl.textContent = has ? clerkDisplayName(user) || 'Set synonym' : '';
+  }
 
   mountUserButton(document.getElementById('clerk-user-btn'));
   mountUserButton(document.getElementById('qs-clerk-user-btn'));
@@ -179,10 +159,58 @@ function updateAuthUI() {
   if (typeof renderClipsOfWeek === 'function') renderClipsOfWeek();
 }
 
+function currentClerkUser() {
+  const c = window.Clerk;
+  if (!c) return null;
+  if (c.user) return c.user;
+  const fromSession = c.session?.user;
+  if (fromSession) return fromSession;
+  return null;
+}
+
 function applyClerkUser(user) {
   window.__clerkUser = user || null;
   window.__clerkUserId = user ? user.id : '';
   updateAuthUI();
+}
+
+async function ensureActiveSession() {
+  const c = window.Clerk;
+  if (!c?.setActive || c.session) return;
+  const sessions = c.client?.sessions;
+  if (!Array.isArray(sessions) || !sessions.length) return;
+  const target =
+    sessions.find((s) => s.status === 'active') ||
+    sessions.find((s) => s.lastActiveAt) ||
+    sessions[0];
+  if (!target?.id) return;
+  try {
+    await c.setActive({ session: target.id });
+  } catch (e) {
+    console.warn('Clerk setActive', e);
+  }
+}
+
+async function refreshClerkUser() {
+  if (!window.Clerk) return;
+  try {
+    await ensureActiveSession();
+    if (window.Clerk.session?.reload) {
+      await window.Clerk.session.reload();
+    }
+    if (window.Clerk.user?.reload) {
+      await window.Clerk.user.reload();
+    }
+  } catch (e) {
+    console.warn('Clerk session refresh', e);
+  }
+  applyClerkUser(currentClerkUser());
+}
+
+function schedulePostSignInRefresh() {
+  [400, 1000, 2200, 4500].forEach((ms) => {
+    setTimeout(() => refreshClerkUser(), ms);
+  });
 }
 
 async function resolvePublishableKey() {
@@ -192,6 +220,46 @@ async function resolvePublishableKey() {
     if (r.ok) cfg = await r.json();
   } catch (e) {}
   return (cfg.publishableKey || getPublishableKey() || '').trim();
+}
+
+async function completeClerkRedirectHandoff() {
+  if (!window.Clerk?.handleRedirectCallback || !clerkRedirectPending()) return;
+  const dest = clerkRedirectUrl();
+  try {
+    await window.Clerk.handleRedirectCallback(
+      {
+        redirectUrl: dest,
+        signInForceRedirectUrl: dest,
+        signUpForceRedirectUrl: dest,
+      },
+      (to) => {
+        window.history.replaceState({}, '', to);
+        return Promise.resolve();
+      },
+    );
+  } catch (e) {
+    console.warn('Clerk redirect handoff', e);
+  }
+}
+
+function bindClerkListeners() {
+  if (!window.Clerk || window.__clerkListenersBound) return;
+  window.__clerkListenersBound = true;
+  window.Clerk.addListener(({ user, session }) => {
+    // While Clerk is loading, session/user are undefined — do not flip to signed-out.
+    if (session === undefined && user === undefined) return;
+    if (session === null && user === null) {
+      applyClerkUser(null);
+      return;
+    }
+    const resolved = user || session?.user || currentClerkUser();
+    if (session && resolved) {
+      applyClerkUser(resolved);
+      return;
+    }
+    if (!session) applyClerkUser(null);
+    else void refreshClerkUser();
+  });
 }
 
 async function initClerkAuth() {
@@ -205,16 +273,25 @@ async function initClerkAuth() {
         return false;
       }
 
-      await ensureUiBundle(publishableKey);
-      await waitFor(() => window.Clerk, 20000, 50);
+      await waitFor(
+        () => window.Clerk && window.__internal_ClerkUICtor,
+        25000,
+        50,
+      );
 
       await window.Clerk.load({
         publishableKey,
         ui: { ClerkUI: window.__internal_ClerkUICtor },
       });
 
-      window.Clerk.addListener(({ user }) => applyClerkUser(user));
-      applyClerkUser(window.Clerk.user);
+      bindClerkListeners();
+      await completeClerkRedirectHandoff();
+      if (clerkRedirectPending()) {
+        try {
+          window.history.replaceState({}, '', clerkRedirectUrl());
+        } catch (e) {}
+      }
+      await refreshClerkUser();
       return true;
     } catch (e) {
       console.error('Clerk init failed', e);
@@ -226,17 +303,29 @@ async function initClerkAuth() {
   return _clerkInitPromise;
 }
 
+function signInRedirectOptions() {
+  const url = clerkRedirectUrl();
+  return {
+    afterSignInUrl: url,
+    afterSignUpUrl: url,
+    redirectUrl: url,
+    fallbackRedirectUrl: url,
+    forceRedirectUrl: url,
+    signInForceRedirectUrl: url,
+    signUpForceRedirectUrl: url,
+    signUpFallbackRedirectUrl: url,
+  };
+}
+
 async function openCowSignIn() {
   try {
     const ok = await initClerkAuth();
     if (!ok || !window.Clerk) {
-      alert('Sign-in could not start. Run npm run dev and git pull the latest branch.');
+      alert('Sign-in is not configured. Hard refresh and try again.');
       return;
     }
-    window.Clerk.openSignIn({
-      redirectUrl: window.location.href,
-      signUpForceRedirectUrl: window.location.href,
-    });
+    window.Clerk.openSignIn(signInRedirectOptions());
+    schedulePostSignInRefresh();
   } catch (e) {
     console.error(e);
     alert('Sign-in error: ' + (e.message || e));
@@ -247,13 +336,11 @@ async function openCowSignUp() {
   try {
     const ok = await initClerkAuth();
     if (!ok || !window.Clerk) {
-      alert('Sign-up could not start. Run npm run dev and git pull the latest branch.');
+      alert('Sign-up is not configured. Hard refresh and try again.');
       return;
     }
-    window.Clerk.openSignUp({
-      redirectUrl: window.location.href,
-      signInForceRedirectUrl: window.location.href,
-    });
+    window.Clerk.openSignUp(signInRedirectOptions());
+    schedulePostSignInRefresh();
   } catch (e) {
     console.error(e);
     alert('Sign-up error: ' + (e.message || e));
@@ -262,7 +349,11 @@ async function openCowSignUp() {
 
 async function openClerkAccount() {
   await initClerkAuth();
-  if (!window.Clerk) return;
+  await refreshClerkUser();
+  if (!window.Clerk?.user) {
+    openCowSignIn();
+    return;
+  }
   openCowSynonymModal();
 }
 
@@ -295,8 +386,15 @@ window.openCowSynonymModal = openCowSynonymModal;
 window.closeCowSynonymModal = closeCowSynonymModal;
 window.saveCowSynonym = saveCowSynonym;
 window.hasCowIdentity = () => !!window.__clerkUserId && hasClerkSynonym(window.__clerkUser);
+window.refreshClerkUser = refreshClerkUser;
 
 document.addEventListener('DOMContentLoaded', () => {
   bindAuthButtons();
   initClerkAuth();
 });
+
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState === 'visible') refreshClerkUser();
+});
+
+window.addEventListener('focus', () => refreshClerkUser());
