@@ -664,6 +664,9 @@ input.ta{padding:8px 12px;}
 }
 .cow-cloud-note{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;line-height:1.45;color:rgba(127,216,255,0.85);text-align:center;padding:10px 12px;margin-bottom:14px;border-radius:8px;border:1px solid rgba(127,216,255,0.25);background:rgba(127,216,255,0.06);}
 .cow-local-note{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:600;line-height:1.4;color:rgba(255,255,255,0.4);text-align:center;margin-top:8px;}
+.cow-clerk-gate{text-align:center;padding:20px 16px;margin-bottom:16px;border-radius:12px;border:1px dashed rgba(var(--tc-rgb),0.35);background:rgba(var(--tc-rgb),0.06);}
+.cow-clerk-gate p{font-family:'Rajdhani',sans-serif;font-size:15px;font-weight:600;color:rgba(255,255,255,0.62);margin-bottom:14px;line-height:1.45;}
+#clerk-user-btn{display:inline-flex;margin-left:8px;vertical-align:middle;}
 .cow-posting-as{display:flex;align-items:center;gap:8px;margin-bottom:14px;padding:10px 12px;border-radius:8px;border:1px solid rgba(var(--tc-rgb),0.25);background:rgba(var(--tc-rgb),0.08);font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:600;color:rgba(255,255,255,0.55);}
 .cow-posting-as span{color:var(--tc);font-size:16px;font-weight:700;}
 .cow-posting-change{margin-left:auto;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:rgba(255,255,255,0.35);cursor:pointer;text-decoration:underline;}
@@ -1838,24 +1841,12 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 <div id="settings-btn" style="display:none;position:fixed;bottom:14px;left:14px;font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,255,255,0.2);letter-spacing:2px;z-index:100;cursor:pointer;transition:color .2s;" onclick="openSettings()">⚙ SETTINGS</div>
 <button id="theme-btn"  onclick="document.getElementById('theme-modal').style.display='flex'" style="position:fixed;bottom:24px;left:50%;transform:translateX(-50%);z-index:9999;font-family:'Bebas Neue',sans-serif;font-size:16px;letter-spacing:4px;background:rgba(0,0,0,0.6);backdrop-filter:blur(8px);border:1px solid var(--g);color:var(--g);padding:10px 28px;border-radius:6px;cursor:none;transition:all 0.25s,opacity 0.3s;box-shadow:0 0 20px var(--g);" onmouseover="this.style.boxShadow='0 0 40px var(--g)'" onmouseout="this.style.boxShadow='0 0 20px var(--g)'">◈ THEME</button>
 
-<!-- TWITCH ACCOUNT (required on first open) -->
-<div id="ndz-account">
-  <div class="ndz-acc-card">
-    <div class="ndz-acc-ico">👤</div>
-    <div class="ndz-acc-title">ENTER YOUR TWITCH NAME</div>
-    <div class="ndz-acc-body">One account per person · used to post clips and show who submitted each clip · <b>1 clip max</b></div>
-    <input class="ta ndz-acc-inp" id="ndz-account-inp" placeholder="e.g. QuicksenseGoated" maxlength="25" onkeydown="if(event.key==='Enter')saveAccountSetup()">
-    <button class="ndz-acc-btn" onclick="saveAccountSetup()">SAVE & CONTINUE →</button>
-    <div class="ndz-acc-hint">Your @ name appears on every clip you post</div>
-  </div>
-</div>
-
 <!-- CLIP OF THE WEEK — quick help -->
 <div id="cow-onboard">
   <div class="cow-ob-card">
     <div class="cow-ob-ico" id="cow-ob-ico">🎬</div>
     <div class="cow-ob-title" id="cow-ob-title">CLIP OF THE WEEK</div>
-    <div class="cow-ob-body" id="cow-ob-body">Paste a Medal, YouTube or TikTok link · everyone sees it · community votes · winner featured.<br><br><b>10 slots</b> · <b>1 clip per Twitch name</b></div>
+    <div class="cow-ob-body" id="cow-ob-body">Sign in with Clerk · paste a Medal, YouTube or TikTok link · community votes · winner featured.<br><br><b>10 slots</b> · <b>1 clip per account</b></div>
     <button class="cow-ob-btn" id="cow-ob-btn" onclick="cowOnboardFinish()">GOT IT →</button>
   </div>
 </div>
@@ -2208,7 +2199,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
         <div class="cow-post-hero-title">POST YOUR <span class="acc">CLIP</span></div>
         <div class="cow-post-hero-line"></div>
         <div class="cow-post-slots-big" id="cow-slots-left">10 LEFT</div>
-        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 10 total · 1 per Twitch name</div>
+        <div class="cow-post-slots-lbl" id="cow-post-slots-lbl">open slots · max 10 total · 1 per account</div>
       </div>
 
       <div class="cow-post-body">
@@ -2228,15 +2219,23 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
           <div class="cow-submit-head">
             <div>
               <div class="cow-submit-title" id="cow-submit-title">SUBMIT CLIP</div>
-              <div class="cow-submit-sub" id="cow-submit-sub">Anyone can post · 10 slots · 1 clip per Twitch name</div>
+              <div class="cow-submit-sub" id="cow-submit-sub">Sign in to post · 10 slots · 1 clip per account</div>
             </div>
           </div>
 
           <div id="cow-already-posted" class="cow-alert ok">✓ YOU POSTED — REMOVE YOURS ON THE LEADERBOARD TAB TO POST AGAIN</div>
           <div id="cow-full-note" class="cow-alert err">ALL 10 SLOTS FULL — SWITCH TO LEADERBOARD TO VOTE</div>
 
-          <div id="cow-form-fields">
-            <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span><span class="cow-posting-change" onclick="showAccountSetup(true)">change</span></div>
+          <div id="cow-signed-out-block" class="cow-clerk-gate">
+            <p>Sign in to post clips. Pick a username in your Clerk profile after signing up.</p>
+            <button type="button" class="cow-btn-primary" onclick="openCowSignIn()">Sign in / Create account</button>
+          </div>
+
+          <div id="cow-form-fields" style="display:none">
+            <div class="cow-posting-as">Posting as <span id="cow-posting-name">@you</span>
+              <span class="cow-posting-change" onclick="openClerkAccount()">profile & username</span>
+              <span id="clerk-user-btn"></span>
+            </div>
 
             <div class="cow-cloud-note">🔗 Paste a link — shared via Vercel API · up to 10 clips · votes sync</div>
 
@@ -2292,7 +2291,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
       <div class="cow-lb-body">
         <div class="cow-lb-meta">
           <div class="cow-lb-stat"><span>Clips live</span><b id="cow-counter">0 / 10</b></div>
-          <div class="cow-lb-stat"><span>Your Twitch</span><b id="cow-lb-user" style="font-size:18px;">—</b></div>
+          <div class="cow-lb-stat"><span>Signed in</span><b id="cow-lb-user" style="font-size:18px;">—</b></div>
         </div>
 
         <div id="cow-empty-hint" class="cow-lb-empty" style="display:none;">
@@ -3029,7 +3028,7 @@ renderAllGoals();
     });
   }
   if(id==='cow' && typeof cowInitPageTab==='function') cowInitPageTab();
-  if(id==='cow' && typeof showAccountSetup==='function' && !hasUserAccount()) showAccountSetup(true);
+  if(id==='cow' && typeof initClerkAuth==='function') initClerkAuth();
   syncCowPopup(id);
 }
 
@@ -6970,56 +6969,32 @@ function cowDedupeTwitch(){
     return true;
   });
 }
-function getUserTwitch(){
-  try{
-    return localStorage.getItem('ndz_user_twitch') || localStorage.getItem('ndz_cow_name') || '';
-  }catch(e){ return ''; }
+function cowDedupeUid(){
+  const seen = new Set();
+  CLIPS_OF_WEEK = CLIPS_OF_WEEK.filter(c=>{
+    if(!c.uid) return true;
+    if(seen.has(c.uid)) return false;
+    seen.add(c.uid);
+    return true;
+  });
 }
-function setUserTwitch(raw){
-  const n = cowFormatTwitch(raw);
-  if(!n) return false;
+function getClerkUserId(){
+  try{ return (window.__clerkUserId || '').trim(); }catch(e){ return ''; }
+}
+function getCowDisplayName(){
   try{
-    localStorage.setItem('ndz_user_twitch', n);
-    localStorage.setItem('ndz_cow_name', n);
+    const u = window.__clerkUser;
+    if(u){
+      const raw = u.username || u.firstName ||
+        (u.primaryEmailAddress && u.primaryEmailAddress.emailAddress
+          ? u.primaryEmailAddress.emailAddress.split('@')[0] : '');
+      if(raw) return cowFormatTwitch(raw);
+    }
   }catch(e){}
-  return true;
+  return '';
 }
-function hasUserAccount(){ return !!cowNormalizeTwitch(getUserTwitch()); }
-function showAccountSetup(force){
-  if(!force && hasUserAccount()) return;
-  const el = document.getElementById('ndz-account');
-  const inp = document.getElementById('ndz-account-inp');
-  if(inp){
-    const cur = getUserTwitch();
-    inp.value = cur ? cur.replace(/^@/,'') : '';
-    setTimeout(()=>inp.focus(), 100);
-  }
-  if(el) el.classList.add('open');
-}
-function saveAccountSetup(){
-  const inp = document.getElementById('ndz-account-inp');
-  const raw = inp ? inp.value.trim() : '';
-  if(!raw){
-    alert('Enter your Twitch name to continue.');
-    if(inp) inp.focus();
-    return;
-  }
-  if(raw.length < 2){
-    alert('Twitch name is too short.');
-    return;
-  }
-  setUserTwitch(raw);
-  const el = document.getElementById('ndz-account');
-  if(el) el.classList.remove('open');
-  if(typeof renderClipsOfWeek==='function') renderClipsOfWeek();
-}
-function initAppUser(){
-  try{
-    const legacy = localStorage.getItem('ndz_cow_name');
-    if(legacy && !localStorage.getItem('ndz_user_twitch')) setUserTwitch(legacy);
-  }catch(e){}
-  showAccountSetup(false);
-}
+function hasUserAccount(){ return !!getClerkUserId(); }
+function getUserTwitch(){ return getCowDisplayName(); }
 
 // ── IndexedDB store for uploaded video blobs (persist across reloads) ──
 const COW_DB = 'ndz_cow_db', COW_STORE = 'clips';
@@ -7111,24 +7086,27 @@ function getCowSid(){
   if(!s){ s='u'+Date.now().toString(36)+Math.random().toString(36).slice(2,6); try{ localStorage.setItem('ndz_cow_sid',s); }catch(e){} }
   return s;
 }
-function getCowName(){ return getUserTwitch(); }
-function setCowName(n){ setUserTwitch(n); }
+function getCowName(){ return getCowDisplayName(); }
 function myCowClip(){
+  const uid = getClerkUserId();
   const sid = getCowSid();
-  const key = cowNormalizeTwitch(getUserTwitch());
+  const key = cowNormalizeTwitch(getCowDisplayName());
   return CLIPS_OF_WEEK.find(c=>{
+    if(uid && c.uid && c.uid === uid) return true;
     if(c.sid && c.sid === sid) return true;
     const ck = c.tkey || cowNormalizeTwitch(c.by);
     return key && ck && ck === key;
   });
 }
-function twitchHasClip(key, exceptSid){
-  if(!key) return false;
+function accountHasClip(uid, tkey, exceptSid){
   return CLIPS_OF_WEEK.some(c=>{
+    if(uid && c.uid && c.uid === uid) return true;
     const ck = c.tkey || cowNormalizeTwitch(c.by);
-    if(ck !== key) return false;
-    if(exceptSid && c.sid === exceptSid) return false;
-    return true;
+    if(tkey && ck === tkey){
+      if(exceptSid && c.sid === exceptSid) return false;
+      return true;
+    }
+    return false;
   });
 }
 
@@ -7182,6 +7160,7 @@ function renderClipsOfWeek(){
   CLIPS_OF_WEEK.forEach(c=>{ if(!c.id) c.id=cowId(); if(typeof c.votes!=='number') c.votes=0; });
   cowEnsureTkeys();
   cowDedupeSid();
+  cowDedupeUid();
   cowDedupeTwitch();
   if(cowEnforceMax()) persistClipsOfWeek();
   if(!list) return;
@@ -7194,8 +7173,8 @@ function renderClipsOfWeek(){
   const alreadyPosted = !!myClip;
   const canPost = !full && !alreadyPosted && hasUserAccount();
 
-  const twitchDisp = hasUserAccount() ? getUserTwitch() : '—';
-  if(postingName) postingName.textContent = getUserTwitch() || '@you';
+  const twitchDisp = hasUserAccount() ? getCowDisplayName() : 'Guest';
+  if(postingName) postingName.textContent = getCowDisplayName() || '@you';
   if(lbUser) lbUser.textContent = twitchDisp;
   if(postUser) postUser.textContent = twitchDisp;
   const countTxt = `${n} / ${COW_MAX}`;
@@ -7243,12 +7222,12 @@ function renderClipsOfWeek(){
     if(slotsLbl){
       if(full) slotsLbl.textContent = 'all slots taken · vote on the leaderboard';
       else if(alreadyPosted) slotsLbl.textContent = 'you already posted · remove yours to post again';
-      else slotsLbl.textContent = `open slots · max ${COW_MAX} total · 1 per Twitch name`;
+      else slotsLbl.textContent = `open slots · max ${COW_MAX} total · 1 per account`;
     }
     if(submitSub){
       if(alreadyPosted) submitSub.textContent = 'You already posted — remove yours on the Leaderboard tab to post again';
       else if(full) submitSub.textContent = `All ${COW_MAX} slots taken — switch to Leaderboard tab to vote`;
-      else submitSub.textContent = `Anyone can post · ${COW_MAX} slots · 1 clip per Twitch name`;
+      else submitSub.textContent = `Sign in to post · ${COW_MAX} slots · 1 clip per account`;
     }
     const showForm = canPost;
     if(formFields) formFields.style.display = showForm ? 'block' : 'none';
@@ -7264,9 +7243,10 @@ function renderClipsOfWeek(){
       const i = CLIPS_OF_WEEK.indexOf(c);
       const rank = sorted.indexOf(c)+1;
       const sid = getCowSid();
-      const myKey = cowNormalizeTwitch(getUserTwitch());
+      const myUid = getClerkUserId();
+      const myKey = cowNormalizeTwitch(getCowDisplayName());
       const clipKey = c.tkey || cowNormalizeTwitch(c.by);
-      const canRemove = owner || (c.sid && c.sid === sid) || (myKey && clipKey === myKey);
+      const canRemove = owner || (myUid && c.uid === myUid) || (c.sid && c.sid === sid) || (myKey && clipKey === myKey);
       const srcCls = c.up ? 'upload' : (c.type==='youtube'?'youtube':c.type==='tiktok'?'tiktok':c.type==='medal'?'medal':'');
       const srcLabel = c.typeBadge || (c.up ? 'UPLOAD' : 'CLIP');
       const removeBtn = canRemove ? `<span class="cow-remove-btn" onclick="removeClipOfWeek(${i})" title="Remove clip">✕</span>` : '';
@@ -7296,7 +7276,7 @@ function renderClipsOfWeek(){
 // clip -> plain metadata for storage. Uploaded (up) clips omit the blob URL (rehydrated from IndexedDB).
 function cowMeta(c){
   const tkey = c.tkey || cowNormalizeTwitch(c.by);
-  const base = {id:c.id, label:c.label, typeBadge:c.typeBadge, votes:c.votes||0, by:c.by||'', sid:c.sid||'', tkey:tkey||''};
+  const base = {id:c.id, label:c.label, typeBadge:c.typeBadge, votes:c.votes||0, by:c.by||'', sid:c.sid||'', uid:c.uid||'', tkey:tkey||''};
   if(c.up) return Object.assign(base, {type:'mp4', up:true, fname:c.fname||''});
   return Object.assign(base, {url:c.url, type:c.type, raw:c.raw});
 }
@@ -7304,6 +7284,7 @@ function cowMeta(c){
 function persistClipsOfWeek(){
   cowEnsureTkeys();
   cowDedupeSid();
+  cowDedupeUid();
   cowDedupeTwitch();
   cowEnforceMax();
   try{
@@ -7468,11 +7449,13 @@ function cowClearForm(){
 
 function addClipOfWeek(){
   if(!hasUserAccount()){
-    showAccountSetup(true);
+    if(typeof openCowSignIn==='function') openCowSignIn();
+    else alert('Sign in to post a clip.');
     return;
   }
   cowEnsureTkeys();
   cowDedupeSid();
+  cowDedupeUid();
   cowDedupeTwitch();
   cowEnforceMax();
   if(CLIPS_OF_WEEK.length >= COW_MAX){
@@ -7490,12 +7473,13 @@ function addClipOfWeek(){
   const labelInp = document.getElementById('cow-label-inp');
   const fileInp = document.getElementById('cow-file-inp');
   const label = labelInp ? labelInp.value.trim() : '';
-  const by = getUserTwitch();
+  const by = getCowDisplayName();
   const tkey = cowNormalizeTwitch(by);
   const sid = getCowSid();
+  const uid = getClerkUserId();
 
-  if(twitchHasClip(tkey, sid)){
-    alert('This Twitch name already has a clip posted. Only 1 clip per person.');
+  if(accountHasClip(uid, tkey, sid)){
+    alert('This account already has a clip posted. Only 1 clip per person.');
     renderClipsOfWeek();
     return;
   }
@@ -7511,7 +7495,7 @@ function addClipOfWeek(){
     }
     const id = cowId();
     const objUrl = URL.createObjectURL(file);
-    clip = {id, url:objUrl, type:'mp4', label:label || file.name.replace(/\.[^.]+$/,''), typeBadge:'UPLOAD', raw:objUrl, up:true, votes:0, fname:file.name, _hydrated:true, by, tkey, sid};
+    clip = {id, url:objUrl, type:'mp4', label:label || file.name.replace(/\.[^.]+$/,''), typeBadge:'UPLOAD', raw:objUrl, up:true, votes:0, fname:file.name, _hydrated:true, by, tkey, sid, uid};
     cowPutBlob(id, file).catch(e=>{ console.warn('upload store failed', e); clip.up=false; clip.local=true; });
   } else if(rawUrl){
     clip = normalizeClip(rawUrl, label);
@@ -7520,6 +7504,7 @@ function addClipOfWeek(){
     clip.by = by;
     clip.tkey = tkey;
     clip.sid = sid;
+    clip.uid = uid;
   } else {
     alert('Upload a video file or paste a Medal, YouTube, TikTok or MP4 link.');
     return;
@@ -7528,6 +7513,7 @@ function addClipOfWeek(){
   CLIPS_OF_WEEK.push(clip);
   cowEnsureTkeys();
   cowDedupeSid();
+  cowDedupeUid();
   cowDedupeTwitch();
   cowEnforceMax();
   cowClearForm();
@@ -7543,9 +7529,10 @@ function removeClipOfWeek(i){
   const c = CLIPS_OF_WEEK[i];
   if(!c) return;
   const owner = checkOwner();
-  const myKey = cowNormalizeTwitch(getUserTwitch());
+  const uid = getClerkUserId();
+  const myKey = cowNormalizeTwitch(getCowDisplayName());
   const clipKey = c.tkey || cowNormalizeTwitch(c.by);
-  const isMine = c.sid === getCowSid() || (myKey && clipKey === myKey);
+  const isMine = (uid && c.uid === uid) || c.sid === getCowSid() || (myKey && clipKey === myKey);
   if(!owner && !isMine) return;
   if(c && (c.up || c.local) && c.url){ try{ URL.revokeObjectURL(c.url); }catch(e){} }
   if(c && c.up && c.id){ cowDelBlob(c.id); }
@@ -7581,6 +7568,7 @@ async function rehydrateUploads(){
     CLIPS_OF_WEEK = arr.slice(0, COW_MAX);
     cowEnsureTkeys();
     cowDedupeSid();
+    cowDedupeUid();
     cowDedupeTwitch();
     cowEnforceMax();
     if(legacy && legacy.url){ try{ localStorage.setItem('ndz_clips', JSON.stringify(CLIPS_OF_WEEK.map(cowMeta))); }catch(e){} }
@@ -7609,7 +7597,7 @@ async function rehydrateUploads(){
     setInterval(cowPoll, 30000);
   });
   cowSelectSource('medal');
-  initAppUser();
+  if(typeof initClerkAuth==='function') initClerkAuth();
   cowInitPageTab();
 })();
 
@@ -8064,3 +8052,4 @@ function exitAmbient(){
 });
 resetAmbientTimer();
 </script>
+<script src="/js/clerk-auth.js" defer></script>

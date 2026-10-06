@@ -31,9 +31,14 @@ npm run dev:static
 
 1. Import this repo at [vercel.com/new](https://vercel.com/new)
 2. **Storage → KV** → create a database and **Connect to Project**
-3. Deploy — Vercel injects `KV_REST_API_URL` and `KV_REST_API_TOKEN`
+3. [Clerk](https://dashboard.clerk.com) → create app → copy **Publishable** + **Secret** keys
+4. Vercel **Settings → Environment Variables**:
+   - `CLERK_PUBLISHABLE_KEY`
+   - `CLERK_SECRET_KEY`
+5. In Clerk: **User & authentication → Username** → enable so users pick a handle
+6. Deploy
 
-Clip links and owner dashboard edits sync through the API (no JSONBin required on Vercel).
+Clip of the Week uses **Clerk sign-in** (no manual Twitch name). Clips and owner dashboard sync through `/api/*` (no JSONBin on Vercel).
 
 ## Legacy GitHub Pages
 

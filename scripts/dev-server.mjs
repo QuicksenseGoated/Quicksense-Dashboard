@@ -75,6 +75,10 @@ async function handleApi(req, res, pathname) {
     const mod = await import('../api/dashboard/state.js');
     return mod.default(req, vercelRes);
   }
+  if (pathname === '/api/auth/config') {
+    const mod = await import('../api/auth/config.js');
+    return mod.default(req, vercelRes);
+  }
 
   vercelRes.status(404).json({ error: 'Not found' });
 }
