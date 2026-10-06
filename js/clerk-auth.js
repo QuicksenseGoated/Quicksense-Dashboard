@@ -109,8 +109,13 @@ async function saveCowSynonym() {
 
 function setBlockVisible(el, show) {
   if (!el) return;
-  if (show) el.removeAttribute('hidden');
-  else el.setAttribute('hidden', '');
+  if (show) {
+    el.removeAttribute('hidden');
+    el.style.display = '';
+  } else {
+    el.setAttribute('hidden', '');
+    el.style.display = 'none';
+  }
 }
 
 function mountUserButton(el) {
@@ -150,7 +155,22 @@ function updateAuthUI() {
 
   const nameEl = document.getElementById('qs-auth-name');
   if (nameEl) {
-    nameEl.textContent = has ? clerkDisplayName(user) || 'Set synonym' : '';
+    const label = has ? clerkDisplayName(user) || 'Set synonym' : '';
+    nameEl.textContent = label;
+    const needsPick = has && !userHasSynonym(user);
+    nameEl.classList.toggle('qs-auth-synonym-link', needsPick);
+    if (needsPick && !nameEl.dataset.synonymLinkBound) {
+      nameEl.dataset.synonymLinkBound = '1';
+      nameEl.setAttribute('role', 'button');
+      nameEl.setAttribute('tabindex', '0');
+      nameEl.addEventListener('click', () => openCowSynonymModal());
+      nameEl.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          openCowSynonymModal();
+        }
+      });
+    }
   }
 
   mountUserButton(document.getElementById('clerk-user-btn'));
