@@ -20,7 +20,13 @@ function ok(msg) {
   console.log('✓', msg);
 }
 
-const jsFiles = ['js/clerk-auth.js', 'api/health.js', 'api/auth/config.js', 'api/cow/clips.js'];
+const jsFiles = [
+  'js/clerk-auth.js',
+  'api/health.js',
+  'api/auth/config.js',
+  'api/auth/synonym.js',
+  'api/cow/clips.js',
+];
 for (const rel of jsFiles) {
   const abs = path.join(ROOT, rel);
   if (!fs.existsSync(abs)) {

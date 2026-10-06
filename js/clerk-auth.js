@@ -99,23 +99,23 @@ async function saveCowSynonym() {
       alert('Sign in first.');
       return false;
     }
-    try {
-      await window.Clerk.user.update({ username: un });
-    } catch (usernameErr) {
-      const msg = String(
-        usernameErr?.message ||
-          usernameErr?.errors?.[0]?.longMessage ||
-          usernameErr?.errors?.[0]?.message ||
-          '',
-      );
-      const usernameDisabled = /username is not a valid parameter/i.test(msg);
-      if (usernameDisabled) {
-        await window.Clerk.user.update({
-          unsafeMetadata: { ...(window.Clerk.user.unsafeMetadata || {}), cowSynonym: un },
-        });
-      } else {
-        throw usernameErr;
-      }
+    const sessionToken = await window.Clerk.session?.getToken?.();
+    if (!sessionToken) {
+      throw new Error('Session expired — sign in again.');
+    }
+    const resp = await fetch('/api/auth/synonym', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${sessionToken}`,
+      },
+      body: JSON.stringify({ synonym: un }),
+    });
+    const data = await resp.json().catch(() => ({}));
+    if (!resp.ok) {
+      const err = new Error(data.error || data.hint || 'Could not save synonym');
+      err.hint = data.hint;
+      throw err;
     }
     await window.Clerk.user.reload();
     applyClerkUser(window.Clerk.user);
@@ -127,9 +127,14 @@ async function saveCowSynonym() {
       const msg = String(
         e?.message || e?.errors?.[0]?.longMessage || e?.errors?.[0]?.message || '',
       );
-      if (/username is not a valid parameter/i.test(msg)) {
+      if (/additional verification/i.test(msg)) {
         err.textContent =
-          'Clerk username is off for this app. Enable Username under User & authentication in the Clerk dashboard, then try again.';
+          'Saving failed on the server. Add CLERK_SECRET_KEY to Vercel (or .env.local locally), redeploy, and try again.';
+      } else if (/username is not a valid parameter/i.test(msg)) {
+        err.textContent =
+          'Enable Username in Clerk → User & authentication, then try again.';
+      } else if (e?.hint) {
+        err.textContent = `${msg} ${e.hint}`;
       } else {
         err.textContent = msg || 'That name is taken or not allowed. Try another.';
       }

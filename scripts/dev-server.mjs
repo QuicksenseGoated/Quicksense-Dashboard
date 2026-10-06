@@ -106,6 +106,10 @@ async function handleApi(req, res, pathname) {
     const mod = await import('../api/auth/config.js');
     return mod.default(req, vercelRes);
   }
+  if (pathname === '/api/auth/synonym') {
+    const mod = await import('../api/auth/synonym.js');
+    return mod.default(req, vercelRes);
+  }
 
   vercelRes.status(404).json({ error: 'Not found' });
 }
