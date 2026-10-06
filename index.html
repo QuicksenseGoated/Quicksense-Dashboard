@@ -1892,7 +1892,7 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
   <div class="cow-ob-card">
     <div class="cow-ob-ico" id="cow-ob-ico">🎬</div>
     <div class="cow-ob-title" id="cow-ob-title">CLIP OF THE WEEK</div>
-    <div class="cow-ob-body" id="cow-ob-body">Sign in with Clerk · paste a Medal, YouTube or TikTok link · community votes · winner featured.<br><br><b>10 slots</b> · <b>1 clip per account</b></div>
+    <div class="cow-ob-body" id="cow-ob-body">Sign in · pick a public synonym (email hidden) · paste a Medal, YouTube or TikTok link · vote.<br><br><b>10 slots</b> · <b>1 clip per account</b></div>
     <button class="cow-ob-btn" id="cow-ob-btn" onclick="cowOnboardFinish()">GOT IT →</button>
   </div>
 </div>
@@ -7341,8 +7341,11 @@ function renderClipsOfWeek(){
 
 // clip -> plain metadata for storage. Uploaded (up) clips omit the blob URL (rehydrated from IndexedDB).
 function cowMeta(c){
-  const tkey = c.tkey || cowNormalizeTwitch(c.by);
-  const base = {id:c.id, label:c.label, typeBadge:c.typeBadge, votes:c.votes||0, by:c.by||'', sid:c.sid||'', uid:c.uid||'', tkey:tkey||''};
+  let by = c.by || '';
+  if(looksLikeEmail(by)) by = '';
+  by = cowPublicDisplayName(by) || by.replace(/^@/,'');
+  const tkey = c.tkey || cowNormalizeTwitch(by);
+  const base = {id:c.id, label:c.label, typeBadge:c.typeBadge, votes:c.votes||0, by:by, sid:c.sid||'', uid:c.uid||'', tkey:tkey||''};
   if(c.up) return Object.assign(base, {type:'mp4', up:true, fname:c.fname||''});
   return Object.assign(base, {url:c.url, type:c.type, raw:c.raw});
 }
