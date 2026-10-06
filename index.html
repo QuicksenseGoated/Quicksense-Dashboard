@@ -71,8 +71,8 @@ body::after{content:'';position:fixed;inset:0;background:radial-gradient(ellipse
 
 /* ─ CURSOR ─ */
 *{cursor:none!important;}
-#cur{position:fixed;width:8px;height:8px;background:var(--g);border-radius:50%;pointer-events:none;z-index:9999999;transform:translate(-50%,-50%);transition:transform .08s,width .12s,height .12s;mix-blend-mode:screen;}
-#cur2{position:fixed;width:20px;height:20px;border:1px solid rgba(var(--g-rgb,200,150,10),0.35);z-index:9999999;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:left .1s,top .1s;}
+#cur{position:fixed;width:8px;height:8px;background:var(--g);border-radius:50%;pointer-events:none;z-index:9999999;transform:translate(-50%,-50%);transition:none;mix-blend-mode:screen;}
+#cur2{position:fixed;width:20px;height:20px;border:1px solid rgba(var(--g-rgb,200,150,10),0.35);z-index:9999999;border-radius:50%;pointer-events:none;transform:translate(-50%,-50%);transition:none;}
 
 /* ─ PAGES ─ */
 .pg{display:none;min-height:100vh;position:relative;z-index:1;}
@@ -3025,9 +3025,13 @@ body.theme-cyberpunk [onclick*="toggleGoalSection"] > div{
 // ── CURSOR ──
 const cur=document.getElementById('cur'),cur2=document.getElementById('cur2');
 document.addEventListener('mousemove',e=>{
-  cur.style.left=e.clientX+'px';cur.style.top=e.clientY+'px';
-  setTimeout(()=>{cur2.style.left=e.clientX+'px';cur2.style.top=e.clientY+'px';},60);
-});
+  const x = e.clientX + 'px';
+  const y = e.clientY + 'px';
+  cur.style.left = x;
+  cur.style.top = y;
+  cur2.style.left = x;
+  cur2.style.top = y;
+}, { passive: true });
 document.addEventListener('mouseover',e=>{
   const smi=e.target.closest('.smi');if(smi)smi.classList.add('hov');
   const lbtn=e.target.closest('.lbtn');if(lbtn)lbtn.classList.add('hov');
