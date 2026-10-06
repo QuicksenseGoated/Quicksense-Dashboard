@@ -1,0 +1,63 @@
+# Deploy Quicksense Dashboard on Vercel
+
+~10 minutes. Do this once; every `git push` to `main` redeploys.
+
+## 1. Import the repo
+
+1. Open [vercel.com/new](https://vercel.com/new)
+2. Import **QuicksenseGoated/Quicksense-Dashboard** (GitHub)
+3. **Framework Preset:** Other (static — no build command)
+4. **Root Directory:** `./` (default)
+5. **Build Command:** leave empty
+6. **Output Directory:** leave empty (serves `index.html` from repo root)
+7. Click **Deploy** (first deploy may work without KV; clips won’t persist until step 2)
+
+## 2. Add Vercel KV (shared Clip of the Week)
+
+1. Project → **Storage** → **Create Database** → **KV**
+2. Name it (e.g. `quicksense-kv`) → **Create**
+3. **Connect to Project** → select this Vercel project → **Connect**
+
+Vercel adds `KV_REST_API_URL` and `KV_REST_API_TOKEN` automatically.
+
+## 3. Add Clerk env vars
+
+From [Clerk Dashboard → API Keys](https://dashboard.clerk.com/last-active?path=api-keys) (app `app_3KJuRHZeiueeEBWgolcso5OwFuG`):
+
+| Variable | Value |
+|----------|--------|
+| `CLERK_PUBLISHABLE_KEY` | `pk_test_...` or `pk_live_...` |
+| `CLERK_SECRET_KEY` | `sk_test_...` or `sk_live_...` |
+
+Project → **Settings → Environment Variables** → add both for **Production** (and Preview if you want).
+
+**Redeploy:** Deployments → ⋮ on latest → **Redeploy**.
+
+## 4. Clerk domain allowlist
+
+Clerk → **Configure → Developers → Allowed origins** (or Domains):
+
+- `https://YOUR-PROJECT.vercel.app`
+- Your custom domain later (e.g. `https://dashboard.quicksense.gg`)
+
+Clerk → **Paths / Redirect URLs** — allow your Vercel URL for sign-in redirect.
+
+Enable **Username** under **User & authentication**.
+
+## 5. Verify
+
+- `https://YOUR-PROJECT.vercel.app/api/health` → `"storage":"kv"` and `"backend":"vercel"`
+- `https://YOUR-PROJECT.vercel.app/#cow` → Sign in → post a **link** clip → open in incognito → clip appears
+
+## 6. Custom domain (optional)
+
+Vercel → **Settings → Domains** → add domain → follow DNS → add same domain in Clerk allowed origins.
+
+## Troubleshooting
+
+| Issue | Fix |
+|-------|-----|
+| `/api/health` 404 | Branch must include `api/` folder (use `main` after merge) |
+| `"storage":"file"` on Vercel | Connect KV to project and redeploy |
+| Sign-in modal broken | Env vars set + redeploy; check Clerk allowed origins |
+| Clips don’t sync | Use **link** posts; file uploads are local-only until blob storage is added |

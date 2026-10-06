@@ -46,16 +46,17 @@ Enable **Username** in the [Clerk Dashboard](https://dashboard.clerk.com/) so Cl
 
 ## Deploy on Vercel
 
-1. Import this repo at [vercel.com/new](https://vercel.com/new)
-2. **Storage → KV** → create a database and **Connect to Project**
-3. [Clerk](https://dashboard.clerk.com) → create app → copy **Publishable** + **Secret** keys
-4. Vercel **Settings → Environment Variables**:
-   - `CLERK_PUBLISHABLE_KEY`
-   - `CLERK_SECRET_KEY`
-5. In Clerk: **User & authentication → Username** → enable so users pick a handle
-6. Deploy
+Step-by-step: **[docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md)**
 
-Clip of the Week uses **Clerk sign-in** (no manual Twitch name). Clips and owner dashboard sync through `/api/*` (no JSONBin on Vercel).
+Quick list:
+
+1. [vercel.com/new](https://vercel.com/new) → import **Quicksense-Dashboard** → deploy (no build command)
+2. **Storage → KV** → connect to the project
+3. Env vars: `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
+4. Clerk: enable **Username** + allow your `*.vercel.app` origin
+5. Redeploy → test `/api/health` and `/#cow`
+
+Clip of the Week uses **Clerk sign-in**. Shared clips use **KV** via `/api/cow/clips`.
 
 ## Legacy GitHub Pages
 
