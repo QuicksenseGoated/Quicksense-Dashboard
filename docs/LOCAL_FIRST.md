@@ -98,6 +98,7 @@ npm run deploy
 | Sign-in works in Clerk but UI stays “Guest” | Hard refresh; check browser console for red errors; run `npm run check` |
 | Clerk modal doesn’t open | Allowed origins must include `http://localhost:3000` |
 | `/api/auth/config` empty | Normal without `.env.local`; HTML meta key still works locally |
+| “Additional verification…” when saving synonym | Add **`CLERK_SECRET_KEY`** to `.env.local` (local) and **Vercel env** (live), then restart / redeploy |
 | Port in use | `set PORT=3001` then `npm run dev` (PowerShell: `$env:PORT=3001; npm run dev`) |
 
 ## Files you edit most
