@@ -20,5 +20,6 @@ alwaysApply: true
 - Legacy **GitHub Pages** still serves static files; shared COW needs Vercel for writes.
 
 ## Project notes
-- COW: max **10** link clips, 1 per Twitch name; uploads are device-local (IndexedDB).
-- Production sync: `/api/cow/clips` and `/api/dashboard/state` (not JSONBin on Vercel).
+- COW: max **10** link clips, 1 per Clerk account; **username/synonym** required to post; email never displayed.
+- Production: **`main` on Vercel only** — `/api/cow/clips`, `/api/dashboard/state`, Clerk env vars + KV.
+- File uploads in COW are device-local until blob storage is added; use **links** for shared leaderboard.

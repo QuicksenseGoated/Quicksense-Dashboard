@@ -1,67 +1,43 @@
 # Quicksense Dashboard
 
-Single-page dashboard (`index.html`) with **Vercel serverless APIs** for Clip of the Week and dashboard state.
+One repo, one branch (**`main`**), deploy on **Vercel**. No PR workflow — push to `main` and Vercel redeploys.
 
-## Run locally (with API)
+Single-page app (`index.html`) + serverless **`/api/*`** (Clip of the Week, dashboard state, Clerk config).
+
+## Vercel (production)
+
+1. [vercel.com/new](https://vercel.com/new) → import **QuicksenseGoated/Quicksense-Dashboard**
+2. **Production branch:** `main`
+3. **Build command:** *(empty)* · **Output:** *(empty)* · **Install:** `npm install`
+4. **Storage → KV** → connect to the project
+5. **Environment variables:** `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
+6. Clerk: **Username required** · allow your `*.vercel.app` origin
+
+Full checklist: **[docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md)**
+
+Verify: `https://YOUR-APP.vercel.app/api/health` → `"storage":"kv"` · COW: `/#cow`
+
+## Local dev
 
 ```bash
+git clone https://github.com/QuicksenseGoated/Quicksense-Dashboard.git
+cd Quicksense-Dashboard
 npm install
+npm run setup:clerk   # once: clerk auth login, then pulls .env.local
 npm run dev
 ```
 
-Uses `scripts/dev-server.mjs` (static + API, file storage under `data/`). No Vercel login required.
+- http://localhost:3000/
+- http://localhost:3000/#cow
 
-For production-like local dev with the Vercel CLI: `npm run dev:vercel` (requires `vercel login`).
+Without `.env.local`, Clerk still works from the publishable key in `index.html` meta (dev only).
 
-Open:
+## Clip of the Week
 
-- Home: http://localhost:3000/
-- Clip of the Week: http://localhost:3000/#cow
-- API health: http://localhost:3000/api/health
-
-Without Vercel KV env vars, APIs persist to `data/cow-clips.json` and `data/dashboard-state.json` on disk.
-
-Static-only (no API):
-
-```bash
-npm run dev:static
-```
-
-## Clerk CLI (link app `app_3KJuRHZeiueeEBWgolcso5OwFuG`)
-
-This project is vanilla JS + Vercel APIs (not Next.js). From your machine:
-
-```bash
-npm install -g clerk   # or: curl -fsSL https://clerk.com/install | bash
-clerk auth login
-cd path/to/Quicksense-Dashboard
-clerk init --app app_3KJuRHZeiueeEBWgolcso5OwFuG --framework javascript --pm npm -y
-clerk env pull
-clerk doctor
-```
-
-Cloud agents cannot finish the browser OAuth step for you. After `clerk env pull`, local `npm run dev` reads `.env.local` automatically.
-
-Enable **Username** in the [Clerk Dashboard](https://dashboard.clerk.com/) so Clip of the Week shows handles.
-
-## Deploy on Vercel
-
-Step-by-step: **[docs/DEPLOY_VERCEL.md](docs/DEPLOY_VERCEL.md)**
-
-Quick list:
-
-1. [vercel.com/new](https://vercel.com/new) → import **Quicksense-Dashboard** → deploy (no build command)
-2. **Storage → KV** → connect to the project
-3. Env vars: `CLERK_PUBLISHABLE_KEY`, `CLERK_SECRET_KEY`
-4. Clerk: enable **Username** + allow your `*.vercel.app` origin
-5. Redeploy → test `/api/health` and `/#cow`
-
-Clip of the Week uses **Clerk sign-in**. Shared clips use **KV** via `/api/cow/clips`.
+- **Clerk** sign-in · **public synonym** (username) — email never shown
+- **10** link slots · **1 clip per account** · votes on leaderboard
+- **KV** sync on Vercel; local dev uses `data/*.json`
 
 ## Legacy GitHub Pages
 
-Still works as a static site; shared clips fall back to reading `data/cow-clips.json`. Owner sync can still use JSONBin until you fully switch to Vercel.
-
-## Workflow
-
-Edit `index.html` and/or `api/` → test with `npm run dev` → push to `main`.
+Static hosting still works; clip **writes** need Vercel + KV.
