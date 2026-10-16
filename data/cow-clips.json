@@ -1,5 +1,30 @@
 {
   "v": 1,
-  "updatedAt": "2026-10-16T19:57:52.497Z",
-  "clips": []
+  "updatedAt": "2026-10-16T22:38:52.727Z",
+  "clips": [
+    {
+      "id": "test1",
+      "label": "test",
+      "votes": 2,
+      "by": "@test",
+      "sid": "",
+      "uid": "",
+      "tkey": "test",
+      "url": "https://medal.tv/x",
+      "type": "medal"
+    },
+    {
+      "id": "cmvbicl9wyovbz",
+      "label": "GC Completion",
+      "typeBadge": "MEDAL.TV",
+      "votes": 1,
+      "by": "@quicksedtest",
+      "sid": "umrrz66rdaz75",
+      "uid": "user_3KJzfYUlLbXqoP0HCMWML7IMhsC",
+      "tkey": "quicksedtest",
+      "url": "https://medal.tv/clip/nHrw6SBmyrWgJ66iK/embed",
+      "type": "medal",
+      "raw": "https://medal.tv/games/geometry-dash/clips/nHrw6SBmyrWgJ66iK?invite=cr-MSxRYkUsMzA2Njk1MTYy"
+    }
+  ]
 }
